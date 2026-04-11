@@ -88,7 +88,7 @@ object PdfExporter {
         canvas.drawText(nom, (PAGE_W - nomPaint.measureText(nom)) / 2f, 96f, nomPaint)
 
         val sousTitrePaint = makePaint(12f, COLOR_INK_SOFT, italic = true)
-        val sousTitre = "Bilan comportemental"
+        val sousTitre = "Bilan émotionnel"
         canvas.drawText(sousTitre, (PAGE_W - sousTitrePaint.measureText(sousTitre)) / 2f, 118f, sousTitrePaint)
 
         drawLine(canvas, MARGIN + 40f, 130f, PAGE_W - MARGIN - 40f, 130f, COLOR_BORDER, 0.8f)
@@ -353,7 +353,7 @@ object PdfExporter {
     private fun dessineFooter(canvas: Canvas, pageNum: Int) {
         val footerY = PAGE_H - MARGIN - 14f
         drawLine(canvas, MARGIN, footerY - 10f, PAGE_W - MARGIN, footerY - 10f, COLOR_BORDER, 0.5f)
-        canvas.drawText("Comprendre mon chat  \u2022  Bilan comportemental indicatif", MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
+        canvas.drawText("Comprendre mon chat  \u2022  Bilan émotionnel indicatif", MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
         val pageLabel = "Page $pageNum / 4"
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), footerY, pagePaint)

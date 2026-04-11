@@ -709,7 +709,7 @@ fun ResultatScreen(
                     EditorialKicker("Quand demander de l'aide", centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     if (analyse.aDejaMordu) {
-                        Text("Une griffure ou morsure a été signalée — un accompagnement vétérinaire comportemental est recommandé.", textAlign = TextAlign.Center, color = PremiumPalette.PrioriteModere, fontWeight = FontWeight.SemiBold)
+                        Text("Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.", textAlign = TextAlign.Center, color = PremiumPalette.PrioriteModere, fontWeight = FontWeight.SemiBold)
                     } else {
                         analyse.messageAide?.let { Text(it, textAlign = TextAlign.Center, color = PremiumPalette.PrioriteUrgente, fontWeight = FontWeight.SemiBold) }
                     }
@@ -747,11 +747,13 @@ fun ResultatScreen(
 
 @Composable
 fun QuatreAxesGrid(analyse: ResultatAnalyse) {
+    // Les champs peur/attachement/impulsivite/reactivite contiennent maintenant
+    // securite/lien/instincts/cohabitation
     val axes = listOf(
-        Triple("Sensibilité", analyse.niveauPeur, analyse.peur),
-        Triple("Attachement", analyse.niveauAttachement, analyse.attachement),
-        Triple("Impulsivité", analyse.niveauImpulsivite, analyse.impulsivite),
-        Triple("Réactivité", analyse.niveauReactivite, analyse.reactivite)
+        Triple("Sécurité émotionnelle", analyse.niveauPeur, analyse.peur),
+        Triple("Lien humain", analyse.niveauAttachement, analyse.attachement),
+        Triple("Instincts", analyse.niveauImpulsivite, analyse.impulsivite),
+        Triple("Cohabitation", analyse.niveauReactivite, analyse.reactivite)
     )
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         axes.chunked(2).forEach { row ->
@@ -852,10 +854,26 @@ fun recommanderFichesComportement(analyse: ResultatAnalyse): List<Pair<String, S
     val maxAxe = maxOf(analyse.peur, analyse.attachement, analyse.impulsivite, analyse.reactivite)
     if (maxAxe < 30) return emptyList()
     return when (analyse.problemePrincipal) {
-        Axe.PEUR -> listOf("oreilles-arriere" to "Oreilles aplaties en arrière", "queue-fouettante" to "Queue qui fouette", "ventre-expose" to "Ventre exposé")
-        Axe.ATTACHEMENT -> listOf("destruction-absence" to "Destructions en l'absence du maître", "vocalisation-excessive" to "Vocalisations excessives", "petrir" to "Pétrir (faire du pain)")
-        Axe.IMPULSIVITE -> listOf("hyperactivite-nocturne" to "Hyperactivité nocturne", "chatter" to "Claquement de dents", "queue-fouettante" to "Queue qui fouette")
-        Axe.REACTIVITE -> listOf("marquage-urinaire" to "Marquage urinaire", "griffage" to "Griffage des surfaces", "oreilles-arriere" to "Oreilles aplaties en arrière")
+        Axe.SECURITE -> listOf(
+            "oreilles-arriere" to "Oreilles aplaties en arrière",
+            "queue-fouettante" to "Queue qui fouette",
+            "ventre-expose" to "Ventre exposé"
+        )
+        Axe.LIEN -> listOf(
+            "destruction-absence" to "Destructions en l'absence",
+            "vocalisation-excessive" to "Vocalisations excessives",
+            "petrir" to "Pétrir (faire du pain)"
+        )
+        Axe.INSTINCTS -> listOf(
+            "hyperactivite-nocturne" to "Hyperactivité nocturne",
+            "chatter" to "Claquement de dents",
+            "griffage" to "Griffage des surfaces"
+        )
+        Axe.COHABITATION -> listOf(
+            "marquage-urinaire" to "Marquage urinaire",
+            "oreilles-arriere" to "Oreilles aplaties en arrière",
+            "queue-fouettante" to "Queue qui fouette"
+        )
     }
 }
 
@@ -1025,7 +1043,7 @@ fun AlerteMorsureCard(nomChat: String) {
             Spacer(modifier = Modifier.height(14.dp))
             Text("Il y a déjà eu griffure ou morsure chez $nomChat. Cette situation mérite une attention particulière.", style = MaterialTheme.typography.titleMedium, color = PremiumPalette.PrioriteUrgente, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
-            Text("Un accompagnement vétérinaire comportemental est recommandé pour comprendre ce qui se passe et sécuriser le quotidien.", color = if (isDark) Color(0xFFFFCFC5) else Color(0xFF5C1A0A), textAlign = TextAlign.Center)
+            Text("Un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.", color = if (isDark) Color(0xFFFFCFC5) else Color(0xFF5C1A0A), textAlign = TextAlign.Center)
         }
     }
 }
@@ -1267,7 +1285,7 @@ fun ParametresScreen(modifier: Modifier = Modifier, onRevoirOnboarding: () -> Un
                 Text("Cette application ne collecte aucune donnée personnelle. Les bilans sont stockés uniquement sur votre appareil. Les notifications sont locales.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(14.dp))
                 SecondaryPremiumButton("Politique de confidentialité", onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchien/confidentialite.html"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchat/confidentialite.html"))
                     context.startActivity(intent)
                 }, leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null) })
             }

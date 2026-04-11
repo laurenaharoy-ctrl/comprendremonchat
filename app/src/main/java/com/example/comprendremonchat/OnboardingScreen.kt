@@ -105,7 +105,7 @@ val onboardingSlides = listOf(
         description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
         illustrationType = IllustrationType.BILAN_COMPLET,
         features = listOf(
-            Icons.Rounded.CheckCircle to "Bilan comportemental",
+            Icons.Rounded.CheckCircle to "Bilan émotionnel",
             Icons.Rounded.PictureAsPdf to "Export PDF 4 pages",
             Icons.Rounded.History to "Historique des bilans"
         )

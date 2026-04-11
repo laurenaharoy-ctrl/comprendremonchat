@@ -24,14 +24,14 @@ class RappelWorker(
             "Rappels bien-être du chat",
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "Rappels mensuels pour refaire le bilan comportemental"
+            description = "Rappels mensuels pour refaire le Bilan émotionnel"
         }
         notificationManager.createNotificationChannel(channel)
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Il est temps de refaire le bilan !")
-            .setContentText("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau bilan comportemental.")
+            .setContentText("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()
