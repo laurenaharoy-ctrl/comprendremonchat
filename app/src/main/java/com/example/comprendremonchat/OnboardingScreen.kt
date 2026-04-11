@@ -1,12 +1,14 @@
 package com.example.comprendremonchat
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.runtime.getValue
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +36,6 @@ import androidx.compose.material.icons.rounded.Pets
 import androidx.compose.material.icons.rounded.PictureAsPdf
 import androidx.compose.material.icons.rounded.Psychology
 import androidx.compose.material.icons.rounded.Spa
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -42,13 +43,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -60,22 +70,28 @@ data class OnboardingSlide(
     val kicker: String,
     val titre: String,
     val description: String,
-    val emoji: String,
+    val illustrationType: IllustrationType,
     val features: List<Pair<ImageVector, String>> = emptyList()
 )
+
+enum class IllustrationType {
+    CHAT_LOGO,
+    QUATRE_AXES,
+    BILAN_COMPLET
+}
 
 val onboardingSlides = listOf(
     OnboardingSlide(
         kicker = "Bienvenue",
         titre = "Comprendre mon chat",
         description = "Cette application vous aide à décoder les comportements de votre chat et à obtenir des pistes concrètes adaptées à son profil unique.",
-        emoji = "🐱"
+        illustrationType = IllustrationType.CHAT_LOGO
     ),
     OnboardingSlide(
         kicker = "Comment ça marche",
         titre = "Un questionnaire, quatre dimensions",
-        description = "En quelques minutes, explorez les quatre axes qui façonnent le comportement de votre chat au quotidien.",
-        emoji = "📊",
+        description = "En quelques minutes, vous explorez les quatre axes qui façonnent le comportement de votre chat au quotidien.",
+        illustrationType = IllustrationType.QUATRE_AXES,
         features = listOf(
             Icons.Rounded.Psychology to "Sensibilité émotionnelle",
             Icons.Rounded.Favorite to "Besoin d'attachement",
@@ -86,8 +102,8 @@ val onboardingSlides = listOf(
     OnboardingSlide(
         kicker = "Ce que vous obtenez",
         titre = "Un bilan personnalisé complet",
-        description = "À la fin du questionnaire, recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
-        emoji = "💡",
+        description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
+        illustrationType = IllustrationType.BILAN_COMPLET,
         features = listOf(
             Icons.Rounded.CheckCircle to "Bilan comportemental",
             Icons.Rounded.PictureAsPdf to "Export PDF 4 pages",
@@ -103,16 +119,15 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
 
     AppBackground {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars)
+            modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.navigationBars)
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 TextButton(onClick = onTerminer) {
-                    Text("Passer", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Passer", color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium)
                 }
             }
 
@@ -166,16 +181,27 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
     ) {
         if (!hasFeatures) {
             Text(slide.titre, style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center, lineHeight = 28.sp)
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        val illustrationSize = if (hasFeatures) 130.dp else 200.dp
         Box(
-            modifier = Modifier.size(if (hasFeatures) 100.dp else 160.dp).clip(CircleShape)
-                .background(PremiumPalette.PaperWarm),
+            modifier = Modifier.size(illustrationSize).clip(CircleShape)
+                .background(Brush.radialGradient(listOf(PremiumPalette.PaperWarm, PremiumPalette.Paper))),
             contentAlignment = Alignment.Center
         ) {
-            Text(slide.emoji, fontSize = if (hasFeatures) 44.sp else 72.sp)
+            when (slide.illustrationType) {
+                IllustrationType.CHAT_LOGO -> Image(
+                    painter = painterResource(id = R.drawable.logo_accueil),
+                    contentDescription = "Logo Comprendre mon chat",
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentScale = ContentScale.Fit
+                )
+                IllustrationType.QUATRE_AXES -> QuatreAxesIllustration()
+                IllustrationType.BILAN_COMPLET -> BilanIllustration()
+            }
         }
 
         Spacer(modifier = Modifier.height(if (hasFeatures) 16.dp else 20.dp))
@@ -188,7 +214,8 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
 
         if (hasFeatures) {
             Text(slide.titre, style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center, lineHeight = 28.sp)
             Spacer(modifier = Modifier.height(8.dp))
         }
 
@@ -225,8 +252,84 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
 }
 
 @Composable
+fun QuatreAxesIllustration() {
+    val primary = PremiumPalette.Primary
+    val soft = PremiumPalette.PrimarySoft
+    val accent = PremiumPalette.Accent
+
+    Canvas(modifier = Modifier.size(140.dp)) {
+        val cx = size.width / 2f
+        val cy = size.height / 2f
+        val r = size.width * 0.38f
+
+        listOf(0.33f, 0.66f, 1f).forEach { ratio ->
+            drawCircle(color = accent.copy(alpha = 0.15f), radius = r * ratio,
+                center = Offset(cx, cy), style = Stroke(width = 1f))
+        }
+
+        val angles = listOf(270f, 0f, 90f, 180f)
+        val valeurs = listOf(0.75f, 0.55f, 0.80f, 0.45f)
+
+        angles.forEach { angle ->
+            val rad = Math.toRadians(angle.toDouble())
+            drawLine(color = accent.copy(alpha = 0.4f), start = Offset(cx, cy),
+                end = Offset(cx + (r * Math.cos(rad)).toFloat(), cy + (r * Math.sin(rad)).toFloat()),
+                strokeWidth = 1.5f)
+        }
+
+        val points = angles.mapIndexed { i, angle ->
+            val rad = Math.toRadians(angle.toDouble())
+            Offset(cx + (r * valeurs[i] * Math.cos(rad)).toFloat(),
+                cy + (r * valeurs[i] * Math.sin(rad)).toFloat())
+        }
+        val path = Path().apply {
+            moveTo(points[0].x, points[0].y)
+            points.drop(1).forEach { lineTo(it.x, it.y) }
+            close()
+        }
+        drawPath(path, color = primary.copy(alpha = 0.20f))
+        drawPath(path, color = primary, style = Stroke(width = 2.5f, cap = StrokeCap.Round, join = StrokeJoin.Round))
+        points.forEach { pt ->
+            drawCircle(color = primary, radius = 5f, center = pt)
+            drawCircle(color = Color.White, radius = 2.5f, center = pt)
+        }
+        drawCircle(color = soft, radius = 5f, center = Offset(cx, cy))
+    }
+}
+
+@Composable
+fun BilanIllustration() {
+    val primary = PremiumPalette.Primary
+    val soft = PremiumPalette.PrimarySoft
+    val accent = PremiumPalette.Accent
+    val border = PremiumPalette.Border
+
+    Canvas(modifier = Modifier.size(140.dp)) {
+        val w = size.width
+        val h = size.height
+        val stroke = Stroke(width = 2f, cap = StrokeCap.Round)
+
+        translate(w * 0.5f, h * 0.5f) {
+            drawRoundRect(color = border, topLeft = Offset(-28f, -36f), size = Size(60f, 76f), cornerRadius = CornerRadius(8f))
+            drawRoundRect(color = Color.White, topLeft = Offset(-32f, -40f), size = Size(60f, 76f), cornerRadius = CornerRadius(8f))
+            drawRoundRect(color = border, topLeft = Offset(-32f, -40f), size = Size(60f, 76f), cornerRadius = CornerRadius(8f), style = stroke)
+            drawRoundRect(color = primary.copy(alpha = 0.85f), topLeft = Offset(-32f, -40f), size = Size(60f, 18f), cornerRadius = CornerRadius(8f))
+            listOf(-14f, -4f, 6f, 16f).forEachIndexed { i, y ->
+                val w2 = if (i % 2 == 0) 44f else 32f
+                drawRoundRect(color = accent.copy(alpha = 0.4f), topLeft = Offset(-24f, y), size = Size(w2, 4f), cornerRadius = CornerRadius(2f))
+            }
+            drawRoundRect(color = border, topLeft = Offset(-24f, 26f), size = Size(44f, 5f), cornerRadius = CornerRadius(3f))
+            drawRoundRect(color = soft, topLeft = Offset(-24f, 26f), size = Size(30f, 5f), cornerRadius = CornerRadius(3f))
+            drawCircle(color = primary, radius = 14f, center = Offset(22f, 28f))
+            val check = Path().apply { moveTo(15f, 28f); lineTo(20f, 34f); lineTo(30f, 22f) }
+            drawPath(check, color = Color.White, style = Stroke(width = 3f, cap = StrokeCap.Round, join = StrokeJoin.Round))
+        }
+    }
+}
+
+@Composable
 fun AccueilIllustrationCard() {
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val isDark = isSystemInDarkTheme()
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
@@ -237,30 +340,26 @@ fun AccueilIllustrationCard() {
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Comprendre mon chat", style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.ExtraBold, color = PremiumPalette.Primary,
                 textAlign = TextAlign.Center)
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             Box(
-                modifier = Modifier.size(140.dp).clip(CircleShape).background(PremiumPalette.PaperWarm),
+                modifier = Modifier.fillMaxWidth().height(160.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = "Logo",
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentDescription = "Logo Comprendre mon chat",
+                    modifier = Modifier.fillMaxWidth().height(160.dp),
                     contentScale = ContentScale.Fit
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Text("Bienvenue", style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-            Spacer(modifier = Modifier.height(6.dp))
-            Text("Évaluez le bien-être de votre compagnon félin",
-                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
         }
     }
