@@ -3,6 +3,9 @@ package com.example.comprendremonchat
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -244,7 +248,12 @@ fun AccueilIllustrationCard() {
                 modifier = Modifier.size(140.dp).clip(CircleShape).background(PremiumPalette.PaperWarm),
                 contentAlignment = Alignment.Center
             ) {
-                Text("🐱", fontSize = 72.sp)
+                Image(
+                    painter = painterResource(id = R.drawable.logo_accueil),
+                    contentDescription = "Logo",
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
             Spacer(modifier = Modifier.height(20.dp))
             Text("Bienvenue", style = MaterialTheme.typography.bodyLarge,
