@@ -142,10 +142,10 @@ object PdfExporter {
         y += 48f
 
         val axes = listOf(
-            Triple("Sensibilit\u00e9 / Peur", analyse.niveauPeur, analyse.peur),
-            Triple("Attachement", analyse.niveauAttachement, analyse.attachement),
-            Triple("Impulsivit\u00e9", analyse.niveauImpulsivite, analyse.impulsivite),
-            Triple("R\u00e9activit\u00e9", analyse.niveauReactivite, analyse.reactivite)
+            Triple("Sécurité émotionnelle", analyse.niveauPeur, analyse.peur),
+            Triple("Lien humain", analyse.niveauAttachement, analyse.attachement),
+            Triple("Instincts", analyse.niveauImpulsivite, analyse.impulsivite),
+            Triple("Cohabitation", analyse.niveauReactivite, analyse.reactivite)
         )
         axes.forEach { (label, niveau, score) ->
             y = drawAxeBar(canvas, y, label, niveau, score)
@@ -334,7 +334,7 @@ object PdfExporter {
         val cardW = (CONTENT_W - colGap) / 2f
         var y = startY
         items.chunked(2).forEach { row ->
-            val cardH = 64f
+            val cardH = 90f
             row.forEachIndexed { index, (label, value) ->
                 val left = MARGIN + index * (cardW + colGap)
                 drawCard(canvas, left, y, left + cardW, y + cardH, COLOR_WARM_BG, COLOR_BORDER, 12f)

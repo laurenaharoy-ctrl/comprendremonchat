@@ -354,8 +354,10 @@ fun AccueilIllustrationCard() {
                 Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
                     contentDescription = "Logo Comprendre mon chat",
-                    modifier = Modifier.fillMaxWidth().height(160.dp),
-                    contentScale = ContentScale.Fit
+                    modifier = Modifier
+                        .size(160.dp)
+                        .clip(RoundedCornerShape(28.dp)),
+                    contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
