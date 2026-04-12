@@ -38,14 +38,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.util.concurrent.TimeUnit
 
 private val Context.dataStore by preferencesDataStore(name = "comprendre_mon_chat_state")
 
@@ -90,25 +85,6 @@ fun screenFromStorage(value: String): AppScreen = when {
     value == "alimentation" -> AppScreen.Alimentation
     value == "historique" -> AppScreen.Historique
     else -> AppScreen.Accueil
-}
-
-fun programmerRappelBilan(context: Context, nomChat: String) {
-    val data = Data.Builder()
-        .putString("nom_chat", nomChat)
-        .build()
-
-    val rappel = OneTimeWorkRequestBuilder<RappelWorker>()
-        .setInitialDelay(30, TimeUnit.DAYS)
-        .setInputData(data)
-        .addTag("rappel_bilan")
-        .build()
-
-    WorkManager.getInstance(context)
-        .enqueueUniqueWork(
-            "rappel_bilan",
-            ExistingWorkPolicy.REPLACE,
-            rappel
-        )
 }
 
 class MainActivity : ComponentActivity() {
@@ -433,7 +409,6 @@ Envoyé depuis l'application Comprendre mon chat
                             reponsesTexte["nom_chat"].orEmpty(),
                             analyse
                         )
-                        programmerRappelBilan(context, reponsesTexte["nom_chat"].orEmpty())
                     }
 
                     val textePartage = construireTextePartageBilan(
@@ -569,12 +544,18 @@ Envoyé depuis l'application Comprendre mon chat
 
 fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>): Boolean {
     return when (question.id) {
-        "si_non_quand" -> { val r = reponsesChoix["proprete_maison"]; r == 1 || r == 2 }
-        "apparition", "situation_principale", "duree_probleme", "evolution_probleme",
+
+        // Si accès extérieur libre → pas besoin de demander l'environnement intérieur
+        "vie_interieur" -> reponsesChoix["acces_exterieur"] != 0
+
+        // Si jamais agressif pendant caresses → on saute a_deja_griffe_mordu
+        "a_deja_griffe_mordu" -> reponsesChoix["agressivite_caresses"] != 0
+
+        // Questions de contexte → seulement si problème signalé
+        "apparition", "duree_probleme", "evolution_probleme",
         "frequence_probleme", "intensite_probleme", "generalisation_probleme",
-        "changement_recent", "signe_physique" -> {
-            reponsesChoix["a_un_probleme"] != 1
-        }
+        "changement_recent", "signe_physique" -> reponsesChoix["a_un_probleme"] == 0
+
         else -> true
     }
 }
@@ -582,7 +563,7 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
 fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): String {
     val nom = nomChatAffiche(nomChat)
     return """
-Bilan pour $nom
+Bilan émotionnel pour $nom
 
 Hypothèse :
 ${analyse.hypothesePrincipale}
@@ -593,10 +574,10 @@ ${textePrioriteAction(analyse.prioriteAction)}
 ${analyse.syntheseAvancee}
 
 Scores :
-Sensibilité : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}
-Attachement : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}
-Impulsivité : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}
-Réactivité : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}
+Sécurité émotionnelle : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}
+Lien humain : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}
+Instincts : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}
+Cohabitation : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}
 
 ⚠️ Bilan indicatif
     """.trimIndent()

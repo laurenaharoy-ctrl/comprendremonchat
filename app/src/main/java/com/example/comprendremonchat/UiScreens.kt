@@ -489,8 +489,6 @@ fun QuestionnaireScreen(
     ) {
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             PremiumCard {
-                EditorialKicker("Étape $numero")
-                Spacer(modifier = Modifier.height(6.dp))
                 SectionChip(titreSection)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text("$numero sur $total", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
@@ -507,8 +505,6 @@ fun QuestionnaireScreen(
                 when (question) {
                     is QuestionTexte -> {
                         PremiumCard {
-                            AccentChip("Réponse libre")
-                            Spacer(modifier = Modifier.height(16.dp))
                             Text(question.titre, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
                             Spacer(modifier = Modifier.height(18.dp))
                             OutlinedTextField(
@@ -534,8 +530,6 @@ fun QuestionnaireScreen(
                     }
                     is QuestionChoix -> {
                         PremiumCard {
-                            AccentChip("Choix unique")
-                            Spacer(modifier = Modifier.height(16.dp))
                             Text(question.titre, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
                             val aide = QuestionnaireEngine.aideQuestion(question.id)
                             if (aide != null) {
@@ -1285,7 +1279,7 @@ fun ParametresScreen(modifier: Modifier = Modifier, onRevoirOnboarding: () -> Un
                 Text("Cette application ne collecte aucune donnée personnelle. Les bilans sont stockés uniquement sur votre appareil. Les notifications sont locales.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(14.dp))
                 SecondaryPremiumButton("Politique de confidentialité", onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchat/confidentialite.html"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchien/confidentialite.html"))
                     context.startActivity(intent)
                 }, leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null) })
             }
