@@ -182,6 +182,20 @@ fun getPredispositions(race: String): List<String> =
     categoriesRaces.firstOrNull { it.nom.equals(race, ignoreCase = true) }?.predispositions ?: emptyList()
 
 // ═══════════════════════════════════════════════════════════
+// HELPERS SEXE/STÉRILISATION
+// 0 = mâle stérilisé, 1 = femelle stérilisée, 2 = mâle entier, 3 = femelle entière
+// ═══════════════════════════════════════════════════════════
+
+fun estSterilise(reponsesChoix: Map<String, Int>): Boolean =
+    reponsesChoix["sterilise"] == 0 || reponsesChoix["sterilise"] == 1
+
+fun estMaleEntier(reponsesChoix: Map<String, Int>): Boolean =
+    reponsesChoix["sterilise"] == 2
+
+fun estFemelleEntiere(reponsesChoix: Map<String, Int>): Boolean =
+    reponsesChoix["sterilise"] == 3
+
+// ═══════════════════════════════════════════════════════════
 // MOTEUR DE CALCUL
 // ═══════════════════════════════════════════════════════════
 
@@ -228,22 +242,10 @@ object QuestionnaireEngine {
         val firstScore = top[0].second
         if (firstScore <= 25) return "Chat épanoui et équilibré"
         return when (first) {
-            Axe.SECURITE -> when {
-                firstScore >= 75 -> "Chat anxieux"
-                else -> "Chat sensible"
-            }
-            Axe.LIEN -> when {
-                firstScore >= 75 -> "Chat hyperattaché"
-                else -> "Chat fusionnel"
-            }
-            Axe.INSTINCTS -> when {
-                firstScore >= 75 -> "Chat en manque de stimulation"
-                else -> "Chat sous-stimulé"
-            }
-            Axe.COHABITATION -> when {
-                firstScore >= 75 -> "Chat en conflit"
-                else -> "Chat territorial"
-            }
+            Axe.SECURITE -> if (firstScore >= 75) "Chat anxieux" else "Chat sensible"
+            Axe.LIEN -> if (firstScore >= 75) "Chat hyperattaché" else "Chat fusionnel"
+            Axe.INSTINCTS -> if (firstScore >= 75) "Chat en manque de stimulation" else "Chat sous-stimulé"
+            Axe.COHABITATION -> if (firstScore >= 75) "Chat en conflit" else "Chat territorial"
         }
     }
 
@@ -264,34 +266,13 @@ object QuestionnaireEngine {
         val phraseHumaine = phraseHumaineProfil(nomChat, securite, lien, instincts, cohabitation)
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
         return when {
-            maxAxe <= 25 ->
-                ProfilGlobal("Profil globalement équilibré",
-                    "Les réponses suggèrent un chat bien dans ses pattes.",
-                    profilType, scoreGlobal, phraseHumaine)
-            securite >= 65 && lien >= 65 ->
-                ProfilGlobal("Insécurité émotionnelle et dépendance",
-                    "Le profil évoque un chat qui cherche constamment à se rassurer.",
-                    profilType, scoreGlobal, phraseHumaine)
-            securite >= 65 ->
-                ProfilGlobal("Insécurité émotionnelle marquée",
-                    "Les réponses suggèrent un chat qui peине à se sentir en sécurité.",
-                    profilType, scoreGlobal, phraseHumaine)
-            lien >= 65 ->
-                ProfilGlobal("Hyperattachement ou difficultés relationnelles",
-                    "Le lien avec l'humain semble au cœur des difficultés.",
-                    profilType, scoreGlobal, phraseHumaine)
-            instincts >= 65 ->
-                ProfilGlobal("Instincts insuffisamment canalisés",
-                    "Les besoins naturels du chat ne trouvent pas de débouché adapté.",
-                    profilType, scoreGlobal, phraseHumaine)
-            cohabitation >= 65 ->
-                ProfilGlobal("Difficultés de cohabitation",
-                    "Les relations avec l'entourage sont source de tension.",
-                    profilType, scoreGlobal, phraseHumaine)
-            else ->
-                ProfilGlobal("Profil à nuancer",
-                    "Quelques points de vigilance sans qu'un aspect ne domine clairement.",
-                    profilType, scoreGlobal, phraseHumaine)
+            maxAxe <= 25 -> ProfilGlobal("Profil globalement équilibré", "Les réponses suggèrent un chat bien dans ses pattes.", profilType, scoreGlobal, phraseHumaine)
+            securite >= 65 && lien >= 65 -> ProfilGlobal("Insécurité émotionnelle et dépendance", "Le profil évoque un chat qui cherche constamment à se rassurer.", profilType, scoreGlobal, phraseHumaine)
+            securite >= 65 -> ProfilGlobal("Insécurité émotionnelle marquée", "Les réponses suggèrent un chat qui peine à se sentir en sécurité.", profilType, scoreGlobal, phraseHumaine)
+            lien >= 65 -> ProfilGlobal("Hyperattachement ou difficultés relationnelles", "Le lien avec l'humain semble au cœur des difficultés.", profilType, scoreGlobal, phraseHumaine)
+            instincts >= 65 -> ProfilGlobal("Instincts insuffisamment canalisés", "Les besoins naturels du chat ne trouvent pas de débouché adapté.", profilType, scoreGlobal, phraseHumaine)
+            cohabitation >= 65 -> ProfilGlobal("Difficultés de cohabitation", "Les relations avec l'entourage sont source de tension.", profilType, scoreGlobal, phraseHumaine)
+            else -> ProfilGlobal("Profil à nuancer", "Quelques points de vigilance sans qu'un aspect ne domine clairement.", profilType, scoreGlobal, phraseHumaine)
         }
     }
 
@@ -313,6 +294,8 @@ object QuestionnaireEngine {
         val critiqueDetecte = questionsChoix.any { q -> q.signalCritique && (reponsesChoix[q.id] ?: 0) > 0 }
         val nbAlertes = questionsChoix.count { q -> q.signalAlerte && (reponsesChoix[q.id] ?: 0) >= 2 }
         val scoreMax = maxOf(securite, lien, instincts, cohabitation)
+        val maleEntier = estMaleEntier(reponsesChoix)
+        val femelleEntiere = estFemelleEntiere(reponsesChoix)
         return when {
             critiqueDetecte -> NiveauVigilance.ELEVEE
             contexte.physique >= 4 -> NiveauVigilance.ELEVEE
@@ -321,6 +304,8 @@ object QuestionnaireEngine {
             nbAlertes >= 2 -> NiveauVigilance.MODEREE
             scoreMax >= 70 -> NiveauVigilance.MODEREE
             contexte.scoreContexte >= 6 -> NiveauVigilance.MODEREE
+            maleEntier && cohabitation >= 50 -> NiveauVigilance.MODEREE
+            femelleEntiere && securite >= 50 -> NiveauVigilance.MODEREE
             else -> NiveauVigilance.FAIBLE
         }
     }
@@ -359,12 +344,14 @@ object QuestionnaireEngine {
     fun genererConseilsPratiquesPersonnalises(nomChat: String, reponsesChoix: Map<String, Int>,
                                               securite: Int, lien: Int, instincts: Int, cohabitation: Int): List<String> {
         val conseils = mutableListOf<String>()
-        if (securite >= 50) conseils += "Multiplier les refuges et cachettes pour que ${ nomChatAffiche(nomChat)} puisse se sentir en sécurité à tout moment."
+        if (securite >= 50) conseils += "Multiplier les refuges et cachettes pour que ${nomChatAffiche(nomChat)} puisse se sentir en sécurité à tout moment."
         if (lien >= 50) conseils += "Travailler progressivement l'autonomie en gardant des rituels stables et prévisibles."
         if (instincts >= 50) conseils += "Proposer des sessions de jeu interactif quotidiennes pour canaliser les instincts naturels."
         if (cohabitation >= 50) conseils += "Assurer des ressources en double (gamelles, litières, griffoirs) pour réduire la compétition."
         if (reponsesChoix["surtoilettage"] == 1) conseils += "Le surtoilettage est souvent un signe de stress chronique — identifier et réduire les sources de tension."
-        if (reponsesChoix["marquage_urinaire"] == 1) conseils += "Le marquage urinaire chez un chat stérilisé signale généralement un stress territorial."
+        if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "Le marquage urinaire chez un chat stérilisé signale généralement un stress territorial."
+        if (estMaleEntier(reponsesChoix) && cohabitation >= 40) conseils += "Chez un mâle entier, le marquage et les tensions territoriales sont plus fréquents — la stérilisation peut être discutée avec votre vétérinaire."
+        if (estFemelleEntiere(reponsesChoix) && securite >= 40) conseils += "Chez une femelle entière, certains comportements peuvent varier selon le cycle — observer si les tensions augmentent à certaines périodes."
         if (conseils.isEmpty()) conseils += "Continuer l'observation du quotidien et maintenir les repères déjà en place."
         return conseils.take(4)
     }
@@ -451,18 +438,12 @@ object QuestionnaireEngine {
                            securite: Int, lien: Int, instincts: Int, cohabitation: Int): String? {
         val nom = nomChatAffiche(nomChat)
         return when {
-            reponsesChoix["a_deja_griffe_mordu"] == 1 ->
-                "Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom."
-            contexte.physique >= 4 ->
-                "Des signes physiques ont été relevés — une consultation vétérinaire est recommandée en priorité pour $nom avant toute approche comportementale."
-            reponsesChoix["surtoilettage"] == 1 ->
-                "Le surtoilettage peut avoir une origine médicale — un avis vétérinaire est conseillé pour $nom avant d'agir sur le plan comportemental."
-            reponsesChoix["marquage_urinaire"] == 1 ->
-                "Le marquage urinaire chez un chat stérilisé mérite d'abord un bilan vétérinaire pour $nom pour écarter une infection urinaire."
-            niveauSituation == NiveauSituation.SENSIBLE ->
-                "La situation mérite le regard d'un comportementaliste félin qui pourra accompagner $nom et vous guider concrètement."
-            maxOf(securite, lien, instincts, cohabitation) >= 75 ->
-                "L'intensité des difficultés observées suggère qu'un comportementaliste félin pourrait apporter une aide précieuse pour $nom."
+            reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom."
+            contexte.physique >= 4 -> "Des signes physiques ont été relevés — une consultation vétérinaire est recommandée en priorité pour $nom avant toute approche comportementale."
+            reponsesChoix["surtoilettage"] == 1 -> "Le surtoilettage peut avoir une origine médicale — un avis vétérinaire est conseillé pour $nom avant d'agir sur le plan comportemental."
+            reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Le marquage urinaire chez un chat stérilisé mérite d'abord un bilan vétérinaire pour $nom pour écarter une infection urinaire."
+            niveauSituation == NiveauSituation.SENSIBLE -> "La situation mérite le regard d'un comportementaliste félin qui pourra accompagner $nom et vous guider concrètement."
+            maxOf(securite, lien, instincts, cohabitation) >= 75 -> "L'intensité des difficultés observées suggère qu'un comportementaliste félin pourrait apporter une aide précieuse pour $nom."
             else -> null
         }
     }
@@ -477,6 +458,7 @@ object QuestionnaireEngine {
         if (reponsesChoix["acces_exterieur"] == 0 && instincts >= 50) facteurs += "Chat d'intérieur avec instincts peu canalisés"
         if (maxOf(securite, lien, instincts, cohabitation) >= 75) facteurs += "Niveau élevé sur au moins un axe"
         if (reponsesChoix["plusieurs_chats"] == 1 && cohabitation >= 50) facteurs += "Cohabitation multi-chats conflictuelle"
+        if (estMaleEntier(reponsesChoix) && cohabitation >= 40) facteurs += "Mâle entier — marquage et tensions territoriales plus fréquents"
         return facteurs.distinct()
     }
 
@@ -485,7 +467,7 @@ object QuestionnaireEngine {
         if (reponsesChoix["evolution_probleme"] == 0) facteurs += "Une amélioration semble déjà présente"
         if (reponsesChoix["frequence_probleme"] == 0) facteurs += "Le comportement reste peu fréquent"
         if (reponsesChoix["acces_exterieur"] == 1) facteurs += "Accès à l'extérieur disponible"
-        if (reponsesChoix["sterilise"] == 0) facteurs += "Chat stérilisé — facteur de stabilité"
+        if (estSterilise(reponsesChoix)) facteurs += "Chat stérilisé — facteur de stabilité"
         if (contexte.scoreContexte <= 3) facteurs += "Le contexte global ne suggère pas une situation dégradée"
         return facteurs.distinct()
     }
@@ -493,24 +475,15 @@ object QuestionnaireEngine {
     fun detecterHypothesePrincipale(reponsesChoix: Map<String, Int>,
                                     securite: Int, lien: Int, instincts: Int, cohabitation: Int, contexte: ContexteAnalyse): String {
         return when {
-            contexte.physique >= 4 ->
-                "Les éléments signalés invitent d'abord à écarter une composante physique ou médicale avec un vétérinaire."
-            reponsesChoix["surtoilettage"] == 1 && securite >= 50 ->
-                "Le surtoilettage associé à une insécurité émotionnelle évoque un stress chronique qui s'exprime corporellement."
-            reponsesChoix["marquage_urinaire"] == 1 ->
-                "Le marquage urinaire évoque un stress territorial — à explorer après bilan vétérinaire."
-            securite >= 65 && lien >= 65 ->
-                "Un attachement anxieux doublé d'une insécurité émotionnelle — votre chat cherche constamment à se rassurer."
-            securite >= 65 ->
-                "Une insécurité émotionnelle importante qui se traduit par une vigilance permanente et des réactions de peur."
-            lien >= 65 ->
-                "Un hyperattachement ou une difficulté à gérer la séparation qui génère de la détresse en votre absence."
-            instincts >= 65 ->
-                "Des instincts naturels (chasse, exploration, griffage) insuffisamment canalisés qui cherchent à s'exprimer."
-            cohabitation >= 65 ->
-                "Des tensions de cohabitation qui génèrent stress et conflits au quotidien."
-            else ->
-                "Plusieurs facteurs semblent impliqués sans qu'un axe ne domine clairement — une approche globale est recommandée."
+            contexte.physique >= 4 -> "Les éléments signalés invitent d'abord à écarter une composante physique ou médicale avec un vétérinaire."
+            reponsesChoix["surtoilettage"] == 1 && securite >= 50 -> "Le surtoilettage associé à une insécurité émotionnelle évoque un stress chronique qui s'exprime corporellement."
+            reponsesChoix["marquage_urinaire"] == 1 -> "Le marquage urinaire évoque un stress territorial — à explorer après bilan vétérinaire."
+            securite >= 65 && lien >= 65 -> "Un attachement anxieux doublé d'une insécurité émotionnelle — votre chat cherche constamment à se rassurer."
+            securite >= 65 -> "Une insécurité émotionnelle importante qui se traduit par une vigilance permanente et des réactions de peur."
+            lien >= 65 -> "Un hyperattachement ou une difficulté à gérer la séparation qui génère de la détresse en votre absence."
+            instincts >= 65 -> "Des instincts naturels (chasse, exploration, griffage) insuffisamment canalisés qui cherchent à s'exprimer."
+            cohabitation >= 65 -> "Des tensions de cohabitation qui génèrent stress et conflits au quotidien."
+            else -> "Plusieurs facteurs semblent impliqués sans qu'un axe ne domine clairement — une approche globale est recommandée."
         }
     }
 
@@ -532,26 +505,21 @@ object QuestionnaireEngine {
                                     priorite: PrioriteAction, niveauSituation: NiveauSituation, nomChat: String): PrioriteImmediate {
         val nom = nomChatAffiche(nomChat)
         return when {
-            reponsesChoix["a_deja_griffe_mordu"] == 1 ->
-                PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un professionnel",
-                    "Comme il y a déjà eu griffure ou morsure, la situation ne doit pas être banalisée pour $nom.",
-                    listOf("Éviter les situations à risque identifiées.", "Consulter un vétérinaire comportementaliste ou un comportementaliste félin."))
-            contexte.physique >= 4 ->
-                PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un vétérinaire",
-                    "Des signes physiques sont signalés chez $nom — la priorité est médicale.",
-                    listOf("Prendre un rendez-vous vétérinaire rapidement.", "Ne pas attendre que les symptômes s'aggravent."))
-            priorite == PrioriteAction.ELEVEE ->
-                PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : agir sans tarder",
-                    "La situation justifie une action rapide pour $nom.",
-                    listOf("Alléger les contextes difficiles.", "Envisager un accompagnement par un comportementaliste félin."))
-            priorite == PrioriteAction.MODEREE ->
-                PrioriteImmediate(PrioriteAction.MODEREE, "Priorité immédiate : avancer progressivement",
-                    "La situation mérite attention pour $nom.",
-                    listOf("Commencer un travail progressif sur l'environnement.", "Observer fréquence et intensité des comportements."))
-            else ->
-                PrioriteImmediate(PrioriteAction.FAIBLE, "Priorité immédiate : surveiller calmement",
-                    "Rien d'urgent pour $nom — continuez à observer.",
-                    listOf("Maintenir un cadre stable et prévisible.", "Enrichir progressivement l'environnement."))
+            reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un professionnel",
+                "Comme il y a déjà eu griffure ou morsure, la situation ne doit pas être banalisée pour $nom.",
+                listOf("Éviter les situations à risque identifiées.", "Consulter un vétérinaire comportementaliste ou un comportementaliste félin."))
+            contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un vétérinaire",
+                "Des signes physiques sont signalés chez $nom — la priorité est médicale.",
+                listOf("Prendre un rendez-vous vétérinaire rapidement.", "Ne pas attendre que les symptômes s'aggravent."))
+            priorite == PrioriteAction.ELEVEE -> PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : agir sans tarder",
+                "La situation justifie une action rapide pour $nom.",
+                listOf("Alléger les contextes difficiles.", "Envisager un accompagnement par un comportementaliste félin."))
+            priorite == PrioriteAction.MODEREE -> PrioriteImmediate(PrioriteAction.MODEREE, "Priorité immédiate : avancer progressivement",
+                "La situation mérite attention pour $nom.",
+                listOf("Commencer un travail progressif sur l'environnement.", "Observer fréquence et intensité des comportements."))
+            else -> PrioriteImmediate(PrioriteAction.FAIBLE, "Priorité immédiate : surveiller calmement",
+                "Rien d'urgent pour $nom — continuez à observer.",
+                listOf("Maintenir un cadre stable et prévisible.", "Enrichir progressivement l'environnement."))
         }
     }
 
@@ -623,7 +591,7 @@ object QuestionnaireEngine {
     }
 
     fun titreSectionPourQuestion(questionId: String): String = when (questionId) {
-        "nom_chat", "age", "sexe", "sterilise", "acces_exterieur", "vie_interieur" -> "Votre chat"
+        "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur" -> "Votre chat"
         "race_categorie" -> "Profil de race"
         "reaction_bruit", "reaction_inconnu", "cache_souvent", "adaptation_changement",
         "reaction_veterinaire", "surtoilettage" -> "Sécurité émotionnelle"
@@ -639,6 +607,7 @@ object QuestionnaireEngine {
 
     fun aideQuestion(questionId: String): String? = when (questionId) {
         "race_categorie" -> "Choisissez la famille qui ressemble le plus à votre chat."
+        "sterilise" -> "La stérilisation influence certains comportements comme le marquage ou les tensions territoriales."
         "surtoilettage" -> "Le surtoilettage se manifeste par des zones de poils clairsemés ou des plaques sans poils."
         "reaction_absence" -> "Pensez à ce que vous observez à votre retour ou ce que vos voisins vous rapportent."
         "agressivite_caresses" -> "Par exemple, il mord ou griffe soudainement pendant que vous le caressez."
@@ -656,8 +625,6 @@ object QuestionnaireEngine {
 fun questionsApplication(): List<Question> {
     return listOf(
 
-        // ── IDENTITÉ ─────────────────────────────────────────────────────────
-
         QuestionTexte("nom_chat", "Quel est le prénom de votre chat ?"),
 
         QuestionChoix("race_categorie", "À quelle famille de races appartient votre chat ?",
@@ -667,20 +634,17 @@ fun questionsApplication(): List<Question> {
         QuestionChoix("age", "Quel âge a votre chat ?",
             listOf("Moins d'1 an (chaton)", "Entre 1 et 3 ans", "Entre 4 et 8 ans", "9 ans et plus (senior)")),
 
-        QuestionChoix("sterilise", "Votre chat est-il stérilisé ?",
-            listOf("Oui", "Non")),
+        // 0 = mâle stérilisé, 1 = femelle stérilisée, 2 = mâle entier, 3 = femelle entière
+        QuestionChoix("sterilise", "Votre chat est :",
+            listOf("Un mâle stérilisé", "Une femelle stérilisée", "Un mâle entier", "Une femelle entière")),
 
         QuestionChoix("acces_exterieur", "Votre chat a-t-il accès à l'extérieur ?",
             listOf("Oui, librement", "Oui, de façon contrôlée (balcon sécurisé, jardin surveillé)", "Non, uniquement en intérieur")),
 
         QuestionChoix("vie_interieur", "Si votre chat est d'intérieur, comment décririez-vous son environnement ?",
             listOf("Enrichi (griffoirs, hauteurs, jeux variés, fenêtres accessibles)",
-                "Correct mais peut mieux faire",
-                "Peu stimulant",
-                "Je ne sais pas vraiment",
-                "Mon chat a accès à l'extérieur")),
-
-        // ── AXE 1 : SÉCURITÉ ÉMOTIONNELLE ────────────────────────────────────
+                "Correct mais peut mieux faire", "Peu stimulant",
+                "Je ne sais pas vraiment", "Mon chat a accès à l'extérieur")),
 
         QuestionChoix("reaction_bruit",
             "Comment votre chat réagit-il aux bruits soudains ou forts (aspirateur, tonnerre, travaux) ?",
@@ -728,8 +692,6 @@ fun questionsApplication(): List<Question> {
                 "Parfois, sans que ça laisse de traces visibles",
                 "Oui, avec des zones légèrement clairsemées"),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3), signalAlerte = true),
-
-        // ── AXE 2 : LIEN HUMAIN ───────────────────────────────────────────────
 
         QuestionChoix("suit_partout",
             "Votre chat vous suit-il partout dans la maison ?",
@@ -779,8 +741,6 @@ fun questionsApplication(): List<Question> {
                 "Il s'agite ou vocalise si vous fermez la porte de la chambre"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 1, 2)),
 
-        // ── AXE 3 : EXPRESSION DES INSTINCTS ─────────────────────────────────
-
         QuestionChoix("joue_activement",
             "Votre chat joue-t-il activement avec des jouets ?",
             listOf("Oui, avec enthousiasme — il initie lui-même des sessions",
@@ -792,8 +752,7 @@ fun questionsApplication(): List<Question> {
         QuestionChoix("chasse_interieur",
             "Votre chat pratique-t-il des comportements de chasse à l'intérieur (épier, bondir, attraper) ?",
             listOf("Oui, régulièrement avec des jouets ou de petits objets",
-                "Parfois",
-                "Rarement",
+                "Parfois", "Rarement",
                 "Jamais — comportement totalement absent"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
@@ -823,8 +782,7 @@ fun questionsApplication(): List<Question> {
 
         QuestionChoix("destruction_ennui",
             "Votre chat provoque-t-il des destructions ou dégâts, notamment en votre absence ?",
-            listOf("Non, jamais",
-                "Rarement, quelques petits incidents",
+            listOf("Non, jamais", "Rarement, quelques petits incidents",
                 "Parfois — objets renversés, plantes abîmées",
                 "Souvent — les dégâts sont importants et réguliers"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
@@ -836,8 +794,6 @@ fun questionsApplication(): List<Question> {
                 "Oui, de temps en temps",
                 "Oui, fréquemment"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
-
-        // ── AXE 4 : COHABITATION ──────────────────────────────────────────────
 
         QuestionChoix("relation_autres_chats",
             "Si vous avez plusieurs chats, comment se passent leurs relations ?",
@@ -867,8 +823,7 @@ fun questionsApplication(): List<Question> {
 
         QuestionChoix("a_deja_griffe_mordu",
             "Votre chat a-t-il déjà griffé ou mordu quelqu'un (vous, un proche, un enfant) ?",
-            listOf("Non, jamais",
-                "Oui, cela s'est déjà produit"),
+            listOf("Non, jamais", "Oui, cela s'est déjà produit"),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 4), poids = 2, signalCritique = true),
 
         QuestionChoix("defense_ressources",
@@ -878,63 +833,35 @@ fun questionsApplication(): List<Question> {
                 "Oui, fréquemment — il n'aime pas qu'on s'approche de ses affaires"),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 2, 4), signalAlerte = true),
 
-        // ── CONTEXTE SI PROBLÈME ──────────────────────────────────────────────
-
         QuestionChoix("a_un_probleme",
             "Y a-t-il un comportement particulier qui vous préoccupe en ce moment ?",
-            listOf("Oui, j'aimerais en savoir plus",
-                "Non, tout va bien dans l'ensemble")),
+            listOf("Oui, j'aimerais en savoir plus", "Non, tout va bien dans l'ensemble")),
 
-        QuestionChoix("apparition",
-            "Ce comportement est apparu :",
-            listOf("Progressivement",
-                "Du jour au lendemain, de façon brutale",
-                "Je ne sais pas vraiment")),
+        QuestionChoix("apparition", "Ce comportement est apparu :",
+            listOf("Progressivement", "Du jour au lendemain, de façon brutale", "Je ne sais pas vraiment")),
 
-        QuestionChoix("duree_probleme",
-            "Depuis combien de temps observez-vous ce comportement ?",
-            listOf("Moins d'une semaine",
-                "Entre 1 semaine et 1 mois",
-                "Depuis plusieurs mois",
-                "Depuis toujours ou très longtemps")),
+        QuestionChoix("duree_probleme", "Depuis combien de temps observez-vous ce comportement ?",
+            listOf("Moins d'une semaine", "Entre 1 semaine et 1 mois", "Depuis plusieurs mois", "Depuis toujours ou très longtemps")),
 
-        QuestionChoix("evolution_probleme",
-            "Ce comportement évolue-t-il ?",
-            listOf("Il s'améliore",
-                "Il reste stable",
-                "Il s'aggrave")),
+        QuestionChoix("evolution_probleme", "Ce comportement évolue-t-il ?",
+            listOf("Il s'améliore", "Il reste stable", "Il s'aggrave")),
 
-        QuestionChoix("frequence_probleme",
-            "À quelle fréquence ce comportement se manifeste-t-il ?",
-            listOf("Rarement — quelques fois par mois",
-                "Quelques fois par semaine",
-                "Tous les jours",
-                "Plusieurs fois par jour")),
+        QuestionChoix("frequence_probleme", "À quelle fréquence ce comportement se manifeste-t-il ?",
+            listOf("Rarement — quelques fois par mois", "Quelques fois par semaine", "Tous les jours", "Plusieurs fois par jour")),
 
-        QuestionChoix("intensite_probleme",
-            "Quand cela arrive, c'est plutôt :",
-            listOf("Gérable facilement",
-                "Gênant mais supportable",
-                "Difficile à gérer",
-                "Très intense, incontrôlable")),
+        QuestionChoix("intensite_probleme", "Quand cela arrive, c'est plutôt :",
+            listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable")),
 
-        QuestionChoix("generalisation_probleme",
-            "Ce comportement se produit :",
-            listOf("Dans une situation très précise",
-                "Dans plusieurs situations différentes",
-                "Dans la plupart des situations quotidiennes")),
+        QuestionChoix("generalisation_probleme", "Ce comportement se produit :",
+            listOf("Dans une situation très précise", "Dans plusieurs situations différentes", "Dans la plupart des situations quotidiennes")),
 
-        QuestionChoix("changement_recent",
-            "Y a-t-il eu un changement important récemment dans la vie de votre chat ?",
+        QuestionChoix("changement_recent", "Y a-t-il eu un changement important récemment dans la vie de votre chat ?",
             listOf("Aucun changement notable",
                 "Un changement léger (nouveau meuble, nouvelle routine)",
                 "Un changement important (déménagement, nouvel animal, naissance, séparation)")),
 
-        QuestionChoix("signe_physique",
-            "Avez-vous observé des changements physiques chez votre chat (appétit, poids, pelage, éliminations) ?",
-            listOf("Non, rien de particulier",
-                "Peut-être — je ne suis pas certain(e)",
-                "Oui, un changement notable",
-                "Oui, quelque chose qui m'inquiète vraiment"))
+        QuestionChoix("signe_physique", "Avez-vous observé des changements physiques chez votre chat (appétit, poids, pelage, éliminations) ?",
+            listOf("Non, rien de particulier", "Peut-être — je ne suis pas certain(e)",
+                "Oui, un changement notable", "Oui, quelque chose qui m'inquiète vraiment"))
     )
 }
