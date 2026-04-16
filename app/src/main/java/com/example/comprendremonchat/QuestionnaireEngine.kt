@@ -72,7 +72,9 @@ data class ResultatAnalyse(
     val hypothesePrincipale: String, val prioriteAction: PrioriteAction,
     val prioriteImmediate: PrioriteImmediate, val explicationResultat: ExplicationResultat,
     val facteursAggravants: List<String>, val facteursProtecteurs: List<String>,
-    val syntheseAvancee: String, val raceCategorie: String?, val racePrecise: String?
+    val syntheseAvancee: String, val raceCategorie: String?, val racePrecise: String?,
+    // ── NOUVEAU : Origines possibles ─────────────────────────────────────────
+    val originesPossibles: String = ""
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -548,6 +550,61 @@ object QuestionnaireEngine {
         return listOf(intro, "Hypothèse : $hypothese", aggr, prot).filter { it.isNotBlank() }.joinToString("\n\n")
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // ORIGINES POSSIBLES
+    // ═══════════════════════════════════════════════════════════
+
+    fun genererOriginesPossibles(
+        nomChat: String,
+        axe: Axe,
+        securite: Int,
+        lien: Int,
+        instincts: Int,
+        cohabitation: Int,
+        reponsesChoix: Map<String, Int>
+    ): String {
+        val nom = nomChatAffiche(nomChat)
+        val maxAxe = maxOf(securite, lien, instincts, cohabitation)
+        if (maxAxe <= 25) return "$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade."
+
+        return when (axe) {
+            Axe.SECURITE -> buildString {
+                append("L'insécurité émotionnelle de $nom peut avoir plusieurs origines. ")
+                append("Une socialisation précoce insuffisante — peu d'expositions à des humains, des bruits ou des environnements variés avant l'âge de 7 semaines — est souvent en cause. ")
+                append("Des expériences négatives passées, même ponctuelles, peuvent laisser une empreinte durable sur la façon dont un chat perçoit son monde. ")
+                if (reponsesChoix["acces_exterieur"] == 2) append("Un chat exclusivement d'intérieur peut parfois manquer de stimulations variées, ce qui fragilise sa capacité à faire face à la nouveauté. ")
+                if (reponsesChoix["age"] == 0) append("À moins d'un an, la construction du sentiment de sécurité est encore en cours — une certaine sensibilité est normale à cet âge. ")
+                if (reponsesChoix["changement_recent"] == 2) append("Un changement important récent peut avoir déstabilisé ses repères et amplifier ce sentiment d'insécurité. ")
+                append("Dans certains cas, une prédisposition génétique joue également un rôle, indépendamment du vécu.")
+            }
+            Axe.LIEN -> buildString {
+                append("Le besoin de proximité intense de $nom peut s'expliquer de plusieurs façons. ")
+                append("Un sevrage trop précoce — avant 8 semaines — peut fragiliser la construction de l'autonomie émotionnelle de façon durable. ")
+                append("Un environnement où le chat n'a jamais appris à rester seul peut aussi renforcer ce besoin de présence constante. ")
+                if (reponsesChoix["suit_partout"] == 3) append("Le fait de suivre en permanence son humain peut être à la fois un symptôme et un facteur qui entretient cette dépendance relationnelle. ")
+                if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("Chez un chat non stérilisé, certaines manifestations peuvent aussi être influencées par les cycles hormonaux. ")
+                append("Ce fonctionnement n'est pas un caprice : il reflète une vraie difficulté à trouver un appui interne en l'absence de la figure rassurante.")
+            }
+            Axe.INSTINCTS -> buildString {
+                append("La frustration instinctive de $nom peut avoir plusieurs origines. ")
+                append("Le chat est un prédateur solitaire dont les besoins de chasse, d'exploration et de griffage sont profondément ancrés — un environnement qui ne permet pas de les exprimer génère inévitablement de la frustration. ")
+                if (reponsesChoix["acces_exterieur"] == 2) append("L'absence d'accès à l'extérieur prive le chat de nombreuses stimulations naturelles qui canalisent ces instincts. ")
+                if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Un environnement intérieur peu enrichi aggrave ce manque de débouché pour ses instincts naturels. ")
+                val raceCat = reponsesChoix["race_categorie"]
+                if (raceCat != null && raceCat <= 1) append("Certaines races comme le Bengal ou l'Abyssin ont été sélectionnées pour un niveau d'énergie très élevé, ce qui accentue ce besoin de stimulation. ")
+                append("Ce n'est pas un problème de caractère mais un besoin fondamental qui cherche à s'exprimer, parfois de façon indésirable faute d'alternative adaptée.")
+            }
+            Axe.COHABITATION -> buildString {
+                append("Les difficultés de cohabitation de $nom peuvent s'expliquer par plusieurs facteurs. ")
+                append("Le chat est territorialement sensible — la compétition pour les ressources (nourriture, litière, espace de repos) est une source de tension majeure en milieu multi-chats. ")
+                if (estMaleEntier(reponsesChoix)) append("Chez un mâle entier, le marquage urinaire et les comportements d'intimidation sont fréquents et peuvent nourrir les conflits avec les cohabitants. ")
+                if (reponsesChoix["changement_recent"] == 2) append("L'arrivée d'un nouvel animal ou d'un nouveau membre du foyer peut avoir rompu un équilibre territorial fragile. ")
+                append("Une introduction trop rapide entre animaux, sans phase de familiarisation progressive, est l'une des causes les plus fréquentes de tensions durables. ")
+                append("Dans certains cas, des personnalités simplement incompatibles peuvent aussi être en cause, indépendamment de la gestion humaine.")
+            }
+        }
+    }
+
     fun calculerResultat(questions: List<Question>, reponsesTexte: Map<String, String>, reponsesChoix: Map<String, Int>): ResultatAnalyse {
         val securite = calculerPourcentageAxe(Axe.SECURITE, questions, reponsesChoix)
         val lien = calculerPourcentageAxe(Axe.LIEN, questions, reponsesChoix)
@@ -566,6 +623,12 @@ object QuestionnaireEngine {
         val prioriteImmediate = construirePrioriteImmediate(reponsesChoix, contexte, prioriteAction, niveauSituation, reponsesTexte["nom_chat"].orEmpty())
         val explicationResultat = construireExplicationResultat(reponsesChoix, contexte, securite, lien, instincts, cohabitation)
         val syntheseAvancee = genererSyntheseAvancee(nomChatAffiche(reponsesTexte["nom_chat"].orEmpty()), hypothesePrincipale, prioriteAction, facteursAggravants, facteursProtecteurs)
+        val originesPossibles = genererOriginesPossibles(
+            reponsesTexte["nom_chat"].orEmpty(),
+            problemePrincipal,
+            securite, lien, instincts, cohabitation,
+            reponsesChoix
+        )
         val raceCategorieTexte = reponsesChoix["race_categorie"]?.let { categoriesRaces.getOrNull(it)?.nom }
         return ResultatAnalyse(
             peur = securite, attachement = lien, impulsivite = instincts, reactivite = cohabitation,
@@ -586,7 +649,8 @@ object QuestionnaireEngine {
             hypothesePrincipale = hypothesePrincipale, prioriteAction = prioriteAction,
             prioriteImmediate = prioriteImmediate, explicationResultat = explicationResultat,
             facteursAggravants = facteursAggravants, facteursProtecteurs = facteursProtecteurs,
-            syntheseAvancee = syntheseAvancee, raceCategorie = raceCategorieTexte, racePrecise = null
+            syntheseAvancee = syntheseAvancee, raceCategorie = raceCategorieTexte, racePrecise = null,
+            originesPossibles = originesPossibles
         )
     }
 
@@ -634,7 +698,6 @@ fun questionsApplication(): List<Question> {
         QuestionChoix("age", "Quel âge a votre chat ?",
             listOf("Moins d'1 an (chaton)", "Entre 1 et 3 ans", "Entre 4 et 8 ans", "9 ans et plus (senior)")),
 
-        // 0 = mâle stérilisé, 1 = femelle stérilisée, 2 = mâle entier, 3 = femelle entière
         QuestionChoix("sterilise", "Votre chat est :",
             listOf("Un mâle stérilisé", "Une femelle stérilisée", "Un mâle entier", "Une femelle entière")),
 

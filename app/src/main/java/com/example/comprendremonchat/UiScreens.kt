@@ -677,6 +677,11 @@ fun ResultatScreen(
 
             HighlightAdviceCard(title = "Première piste concrète", advice = analyse.conseilPrincipal)
 
+            // ═══════════════════════════════════════════════════════════
+            // CARTE : POURQUOI EST-IL COMME ÇA ?
+            // ═══════════════════════════════════════════════════════════
+            OriginesPossiblesCard(origines = analyse.originesPossibles)
+
             PremiumCard(centered = true) {
                 EditorialKicker("Les 3 prochains jours", centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
@@ -739,10 +744,42 @@ fun ResultatScreen(
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+// CARTE ORIGINES POSSIBLES
+// ═══════════════════════════════════════════════════════════
+
+@Composable
+fun OriginesPossiblesCard(origines: String) {
+    val backgroundBrush = if (isSystemInDarkTheme())
+        Brush.verticalGradient(listOf(Color(0xFF2E2018), Color(0xFF231B14)))
+    else
+        Brush.verticalGradient(listOf(Color(0xFFF5EBE0), Color(0xFFEEE0D2)))
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, if (isSystemInDarkTheme()) Color(0xFF5A4035) else Color(0xFFD4B8A8))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().background(backgroundBrush).padding(horizontal = 24.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AccentChip("Comprendre pour mieux agir")
+            Spacer(modifier = Modifier.height(14.dp))
+            EditorialKicker("Pourquoi est-il comme ça ?", centered = true)
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                origines,
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
 @Composable
 fun QuatreAxesGrid(analyse: ResultatAnalyse) {
-    // Les champs peur/attachement/impulsivite/reactivite contiennent maintenant
-    // securite/lien/instincts/cohabitation
     val axes = listOf(
         Triple("Sécurité émotionnelle", analyse.niveauPeur, analyse.peur),
         Triple("Lien humain", analyse.niveauAttachement, analyse.attachement),
