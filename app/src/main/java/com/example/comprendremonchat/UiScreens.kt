@@ -1,4 +1,4 @@
-package com.example.comprendremonchat
+package com.laurena.comprendremonchat
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.runtime.getValue

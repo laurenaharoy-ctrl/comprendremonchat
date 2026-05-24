@@ -1,4 +1,4 @@
-package com.example.comprendremonchat
+package com.laurena.comprendremonchat
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.runtime.getValue
@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import com.laurena.comprendremonchat.R
 
 data class OnboardingSlide(
     val kicker: String,

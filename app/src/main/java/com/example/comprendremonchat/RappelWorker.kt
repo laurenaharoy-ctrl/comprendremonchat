@@ -1,4 +1,4 @@
-package com.example.comprendremonchat
+package com.laurena.comprendremonchat
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

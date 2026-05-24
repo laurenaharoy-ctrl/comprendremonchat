@@ -1,4 +1,4 @@
-package com.example.comprendremonchat
+package com.laurena.comprendremonchat
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween

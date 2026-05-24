@@ -1,4 +1,4 @@
-package com.example.comprendremonchat
+package com.laurena.comprendremonchat
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

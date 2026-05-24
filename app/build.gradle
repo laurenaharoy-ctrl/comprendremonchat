@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.comprendremonchat'
+    namespace 'com.laurena.comprendremonchat'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.example.comprendremonchat"
+        applicationId "com.laurena.comprendremonchat"
         minSdk 28
         targetSdk 35
         versionCode 1
@@ -16,9 +16,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("release/comprendremonchat.jks")
+            storePassword "191011"
+            keyAlias "comprendremonchat"
+            keyPassword "191011"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
