@@ -81,7 +81,37 @@ enum class IllustrationType {
     BILAN_COMPLET
 }
 
-val onboardingSlides = listOf(
+fun onboardingSlides(): List<OnboardingSlide> = if (isEnglish()) listOf(
+    OnboardingSlide(
+        kicker = "Welcome",
+        titre = "Understanding My Cat",
+        description = "This app helps you decode your cat's behaviors and get concrete, personalized guidance tailored to their unique profile.",
+        illustrationType = IllustrationType.CHAT_LOGO
+    ),
+    OnboardingSlide(
+        kicker = "How it works",
+        titre = "One questionnaire, four dimensions",
+        description = "In just a few minutes, you explore the four axes that shape your cat's everyday behavior.",
+        illustrationType = IllustrationType.QUATRE_AXES,
+        features = listOf(
+            Icons.Rounded.Psychology to "Emotional sensitivity",
+            Icons.Rounded.Favorite to "Attachment needs",
+            Icons.Rounded.Spa to "Excitement management",
+            Icons.Rounded.Analytics to "Reactivity to the environment"
+        )
+    ),
+    OnboardingSlide(
+        kicker = "What you get",
+        titre = "A complete personalized report",
+        description = "At the end of the questionnaire, you receive a detailed report with practical advice, an action plan, and a PDF to share with your vet.",
+        illustrationType = IllustrationType.BILAN_COMPLET,
+        features = listOf(
+            Icons.Rounded.CheckCircle to "Emotional assessment",
+            Icons.Rounded.PictureAsPdf to "4-page PDF export",
+            Icons.Rounded.History to "Report history"
+        )
+    )
+) else listOf(
     OnboardingSlide(
         kicker = "Bienvenue",
         titre = "Comprendre mon chat",
@@ -115,7 +145,8 @@ val onboardingSlides = listOf(
 
 @Composable
 fun OnboardingScreen(onTerminer: () -> Unit) {
-    val pagerState = rememberPagerState(pageCount = { onboardingSlides.size })
+    val slides = onboardingSlides()
+    val pagerState = rememberPagerState(pageCount = { slides.size })
     val scope = rememberCoroutineScope()
 
     AppBackground {
@@ -127,13 +158,16 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
                 contentAlignment = Alignment.CenterEnd
             ) {
                 TextButton(onClick = onTerminer) {
-                    Text("Passer", color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        if (isEnglish()) "Skip" else "Passer",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
-                OnboardingSlideContent(slide = onboardingSlides[page])
+                OnboardingSlideContent(slide = slides[page])
             }
 
             Column(
@@ -142,7 +176,7 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    repeat(onboardingSlides.size) { index ->
+                    repeat(slides.size) { index ->
                         val isSelected = pagerState.currentPage == index
                         val width by animateFloatAsState(
                             targetValue = if (isSelected) 24f else 8f,
@@ -156,9 +190,13 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
                     }
                 }
 
-                val estDernierSlide = pagerState.currentPage == onboardingSlides.lastIndex
+                val estDernierSlide = pagerState.currentPage == slides.lastIndex
                 PrimaryGlowButton(
-                    text = if (estDernierSlide) "Commencer" else "Suivant",
+                    text = if (estDernierSlide) {
+                        if (isEnglish()) "Get started" else "Commencer"
+                    } else {
+                        if (isEnglish()) "Next" else "Suivant"
+                    },
                     onClick = {
                         if (estDernierSlide) onTerminer()
                         else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
@@ -196,7 +234,7 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
             when (slide.illustrationType) {
                 IllustrationType.CHAT_LOGO -> Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = "Logo Comprendre mon chat",
+                    contentDescription = if (isEnglish()) "Understanding My Cat logo" else "Logo Comprendre mon chat",
                     modifier = Modifier.fillMaxSize().padding(16.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -344,9 +382,12 @@ fun AccueilIllustrationCard() {
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Comprendre mon chat", style = MaterialTheme.typography.headlineMedium,
+            Text(
+                if (isEnglish()) "Understanding My Cat" else "Comprendre mon chat",
+                style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.ExtraBold, color = PremiumPalette.Primary,
-                textAlign = TextAlign.Center)
+                textAlign = TextAlign.Center
+            )
             Spacer(modifier = Modifier.height(14.dp))
             Box(
                 modifier = Modifier.fillMaxWidth().height(160.dp),
@@ -354,16 +395,18 @@ fun AccueilIllustrationCard() {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = "Logo Comprendre mon chat",
-                    modifier = Modifier
-                        .size(160.dp)
-                        .clip(RoundedCornerShape(28.dp)),
+                    contentDescription = if (isEnglish()) "Understanding My Cat logo" else "Logo Comprendre mon chat",
+                    modifier = Modifier.size(160.dp).clip(RoundedCornerShape(28.dp)),
                     contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Text("Bienvenue", style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            Text(
+                if (isEnglish()) "Welcome" else "Bienvenue",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

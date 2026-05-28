@@ -1,0 +1,256 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">Understanding My Cat</string>
+
+    <!-- Home -->
+    <string name="btn_demarrer">Start the assessment</string>
+    <string name="btn_dictionnaire">Behavioral dictionary</string>
+    <string name="btn_alimentation">Nutrition</string>
+    <string name="btn_reprendre">Resume questionnaire</string>
+
+    <!-- Questionnaire -->
+    <string name="label_sur">of</string>
+    <string name="btn_continuer">Continue</string>
+    <string name="placeholder_prenom_chat">E.g. Luna, Milo, Simba…</string>
+    <string name="label_prenom_chat">Your cat\'s name</string>
+    <string name="hint_saisir_prenom">Enter your cat\'s name to continue</string>
+    <string name="hint_choisir_reponse">Choose an answer to continue</string>
+
+    <!-- Loading -->
+    <string name="chargement_analyse">Analyzing…</string>
+    <string name="chargement_profil">Reading your cat\'s profile…</string>
+    <string name="chargement_bilan">Preparing your report…</string>
+
+    <!-- Results -->
+    <string name="kicker_votre_bilan">Your report</string>
+    <string name="titre_bilan_pour">Report for</string>
+    <string name="kicker_lecture_principale">Main reading</string>
+    <string name="label_priorite">Priority: </string>
+    <string name="kicker_ressent">What</string>
+    <string name="kicker_coup_oeil">At a glance</string>
+    <string name="kicker_facteurs">Identified factors</string>
+    <string name="subsection_aggrave">What may make things worse</string>
+    <string name="subsection_protege">What helps</string>
+    <string name="kicker_niveau_situation">Situation level</string>
+    <string name="kicker_inquieter">Should you be concerned?</string>
+    <string name="kicker_ce_qui_passe">What is probably happening</string>
+    <string name="highlight_chip">The main point of support</string>
+    <string name="highlight_footer">This is often where change begins to take shape.</string>
+    <string name="kicker_3_jours">The next 3 days</string>
+    <string name="subsection_a_faire">To do</string>
+    <string name="subsection_a_eviter">To avoid</string>
+    <string name="subsection_a_observer">To observe</string>
+    <string name="kicker_conseils">Additional advice</string>
+    <string name="kicker_demander_aide">When to seek help</string>
+    <string name="texte_morsure_signale">A scratch or bite has been reported — support from a veterinary behaviorist or feline behaviorist is recommended.</string>
+    <string name="kicker_important">Important</string>
+    <string name="texte_important_bilan">This report is indicative only. It does not replace a veterinarian or feline behaviorist.</string>
+    <string name="kicker_aller_plus_loin">To go further with</string>
+    <string name="label_fiches_comportementales">Behavioral fact sheets</string>
+    <string name="label_reperes_alimentation">Nutrition references</string>
+    <string name="kicker_a_retenir">Key takeaway</string>
+    <string name="kicker_le_livre">The book</string>
+    <string name="texte_livre">If you want to go further</string>
+    <string name="btn_voir_livres">See my books</string>
+    <string name="btn_partager">Share</string>
+    <string name="btn_export_pdf">Export PDF</string>
+    <string name="btn_copier_resume">Copy summary</string>
+    <string name="btn_recommencer">Start over</string>
+
+    <!-- Bite alert -->
+    <string name="alerte_morsure_titre">SCRATCH / BITE REPORTED</string>
+    <string name="alerte_morsure_corps">There has already been a scratch or bite with %1$s. This situation deserves special attention.</string>
+    <string name="alerte_morsure_conseil">Support from a veterinary behaviorist or feline behaviorist is recommended.</string>
+
+    <!-- Breed profile -->
+    <string name="kicker_profil_race">Breed profile</string>
+    <string name="label_predispositions">Common predispositions in this family</string>
+    <string name="kicker_origines">Why is he like that?</string>
+    <string name="chip_comprendre_agir">Understand to act better</string>
+
+    <!-- Behavioral dictionary -->
+    <string name="kicker_dictionnaire">Behavioral dictionary</string>
+    <string name="titre_dictionnaire">References for reading your cat\'s body language</string>
+    <string name="placeholder_recherche">Search a fact sheet…</string>
+    <string name="aucune_fiche">No fact sheet matches \"%1$s\".</string>
+    <string name="texte_important_dictionnaire">These fact sheets provide references for reading feline behavior. They do not replace professional advice.</string>
+    <string name="kicker_fiche_comportementale">Behavioral fact sheet</string>
+    <string name="kicker_explication">Explanation</string>
+    <string name="kicker_que_faire">What to do</string>
+    <string name="kicker_a_eviter_fiche">What to avoid</string>
+    <string name="texte_rappel_fiche">An isolated behavior is not always enough to draw conclusions. Context and overall body language matter just as much.</string>
+    <string name="fiche_introuvable">Fact sheet not found.</string>
+
+    <!-- Nutrition -->
+    <string name="kicker_alimentation">Cat nutrition</string>
+    <string name="texte_alimentation_intro">Practical references for feeding your cat with confidence.</string>
+    <string name="kicker_a_retenir_alimentation">First key points</string>
+    <string name="bullet_carnivore">Cats are strict carnivores — their diet must be primarily animal-based.</string>
+    <string name="bullet_plantes_toxiques">Some common plants and foods can be highly toxic to them.</string>
+    <string name="bullet_ingestion_suspecte">If your cat ingests something suspicious, consult a vet promptly.</string>
+    <string name="texte_important_alimentation">This guide provides general references. It does not replace a veterinarian.</string>
+    <string name="texte_rappel_alimentation">If symptoms appear or ingestion is suspected, seek veterinary advice.</string>
+    <string name="btn_retour_categorie">Back to category</string>
+    <string name="btn_retour_rubriques">Back to topics</string>
+    <string name="kicker_alimentation_detail">Nutrition</string>
+
+    <!-- Nutrition categories -->
+    <string name="cat_dangereux_titre">Foods dangerous to cats</string>
+    <string name="cat_dangereux_desc">Foods and plants to avoid entirely.</string>
+    <string name="cat_autorises_titre">Foods allowed in moderation</string>
+    <string name="cat_autorises_desc">What can be given with moderation.</string>
+    <string name="cat_ingestion_titre">What to do in case of ingestion</string>
+    <string name="cat_ingestion_desc">The right reflexes if your cat has ingested something.</string>
+    <string name="cat_digestion_titre">Digestion / grass / vomiting / stools</string>
+    <string name="cat_digestion_desc">Grass, vomiting, hairballs and stools.</string>
+
+    <!-- Settings -->
+    <string name="kicker_parametres">Settings</string>
+    <string name="titre_parametres">Understanding My Cat</string>
+    <string name="label_version">Version %1$s</string>
+    <string name="kicker_tutoriel">Tutorial</string>
+    <string name="texte_tutoriel">Review the app presentation from the beginning.</string>
+    <string name="btn_revoir_intro">Review introduction</string>
+    <string name="kicker_confidentialite">Privacy</string>
+    <string name="texte_confidentialite">This app collects no personal data. Reports are stored only on your device. Notifications are local.</string>
+    <string name="btn_politique_confidentialite">Privacy policy</string>
+    <string name="kicker_a_propos">About</string>
+    <string name="texte_a_propos">Designed to help owners better understand their cat and improve its quality of life.</string>
+
+    <!-- Navigation / TopBar -->
+    <string name="nav_retour">Back</string>
+
+    <!-- Behavioral fact sheets -->
+    <string name="comp_ronronnement_titre">Purring</string>
+    <string name="comp_ronronnement_resume">Not always a sign of well-being — it can also signal stress.</string>
+    <string name="comp_ronronnement_explication">Purring is produced by vibration of the larynx. It often signals well-being, but also self-soothing in cases of stress or pain.</string>
+    <string name="comp_ronronnement_que_faire">Observe the overall context before concluding the cat is happy.</string>
+    <string name="comp_ronronnement_a_eviter">Ignoring unusual or excessive purring.</string>
+
+    <string name="comp_clin_oeil_titre">Slow blink</string>
+    <string name="comp_clin_oeil_resume">A sign of trust and affection from your cat.</string>
+    <string name="comp_clin_oeil_explication">The cat slowly narrows its eyes toward you as a sign of trust. Responding in kind strengthens the bond.</string>
+    <string name="comp_clin_oeil_que_faire">Mirror this signal to reinforce the relationship.</string>
+    <string name="comp_clin_oeil_a_eviter">Staring at the cat without blinking — this can be perceived as a threat.</string>
+
+    <string name="comp_queue_dressee_titre">Tail held high</string>
+    <string name="comp_queue_dressee_resume">A friendly greeting signal.</string>
+    <string name="comp_queue_dressee_explication">A vertical tail indicates friendly intent and confidence. A small hook at the tip signals a particularly warm greeting.</string>
+    <string name="comp_queue_dressee_que_faire">Respond positively to this invitation for contact.</string>
+    <string name="comp_queue_dressee_a_eviter">Ignoring this sociability signal.</string>
+
+    <string name="comp_queue_fouettante_titre">Flicking tail</string>
+    <string name="comp_queue_fouettante_resume">A sign of agitation or irritation.</string>
+    <string name="comp_queue_fouettante_explication">Unlike dogs, a cat flicking its tail is irritated or overexcited. It is not a sign of joy.</string>
+    <string name="comp_queue_fouettante_que_faire">Stop interacting and let the cat calm down.</string>
+    <string name="comp_queue_fouettante_a_eviter">Continuing to pet or play with a cat whose tail is flicking.</string>
+
+    <string name="comp_oreilles_arriere_titre">Ears flattened back</string>
+    <string name="comp_oreilles_arriere_resume">Maximum alert signal.</string>
+    <string name="comp_oreilles_arriere_explication">When ears flatten back, the cat is frightened or ready to react aggressively. Stop all interaction immediately.</string>
+    <string name="comp_oreilles_arriere_que_faire">Create distance immediately.</string>
+    <string name="comp_oreilles_arriere_a_eviter">Continuing to touch or approach a cat with flattened ears.</string>
+
+    <string name="comp_ventre_expose_titre">Exposed belly</string>
+    <string name="comp_ventre_expose_resume">A sign of trust, not necessarily an invitation.</string>
+    <string name="comp_ventre_expose_explication">Exposing the belly shows extreme trust, but is not always an invitation to be petted. Many cats scratch if this vulnerable area is touched.</string>
+    <string name="comp_ventre_expose_que_faire">Check whether the cat truly accepts belly petting before insisting.</string>
+    <string name="comp_ventre_expose_a_eviter">Automatically petting a cat\'s belly when it rolls over.</string>
+
+    <string name="comp_petrir_titre">Kneading (making biscuits)</string>
+    <string name="comp_petrir_resume">A well-being behavior rooted in the nursing period.</string>
+    <string name="comp_petrir_explication">The cat kneads with its front paws — a gesture inherited from kittens nursing their mother. A sign of comfort and security.</string>
+    <string name="comp_petrir_que_faire">Let this behavior happen — it is a very good sign.</string>
+    <string name="comp_petrir_a_eviter">Punishing or abruptly interrupting this moment of well-being.</string>
+
+    <string name="comp_frotter_tete_titre">Head rubbing (bunting)</string>
+    <string name="comp_frotter_tete_resume">Affectionate marking and a sign of trust.</string>
+    <string name="comp_frotter_tete_explication">The cat rubs its muzzle, cheeks or temple to deposit pheromones. It is a sign of trust and affectionate bonding.</string>
+    <string name="comp_frotter_tete_que_faire">Respond positively to this cat-initiated contact.</string>
+    <string name="comp_frotter_tete_a_eviter">Pushing away a cat that comes to rub its head.</string>
+
+    <string name="comp_chatter_titre">Teeth chattering (chattering)</string>
+    <string name="comp_chatter_resume">A reaction to an unreachable prey.</string>
+    <string name="comp_chatter_explication">This rapid sound is produced when the cat watches a bird or prey it cannot catch. An expression of frustration and activated hunting instinct.</string>
+    <string name="comp_chatter_que_faire">Offer a play session with a feather wand to channel this instinct.</string>
+    <string name="comp_chatter_a_eviter">Worrying — this is normal behavior.</string>
+
+    <string name="comp_griffage_titre">Scratching surfaces</string>
+    <string name="comp_griffage_resume">A vital need for marking and claw maintenance.</string>
+    <string name="comp_griffage_explication">Cats scratch to mark territory (paw pad pheromones), stretch and maintain their claws. It is a fundamental need.</string>
+    <string name="comp_griffage_que_faire">Provide varied scratching posts in the right places (near resting areas).</string>
+    <string name="comp_griffage_a_eviter">Punishing scratching — it does not eliminate the need; the cat will find other surfaces.</string>
+
+    <string name="comp_marquage_urinaire_titre">Urine marking (spraying)</string>
+    <string name="comp_marquage_urinaire_resume">Territorial communication, often linked to stress.</string>
+    <string name="comp_marquage_urinaire_explication">The cat urinates while standing and backing up, tail trembling. This marking behavior is distinct from normal elimination. In a neutered cat, it often signals territorial stress.</string>
+    <string name="comp_marquage_urinaire_que_faire">Identify and reduce the source of stress (visible outdoor cat, conflict with a housemate).</string>
+    <string name="comp_marquage_urinaire_a_eviter">Punishing the cat — this worsens stress and therefore marking.</string>
+
+    <string name="comp_hyperactivite_titre">Nocturnal hyperactivity</string>
+    <string name="comp_hyperactivite_resume">Often linked to a lack of daytime stimulation.</string>
+    <string name="comp_hyperactivite_explication">Cats are naturally active at dawn and dusk. A lack of play during the day can result in nighttime agitation.</string>
+    <string name="comp_hyperactivite_que_faire">Offer an intense play session before bedtime, then a meal.</string>
+    <string name="comp_hyperactivite_a_eviter">Letting the cat get bored all day and being surprised by its nighttime agitation.</string>
+
+    <string name="comp_destruction_titre">Destruction in the owner\'s absence</string>
+    <string name="comp_destruction_resume">Often linked to stress or boredom.</string>
+    <string name="comp_destruction_explication">A cat that destroys things when alone is not acting out of revenge. It is a sign of distress or boredom.</string>
+    <string name="comp_destruction_que_faire">Enrich the environment: rotating toys, accessible windows, hiding spots.</string>
+    <string name="comp_destruction_a_eviter">Punishing after the fact — the cat does not connect the punishment to its past behavior.</string>
+
+    <string name="comp_vocalisation_titre">Excessive vocalizations</string>
+    <string name="comp_vocalisation_resume">Several possible causes depending on context.</string>
+    <string name="comp_vocalisation_explication">Excessive meowing can signal hunger, boredom, attention-seeking, pain, or in older cats, early cognitive syndrome. Siamese and oriental breeds are naturally more vocal.</string>
+    <string name="comp_vocalisation_que_faire">Consult a vet if vocalizations are new, nocturnal and intense.</string>
+    <string name="comp_vocalisation_a_eviter">Systematically responding to vocal demands — this reinforces the behavior.</string>
+
+    <!-- Nutrition fact sheets -->
+    <string name="alim_dangereux1_titre">Which foods to avoid entirely?</string>
+    <string name="alim_dangereux1_resume">Some human foods can be dangerous for cats.</string>
+    <string name="alim_dangereux1_contenu">To be safe, avoid chocolate, onion, garlic, grapes, alcohol, cooked bones, and very fatty or salty foods. Cow\'s milk is also poorly tolerated by most adult cats. If ingestion is suspected and symptoms appear, consult a vet promptly.</string>
+
+    <string name="alim_dangereux2_titre">Plants toxic to cats</string>
+    <string name="alim_dangereux2_resume">Some common plants are dangerous.</string>
+    <string name="alim_dangereux2_contenu">Lilies (highly toxic, can cause kidney failure), philodendron, pothos, azalea, and lily of the valley are among the most dangerous plants. If your cat has chewed an unknown plant and shows symptoms, seek emergency veterinary care.</string>
+
+    <string name="alim_dangereux3_titre">Why avoid bones for cats?</string>
+    <string name="alim_dangereux3_resume">Cooked bones can be dangerous.</string>
+    <string name="alim_dangereux3_contenu">Cooked bones can splinter and cause internal injuries. Avoid them entirely. Raw bones may be offered under supervision, but ask your vet first.</string>
+
+    <string name="alim_autorises1_titre">Can cats eat vegetables?</string>
+    <string name="alim_autorises1_resume">In moderation and depending on the vegetable.</string>
+    <string name="alim_autorises1_contenu">Some cooked vegetables such as carrot or zucchini may be tolerated in small amounts. A cat\'s diet must remain primarily meat-based — cats are strict carnivores and cannot synthesize certain essential amino acids such as taurine.</string>
+
+    <string name="alim_autorises2_titre">Cat treats: useful or risky?</string>
+    <string name="alim_autorises2_resume">Useful for positive reinforcement, but keep them controlled.</string>
+    <string name="alim_autorises2_contenu">Treats can be useful during play or training sessions. They should not exceed 10% of the daily ration. Choose treats designed for cats, with minimal additives.</string>
+
+    <string name="alim_autorises3_titre">How to change your cat\'s food?</string>
+    <string name="alim_autorises3_resume">A gradual transition is essential.</string>
+    <string name="alim_autorises3_contenu">Change the diet over 7 to 10 days by gradually mixing the old and new food. Cats are very sensitive to dietary changes and may suddenly refuse new food or develop digestive issues.</string>
+
+    <string name="alim_ingestion1_titre">What if my cat ate something questionable?</string>
+    <string name="alim_ingestion1_resume">React calmly and quickly.</string>
+    <string name="alim_ingestion1_contenu">Identify what the cat ingested and in what approximate quantity. Do not try to induce vomiting yourself. Contact your vet or the veterinary poison control center if the substance may be toxic.</string>
+
+    <string name="alim_ingestion2_titre">Which signs should alert you after ingestion?</string>
+    <string name="alim_ingestion2_resume">Some signs require urgent veterinary attention.</string>
+    <string name="alim_ingestion2_contenu">Repeated vomiting, severe diarrhea, lethargy, trembling, breathing difficulties, excessive drooling, convulsions or unusual behavior are warning signs. Consult without delay.</string>
+
+    <string name="alim_digestion1_titre">Why does my cat eat grass?</string>
+    <string name="alim_digestion1_resume">Normal behavior, monitor if excessive.</string>
+    <string name="alim_digestion1_contenu">Grass helps cats eliminate hairballs and can act as a natural purgative. Offer cat grass or a pot of chewing grass — it is beneficial for most indoor cats.</string>
+
+    <string name="alim_digestion2_titre">My cat is vomiting — is it serious?</string>
+    <string name="alim_digestion2_resume">It depends on frequency and context.</string>
+    <string name="alim_digestion2_contenu">An isolated hairball vomit is often benign. Frequent vomiting with blood, combined with lethargy or refusal to eat, requires veterinary consultation.</string>
+
+    <string name="alim_digestion3_titre">Hairballs: how to help your cat?</string>
+    <string name="alim_digestion3_resume">A common issue with simple solutions.</string>
+    <string name="alim_digestion3_contenu">Brush your cat regularly, offer cat grass, and consider a specific anti-hairball diet. In cases of very frequent vomiting or constipation, consult a vet.</string>
+
+    <string name="alim_digestion4_titre">My cat always begs for food</string>
+    <string name="alim_digestion4_resume">Food-seeking behavior can have several causes.</string>
+    <string name="alim_digestion4_contenu">A cat that frequently begs may lack stimulation, have an insufficient ration, or have developed a begging habit. Food puzzles (treat dispensers) can help channel this behavior while providing mental stimulation.</string>
+</resources>

@@ -77,6 +77,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -149,67 +150,70 @@ object PremiumPalette {
 
 // ─── Dictionnaire alimentation ───────────────────────────────
 
-enum class DictionnaireCategorie(val titre: String) {
-    DANGEREUX("Aliments dangereux pour le chat"),
-    AUTORISES("Aliments autorisés avec modération"),
-    INGESTION("Que faire en cas d'ingestion"),
-    DIGESTION("Digestion / herbe / vomissements / selles")
+enum class DictionnaireCategorie { DANGEREUX, AUTORISES, INGESTION, DIGESTION }
+
+@Composable
+fun DictionnaireCategorie.titre(): String = when (this) {
+    DictionnaireCategorie.DANGEREUX -> stringResource(R.string.cat_dangereux_titre)
+    DictionnaireCategorie.AUTORISES -> stringResource(R.string.cat_autorises_titre)
+    DictionnaireCategorie.INGESTION -> stringResource(R.string.cat_ingestion_titre)
+    DictionnaireCategorie.DIGESTION -> stringResource(R.string.cat_digestion_titre)
 }
 
 data class DictionnaireEntry(
     val categorie: DictionnaireCategorie,
-    val titre: String,
-    val resume: String,
-    val contenu: String
+    val titreKey: Int,
+    val resumeKey: Int,
+    val contenuKey: Int
 )
 
 data class ComportementEntry(
     val id: String,
-    val titre: String,
-    val resume: String,
-    val explication: String,
-    val queFaire: String,
-    val aEviter: String
+    val titreKey: Int,
+    val resumeKey: Int,
+    val explicationKey: Int,
+    val queFaireKey: Int,
+    val aEviterKey: Int
 )
+
+fun getComportementEntryById(id: String): ComportementEntry? =
+    comportementEntries().firstOrNull { it.id == id }
 
 fun dictionnaireEntries(): List<DictionnaireEntry> {
     return listOf(
-        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, "Quels aliments éviter absolument ?", "Certains aliments humains peuvent être dangereux pour le chat.", "Par prudence, il faut éviter le chocolat, l'oignon, l'ail, le raisin, l'alcool, les os cuits, les aliments très gras ou très salés. Le lait de vache est également mal toléré par la plupart des chats adultes. En cas d'ingestion suspecte, consultez rapidement si des symptômes apparaissent."),
-        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, "Les plantes toxiques pour le chat", "Certaines plantes courantes sont dangereuses.", "Le lys (très toxique, peut provoquer une insuffisance rénale), le philodendron, le pothos, l'azalée, le muguet sont parmi les plantes les plus dangereuses. Si votre chat a mâché une plante inconnue et présente des symptômes, consultez en urgence."),
-        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, "Pourquoi éviter les os pour chats ?", "Les os cuits peuvent être dangereux.", "Les os cuits peuvent se fragmenter et provoquer des blessures internes. Évitez-les systématiquement. Les os crus peuvent être proposés sous surveillance, mais demandez l'avis de votre vétérinaire."),
-        DictionnaireEntry(DictionnaireCategorie.AUTORISES, "Le chat peut-il manger des légumes ?", "Avec modération et selon les légumes.", "Certains légumes cuits comme la carotte ou la courgette peuvent être tolérés en petite quantité. L'alimentation du chat doit rester majoritairement carnée — il est un carnivore strict et ne peut pas synthétiser certains acides aminés essentiels comme la taurine."),
-        DictionnaireEntry(DictionnaireCategorie.AUTORISES, "Les friandises pour chat : utile ou risqué ?", "Utiles en renforcement positif, à encadrer.", "Les friandises peuvent être utiles lors des sessions de jeu ou d'apprentissage. Elles ne doivent pas dépasser 10% de la ration quotidienne. Choisissez des friandises adaptées aux chats, sans additifs en excès."),
-        DictionnaireEntry(DictionnaireCategorie.AUTORISES, "Comment changer la nourriture de son chat ?", "Une transition progressive est indispensable.", "Changez l'alimentation sur 7 à 10 jours en mélangeant progressivement l'ancien et le nouvel aliment. Les chats sont très sensibles aux changements alimentaires et peuvent refuser brutalement une nouvelle nourriture ou développer des troubles digestifs."),
-        DictionnaireEntry(DictionnaireCategorie.INGESTION, "Que faire si mon chat a mangé quelque chose de douteux ?", "Réagir calmement et rapidement.", "Identifiez ce que le chat a ingéré et en quelle quantité approximative. N'essayez pas de faire vomir vous-même. Contactez votre vétérinaire ou le centre antipoison vétérinaire si la substance est potentiellement toxique."),
-        DictionnaireEntry(DictionnaireCategorie.INGESTION, "Quels signes doivent alerter après ingestion ?", "Certains signes nécessitent une consultation urgente.", "Vomissements répétés, diarrhée intense, abattement, tremblements, difficultés respiratoires, bave excessive, convulsions ou comportement inhabituel sont des signes d'alerte. Consultez sans attendre."),
-        DictionnaireEntry(DictionnaireCategorie.DIGESTION, "Pourquoi mon chat mange de l'herbe ?", "Comportement normal, à surveiller si excessif.", "L'herbe aide le chat à éliminer les boules de poils et peut agir comme purgatif naturel. Proposez de l'herbe à chat ou de l'herbe à mâcher en pot — c'est bénéfique pour la plupart des chats d'intérieur."),
-        DictionnaireEntry(DictionnaireCategorie.DIGESTION, "Mon chat vomit, est-ce grave ?", "Cela dépend de la fréquence et du contexte.", "Un vomissement isolé de boules de poils est souvent bénin. Des vomissements fréquents, avec sang, associés à un abattement ou un refus de manger nécessitent une consultation vétérinaire."),
-        DictionnaireEntry(DictionnaireCategorie.DIGESTION, "Boules de poils : comment aider son chat ?", "Un problème fréquent, des solutions simples.", "Brossez régulièrement votre chat, proposez de l'herbe à chat, et envisagez une alimentation spécifique anti-boules de poils. En cas de vomissements très fréquents ou de constipation, consultez."),
-        DictionnaireEntry(DictionnaireCategorie.DIGESTION, "Mon chat réclame tout le temps à manger", "La demande alimentaire peut avoir plusieurs causes.", "Un chat qui réclame souvent peut manquer de stimulation, avoir une ration insuffisante, ou avoir pris l'habitude de mendier. Les food puzzles (jouets distributeurs) peuvent aider à canaliser ce comportement tout en le stimulant mentalement.")
+        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, R.string.alim_dangereux1_titre, R.string.alim_dangereux1_resume, R.string.alim_dangereux1_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, R.string.alim_dangereux2_titre, R.string.alim_dangereux2_resume, R.string.alim_dangereux2_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DANGEREUX, R.string.alim_dangereux3_titre, R.string.alim_dangereux3_resume, R.string.alim_dangereux3_contenu),
+        DictionnaireEntry(DictionnaireCategorie.AUTORISES, R.string.alim_autorises1_titre, R.string.alim_autorises1_resume, R.string.alim_autorises1_contenu),
+        DictionnaireEntry(DictionnaireCategorie.AUTORISES, R.string.alim_autorises2_titre, R.string.alim_autorises2_resume, R.string.alim_autorises2_contenu),
+        DictionnaireEntry(DictionnaireCategorie.AUTORISES, R.string.alim_autorises3_titre, R.string.alim_autorises3_resume, R.string.alim_autorises3_contenu),
+        DictionnaireEntry(DictionnaireCategorie.INGESTION, R.string.alim_ingestion1_titre, R.string.alim_ingestion1_resume, R.string.alim_ingestion1_contenu),
+        DictionnaireEntry(DictionnaireCategorie.INGESTION, R.string.alim_ingestion2_titre, R.string.alim_ingestion2_resume, R.string.alim_ingestion2_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DIGESTION, R.string.alim_digestion1_titre, R.string.alim_digestion1_resume, R.string.alim_digestion1_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DIGESTION, R.string.alim_digestion2_titre, R.string.alim_digestion2_resume, R.string.alim_digestion2_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DIGESTION, R.string.alim_digestion3_titre, R.string.alim_digestion3_resume, R.string.alim_digestion3_contenu),
+        DictionnaireEntry(DictionnaireCategorie.DIGESTION, R.string.alim_digestion4_titre, R.string.alim_digestion4_resume, R.string.alim_digestion4_contenu)
     )
 }
 
 fun comportementEntries(): List<ComportementEntry> {
     return listOf(
-        ComportementEntry("ronronnement", "Ronronnement", "Pas toujours synonyme de bien-être, il peut aussi signaler un stress.", "Le ronronnement est produit par vibration du larynx. Il signale souvent le bien-être, mais aussi l'auto-apaisement en cas de stress ou de douleur.", "Observer le contexte global avant de conclure que le chat est heureux.", "Ignorer un ronronnement inhabituel ou excessif."),
-        ComportementEntry("clin-oeil-lent", "Clin d'œil lent", "Signe de confiance et d'affection du chat.", "Le chat plisse les yeux lentement vers vous en signe de confiance. Répondre de la même façon renforce le lien.", "Reproduire ce signal pour renforcer la relation.", "Fixer le chat dans les yeux sans cligner — cela peut être perçu comme une menace."),
-        ComportementEntry("queue-dressee", "Queue dressée", "Signal de salutation amical.", "Une queue verticale indique une intention amicale et de la confiance. Le petit crochet au bout signale une salutation particulièrement chaleureuse.", "Répondre positivement à cette invitation au contact.", "Ignorer ce signal de sociabilité."),
-        ComportementEntry("queue-fouettante", "Queue qui fouette", "Signal d'agitation ou d'irritation.", "Contrairement au chien, un chat qui fouette la queue est irrité ou surexcité. Ce n'est pas un signe de joie.", "S'arrêter d'interagir et laisser le chat se calmer.", "Continuer à caresser ou jouer avec un chat dont la queue fouette."),
-        ComportementEntry("oreilles-arriere", "Oreilles aplaties en arrière", "Signal d'alerte maximal.", "Quand les oreilles se plaquent en arrière, le chat est apeuré ou prêt à réagir agressivement. Arrêtez toute interaction immédiatement.", "Créer de la distance immédiatement.", "Continuer à toucher ou approcher un chat avec les oreilles en arrière."),
-        ComportementEntry("ventre-expose", "Ventre exposé", "Signe de confiance, pas forcément une invitation.", "Exposer le ventre montre une confiance extrême, mais n'est pas toujours une invitation à être caressé. Beaucoup de chats griffent si on touche cette zone vulnérable.", "Observer si le chat accepte vraiment les caresses sur le ventre avant d'insister.", "Caresser automatiquement le ventre d'un chat qui se retourne."),
-        ComportementEntry("petrir", "Pétrir (faire du pain)", "Comportement de bien-être issu de la période de tétée.", "Le chat pétrit avec ses pattes avant — geste hérité du chaton tétant sa mère. Signe de confort et de sécurité.", "Laisser ce comportement se produire, c'est un très bon signe.", "Punir ou interrompre brusquement ce moment de bien-être."),
-        ComportementEntry("frotter-tete", "Frottement de tête (bunting)", "Marquage affectif et signe de confiance.", "Le chat frotte son museau, ses joues ou sa tempe pour déposer ses phéromones. C'est un signe de confiance et d'appropriation affective.", "Répondre positivement à ce contact initié par le chat.", "Repousser le chat qui vient frotter sa tête."),
-        ComportementEntry("chatter", "Claquement de dents (chatter)", "Réaction face à une proie inaccessible.", "Ce bruit rapide est produit lorsque le chat observe un oiseau ou une proie qu'il ne peut pas attraper. Expression de frustration et d'instinct de chasse activé.", "Proposer une session de jeu avec une canne à plume pour canaliser cet instinct.", "S'inquiéter — c'est un comportement normal."),
-        ComportementEntry("griffage", "Griffage des surfaces", "Besoin vital de marquage et d'entretien des griffes.", "Le chat griffe pour marquer son territoire (phéromones des coussinets), s'étirer et entretenir ses griffes. C'est un besoin fondamental.", "Proposer des griffoirs variés aux bons endroits (près des zones de repos).", "Punir le griffage — cela ne supprime pas le besoin, le chat cherchera d'autres surfaces."),
-        ComportementEntry("marquage-urinaire", "Marquage urinaire (spray)", "Communication territoriale, souvent liée au stress.", "Le chat urine debout en reculant, queue tremblante. Comportement de marquage distinct de l'élimination normale. Chez un chat stérilisé, c'est souvent le signe d'un stress territorial.", "Identifier et réduire la source de stress (chat extérieur visible, conflit avec un cohabitant).", "Punir le chat — cela aggrave le stress et donc le marquage."),
-        ComportementEntry("hyperactivite-nocturne", "Hyperactivité nocturne", "Souvent liée à un manque de stimulation diurne.", "Le chat est naturellement actif à l'aube et au crépuscule. Un manque de jeu en journée peut se traduire par une agitation nocturne.", "Proposer une session de jeu intense avant le coucher, puis un repas.", "Laisser le chat s'ennuyer toute la journée et s'étonner de son agitation nocturne."),
-        ComportementEntry("destruction-absence", "Destructions en l'absence du maître", "Souvent liées au stress ou à l'ennui.", "Un chat qui détruit quand il est seul n'agit pas par vengeance. C'est un signe de détresse ou d'ennui.", "Enrichir l'environnement : jouets rotatifs, fenêtres accessibles, cachettes.", "Punir après coup — le chat ne fait pas le lien avec son comportement passé."),
-        ComportementEntry("vocalisation-excessive", "Vocalisations excessives", "Plusieurs causes possibles selon le contexte.", "Des miaulements excessifs peuvent signaler la faim, l'ennui, une demande d'attention, une douleur, ou chez le chat âgé, un début de syndrome cognitif. Les Siamois et orientaux sont naturellement plus vocaux.", "Consulter un vétérinaire si les vocalisations sont nouvelles ou nocturnes et intenses.", "Répondre systématiquement aux demandes vocales — cela renforce le comportement.")
+        ComportementEntry("ronronnement", R.string.comp_ronronnement_titre, R.string.comp_ronronnement_resume, R.string.comp_ronronnement_explication, R.string.comp_ronronnement_que_faire, R.string.comp_ronronnement_a_eviter),
+        ComportementEntry("clin-oeil-lent", R.string.comp_clin_oeil_titre, R.string.comp_clin_oeil_resume, R.string.comp_clin_oeil_explication, R.string.comp_clin_oeil_que_faire, R.string.comp_clin_oeil_a_eviter),
+        ComportementEntry("queue-dressee", R.string.comp_queue_dressee_titre, R.string.comp_queue_dressee_resume, R.string.comp_queue_dressee_explication, R.string.comp_queue_dressee_que_faire, R.string.comp_queue_dressee_a_eviter),
+        ComportementEntry("queue-fouettante", R.string.comp_queue_fouettante_titre, R.string.comp_queue_fouettante_resume, R.string.comp_queue_fouettante_explication, R.string.comp_queue_fouettante_que_faire, R.string.comp_queue_fouettante_a_eviter),
+        ComportementEntry("oreilles-arriere", R.string.comp_oreilles_arriere_titre, R.string.comp_oreilles_arriere_resume, R.string.comp_oreilles_arriere_explication, R.string.comp_oreilles_arriere_que_faire, R.string.comp_oreilles_arriere_a_eviter),
+        ComportementEntry("ventre-expose", R.string.comp_ventre_expose_titre, R.string.comp_ventre_expose_resume, R.string.comp_ventre_expose_explication, R.string.comp_ventre_expose_que_faire, R.string.comp_ventre_expose_a_eviter),
+        ComportementEntry("petrir", R.string.comp_petrir_titre, R.string.comp_petrir_resume, R.string.comp_petrir_explication, R.string.comp_petrir_que_faire, R.string.comp_petrir_a_eviter),
+        ComportementEntry("frotter-tete", R.string.comp_frotter_tete_titre, R.string.comp_frotter_tete_resume, R.string.comp_frotter_tete_explication, R.string.comp_frotter_tete_que_faire, R.string.comp_frotter_tete_a_eviter),
+        ComportementEntry("chatter", R.string.comp_chatter_titre, R.string.comp_chatter_resume, R.string.comp_chatter_explication, R.string.comp_chatter_que_faire, R.string.comp_chatter_a_eviter),
+        ComportementEntry("griffage", R.string.comp_griffage_titre, R.string.comp_griffage_resume, R.string.comp_griffage_explication, R.string.comp_griffage_que_faire, R.string.comp_griffage_a_eviter),
+        ComportementEntry("marquage-urinaire", R.string.comp_marquage_urinaire_titre, R.string.comp_marquage_urinaire_resume, R.string.comp_marquage_urinaire_explication, R.string.comp_marquage_urinaire_que_faire, R.string.comp_marquage_urinaire_a_eviter),
+        ComportementEntry("hyperactivite-nocturne", R.string.comp_hyperactivite_titre, R.string.comp_hyperactivite_resume, R.string.comp_hyperactivite_explication, R.string.comp_hyperactivite_que_faire, R.string.comp_hyperactivite_a_eviter),
+        ComportementEntry("destruction-absence", R.string.comp_destruction_titre, R.string.comp_destruction_resume, R.string.comp_destruction_explication, R.string.comp_destruction_que_faire, R.string.comp_destruction_a_eviter),
+        ComportementEntry("vocalisation-excessive", R.string.comp_vocalisation_titre, R.string.comp_vocalisation_resume, R.string.comp_vocalisation_explication, R.string.comp_vocalisation_que_faire, R.string.comp_vocalisation_a_eviter)
     )
 }
-
-fun getComportementEntryById(id: String): ComportementEntry? =
-    comportementEntries().firstOrNull { it.id == id }
 
 // ─── Thème ───────────────────────────────────────────────────
 
@@ -369,7 +373,7 @@ fun PremiumTopBar(title: String, onBack: (() -> Unit)?) {
         navigationIcon = {
             if (onBack != null) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Retour", tint = MaterialTheme.colorScheme.onBackground)
+                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.nav_retour), tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
         },
@@ -389,9 +393,9 @@ fun ChargementMinimal() {
 @Composable
 fun ChargementAnalyseScreen(modifier: Modifier = Modifier, onTermine: () -> Unit) {
     val messages = listOf(
-        "Analyse en cours...",
-        "Lecture du profil de votre chat...",
-        "Préparation de votre bilan..."
+        stringResource(R.string.chargement_analyse),
+        stringResource(R.string.chargement_profil),
+        stringResource(R.string.chargement_bilan)
     )
     var messageIndex by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
@@ -437,23 +441,23 @@ fun AccueilScreen(
         ) {
             AccueilIllustrationCard()
             PrimaryGlowButton(
-                text = "Démarrer le bilan",
+                text = stringResource(R.string.btn_demarrer),
                 onClick = onCommencer,
                 leading = { Icon(Icons.Rounded.Pets, contentDescription = null, tint = Color.White) }
             )
             SecondaryPremiumButton(
-                text = "Dictionnaire comportemental",
+                text = stringResource(R.string.btn_dictionnaire),
                 onClick = onDictionnaire,
                 leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null) }
             )
             SecondaryPremiumButton(
-                text = "Alimentation",
+                text = stringResource(R.string.btn_alimentation),
                 onClick = onAlimentation,
                 leading = { Icon(Icons.Rounded.Star, contentDescription = null) }
             )
             if (hasSavedProgress) {
                 SecondaryPremiumButton(
-                    text = "Reprendre le questionnaire",
+                    text = stringResource(R.string.btn_reprendre),
                     onClick = onReprendre,
                     leading = { Icon(Icons.Rounded.AutoStories, contentDescription = null) }
                 )
@@ -491,7 +495,7 @@ fun QuestionnaireScreen(
             PremiumCard {
                 SectionChip(titreSection)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("$numero sur $total", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text("$numero ${stringResource(R.string.label_sur)} $total", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                 Spacer(modifier = Modifier.height(12.dp))
                 val animatedProgress by animateFloatAsState(progress.coerceIn(0f, 1f), label = "progress")
                 Box(modifier = Modifier.fillMaxWidth().height(10.dp)
@@ -510,8 +514,8 @@ fun QuestionnaireScreen(
                             OutlinedTextField(
                                 value = valeurTexte,
                                 onValueChange = onValeurChangee,
-                                label = { Text("Prénom de votre chat") },
-                                placeholder = { Text("Ex. Luna, Milo, Simba…") },
+                                label = { Text(stringResource(R.string.label_prenom_chat)) },
+                                placeholder = { Text(stringResource(R.string.placeholder_prenom_chat)) },
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                                 modifier = Modifier.fillMaxWidth(),
@@ -547,13 +551,13 @@ fun QuestionnaireScreen(
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column {
-                PrimaryGlowButton(text = "Continuer", onClick = onSuivant, enabled = boutonActif)
+                PrimaryGlowButton(text = stringResource(R.string.btn_continuer), onClick = onSuivant, enabled = boutonActif)
                 if (!boutonActif) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = when (question) {
-                            is QuestionTexte -> "Saisissez le prénom de votre chat pour continuer"
-                            is QuestionChoix -> "Choisissez une réponse pour continuer"
+                            is QuestionTexte -> stringResource(R.string.hint_saisir_prenom)
+                            is QuestionChoix -> stringResource(R.string.hint_choisir_reponse)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -600,6 +604,7 @@ fun ResultatScreen(
     onOpenFiche: (String) -> Unit = {},
     onOpenAlimentation: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     EditorialContainer(
         modifier = modifier.fillMaxSize()
             .windowInsetsPadding(WindowInsets.navigationBars)
@@ -610,9 +615,9 @@ fun ResultatScreen(
         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
             PremiumCard(centered = true) {
-                EditorialKicker("Votre bilan", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_votre_bilan), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Bilan pour ${nomChatAffiche(nomChat)}", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                Text("${stringResource(R.string.titre_bilan_pour)} ${nomChatAffiche(nomChat)}", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(8.dp))
                 AccentChip(analyse.profil.profilType)
             }
@@ -622,19 +627,19 @@ fun ResultatScreen(
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("Lecture principale", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_lecture_principale), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(analyse.hypothesePrincipale, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(12.dp))
                 val couleur = couleurPriorite(analyse.prioriteAction)
                 val couleurFond = couleurFondPriorite(analyse.prioriteAction)
                 Box(modifier = Modifier.clip(RoundedCornerShape(999.dp)).background(couleurFond).padding(horizontal = 14.dp, vertical = 8.dp)) {
-                    Text("Priorité : ${textePrioriteAction(analyse.prioriteAction)}", color = couleur, fontWeight = FontWeight.SemiBold)
+                    Text("${stringResource(R.string.label_priorite)}${textePrioriteAction(analyse.prioriteAction)}", color = couleur, fontWeight = FontWeight.SemiBold)
                 }
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("Ce que ressent probablement ${nomChatAffiche(nomChat)}", centered = true)
+                EditorialKicker("${stringResource(R.string.kicker_ressent)} ${nomChatAffiche(nomChat)}", centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(analyse.profil.phraseHumaine, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(14.dp))
@@ -646,7 +651,7 @@ fun ResultatScreen(
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("En un coup d'œil", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_coup_oeil), centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
                 QuatreAxesGrid(analyse = analyse)
             }
@@ -654,7 +659,7 @@ fun ResultatScreen(
             FacteursCard(analyse = analyse)
 
             PremiumCard(centered = true) {
-                EditorialKicker("Niveau de situation", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_niveau_situation), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 AccentChip(texteNiveauSituation(analyse.niveauSituation))
                 Spacer(modifier = Modifier.height(14.dp))
@@ -664,40 +669,35 @@ fun ResultatScreen(
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("Faut-il s'inquiéter ?", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_inquieter), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(texteVigilance(analyse.vigilance, nomChat), textAlign = TextAlign.Center)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("Ce qui se passe probablement", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_ce_qui_passe), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(analyse.explicationPrincipale, textAlign = TextAlign.Center)
             }
 
-            HighlightAdviceCard(title = "Première piste concrète", advice = analyse.conseilPrincipal)
-
-            // ═══════════════════════════════════════════════════════════
-            // CARTE : POURQUOI EST-IL COMME ÇA ?
-            // ═══════════════════════════════════════════════════════════
-            OriginesPossiblesCard(origines = analyse.originesPossibles)
+            HighlightAdviceCard(title = stringResource(R.string.highlight_chip), advice = analyse.conseilPrincipal)
 
             PremiumCard(centered = true) {
-                EditorialKicker("Les 3 prochains jours", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_3_jours), centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
-                SubsectionTitle("À faire"); Spacer(modifier = Modifier.height(8.dp))
+                SubsectionTitle(stringResource(R.string.subsection_a_faire)); Spacer(modifier = Modifier.height(8.dp))
                 analyse.planAction.aFaire.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
                 Spacer(modifier = Modifier.height(8.dp))
-                SubsectionTitle("À éviter"); Spacer(modifier = Modifier.height(8.dp))
+                SubsectionTitle(stringResource(R.string.subsection_a_eviter)); Spacer(modifier = Modifier.height(8.dp))
                 analyse.planAction.aEviter.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
                 Spacer(modifier = Modifier.height(8.dp))
-                SubsectionTitle("À observer"); Spacer(modifier = Modifier.height(8.dp))
+                SubsectionTitle(stringResource(R.string.subsection_a_observer)); Spacer(modifier = Modifier.height(8.dp))
                 analyse.planAction.aObserver.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
             }
 
             if (analyse.conseilsPratiques.isNotEmpty()) {
                 PremiumCard(centered = true) {
-                    EditorialKicker("Conseils complémentaires", centered = true)
+                    EditorialKicker(stringResource(R.string.kicker_conseils), centered = true)
                     Spacer(modifier = Modifier.height(12.dp))
                     analyse.conseilsPratiques.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
                 }
@@ -705,10 +705,10 @@ fun ResultatScreen(
 
             if (analyse.messageAide != null || analyse.aDejaMordu) {
                 PremiumCard(centered = true) {
-                    EditorialKicker("Quand demander de l'aide", centered = true)
+                    EditorialKicker(stringResource(R.string.kicker_demander_aide), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     if (analyse.aDejaMordu) {
-                        Text("Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.", textAlign = TextAlign.Center, color = PremiumPalette.PrioriteModere, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.texte_morsure_signale), textAlign = TextAlign.Center, color = PremiumPalette.PrioriteModere, fontWeight = FontWeight.SemiBold)
                     } else {
                         analyse.messageAide?.let { Text(it, textAlign = TextAlign.Center, color = PremiumPalette.PrioriteUrgente, fontWeight = FontWeight.SemiBold) }
                     }
@@ -716,17 +716,32 @@ fun ResultatScreen(
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("Important", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_important), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Ce bilan reste indicatif. Il ne remplace ni un vétérinaire ni un comportementaliste félin.", textAlign = TextAlign.Center)
+                Text(stringResource(R.string.texte_important_bilan), textAlign = TextAlign.Center)
             }
 
             FichesRecommandeesCard(analyse = analyse, nomChat = nomChatAffiche(nomChat), onOpenFiche = onOpenFiche, onOpenAlimentation = onOpenAlimentation)
 
             PremiumCard(centered = true) {
-                EditorialKicker("À retenir", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_a_retenir), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(phraseFin(nomChat), textAlign = TextAlign.Center)
+            }
+
+            PremiumCard(centered = true) {
+                EditorialKicker(stringResource(R.string.kicker_le_livre), centered = true)
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(stringResource(R.string.texte_livre), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(modifier = Modifier.height(14.dp))
+                PrimaryGlowButton(
+                    text = stringResource(R.string.btn_voir_livres),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy.carrd.co"))
+                        context.startActivity(intent)
+                    },
+                    leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null, tint = Color.White) }
+                )
             }
 
             ActionButtonsGrid(onShare = onShare, onCopy = onCopy, onExportPdf = onExportPdf, onRecommencer = onRecommencer)
@@ -737,7 +752,7 @@ fun ResultatScreen(
             TextButton(onClick = onRecommencer, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Rounded.Refresh, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("Recommencer depuis le début", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.btn_recommencer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -764,16 +779,11 @@ fun OriginesPossiblesCard(origines: String) {
             modifier = Modifier.fillMaxWidth().background(backgroundBrush).padding(horizontal = 24.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AccentChip("Comprendre pour mieux agir")
+            AccentChip(stringResource(R.string.chip_comprendre_agir))
             Spacer(modifier = Modifier.height(14.dp))
-            EditorialKicker("Pourquoi est-il comme ça ?", centered = true)
+            EditorialKicker(stringResource(R.string.kicker_origines), centered = true)
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                origines,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text(origines, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -830,16 +840,17 @@ fun FichesRecommandeesCard(
     onOpenFiche: (String) -> Unit,
     onOpenAlimentation: () -> Unit
 ) {
-    val fichesBehavior = recommanderFichesComportement(analyse)
-    val fichesAlim = recommanderFichesAlimentation(analyse)
+    val context = LocalContext.current
+    val fichesBehavior = recommanderFichesComportement(analyse, context)
+    val fichesAlim = recommanderFichesAlimentation(analyse, context)
     if (fichesBehavior.isEmpty() && fichesAlim.isEmpty()) return
 
     PremiumCard(centered = false) {
-        EditorialKicker("Pour aller plus loin avec $nomChat")
+        EditorialKicker("${stringResource(R.string.kicker_aller_plus_loin)} $nomChat")
         Spacer(modifier = Modifier.height(14.dp))
 
         if (fichesBehavior.isNotEmpty()) {
-            Text("Fiches comportementales", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.PrimarySoft)
+            Text(stringResource(R.string.label_fiches_comportementales), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.PrimarySoft)
             Spacer(modifier = Modifier.height(8.dp))
             fichesBehavior.forEach { (ficheId, titre) ->
                 Row(
@@ -859,7 +870,7 @@ fun FichesRecommandeesCard(
 
         if (fichesAlim.isNotEmpty()) {
             if (fichesBehavior.isNotEmpty()) Spacer(modifier = Modifier.height(8.dp))
-            Text("Repères alimentation", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.PrimarySoft)
+            Text(stringResource(R.string.label_reperes_alimentation), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.PrimarySoft)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth().clickable { onOpenAlimentation() }
@@ -881,38 +892,44 @@ fun FichesRecommandeesCard(
     }
 }
 
-fun recommanderFichesComportement(analyse: ResultatAnalyse): List<Pair<String, String>> {
+fun recommanderFichesComportement(analyse: ResultatAnalyse, context: android.content.Context): List<Pair<String, String>> {
     val maxAxe = maxOf(analyse.peur, analyse.attachement, analyse.impulsivite, analyse.reactivite)
     if (maxAxe < 30) return emptyList()
     return when (analyse.problemePrincipal) {
         Axe.SECURITE -> listOf(
-            "oreilles-arriere" to "Oreilles aplaties en arrière",
-            "queue-fouettante" to "Queue qui fouette",
-            "ventre-expose" to "Ventre exposé"
+            "oreilles-arriere" to context.getString(R.string.comp_oreilles_arriere_titre),
+            "queue-fouettante" to context.getString(R.string.comp_queue_fouettante_titre),
+            "ventre-expose" to context.getString(R.string.comp_ventre_expose_titre)
         )
         Axe.LIEN -> listOf(
-            "destruction-absence" to "Destructions en l'absence",
-            "vocalisation-excessive" to "Vocalisations excessives",
-            "petrir" to "Pétrir (faire du pain)"
+            "destruction-absence" to context.getString(R.string.comp_destruction_titre),
+            "vocalisation-excessive" to context.getString(R.string.comp_vocalisation_titre),
+            "petrir" to context.getString(R.string.comp_petrir_titre)
         )
         Axe.INSTINCTS -> listOf(
-            "hyperactivite-nocturne" to "Hyperactivité nocturne",
-            "chatter" to "Claquement de dents",
-            "griffage" to "Griffage des surfaces"
+            "hyperactivite-nocturne" to context.getString(R.string.comp_hyperactivite_titre),
+            "chatter" to context.getString(R.string.comp_chatter_titre),
+            "griffage" to context.getString(R.string.comp_griffage_titre)
         )
         Axe.COHABITATION -> listOf(
-            "marquage-urinaire" to "Marquage urinaire",
-            "oreilles-arriere" to "Oreilles aplaties en arrière",
-            "queue-fouettante" to "Queue qui fouette"
+            "marquage-urinaire" to context.getString(R.string.comp_marquage_urinaire_titre),
+            "oreilles-arriere" to context.getString(R.string.comp_oreilles_arriere_titre),
+            "queue-fouettante" to context.getString(R.string.comp_queue_fouettante_titre)
         )
     }
 }
 
-fun recommanderFichesAlimentation(analyse: ResultatAnalyse): List<String> {
+fun recommanderFichesAlimentation(analyse: ResultatAnalyse, context: android.content.Context): List<String> {
     return if (analyse.contexte.physique >= 2) {
-        listOf("Que faire si mon chat a mangé quelque chose de douteux ?", "Quels signes doivent alerter après ingestion ?")
+        listOf(
+            context.getString(R.string.alim_ingestion1_titre),
+            context.getString(R.string.alim_ingestion2_titre)
+        )
     } else {
-        listOf("Les plantes toxiques pour le chat", "Boules de poils : comment aider son chat ?")
+        listOf(
+            context.getString(R.string.alim_dangereux2_titre),
+            context.getString(R.string.alim_digestion3_titre)
+        )
     }
 }
 
@@ -920,10 +937,10 @@ fun recommanderFichesAlimentation(analyse: ResultatAnalyse): List<String> {
 fun ActionButtonsGrid(onShare: () -> Unit, onCopy: () -> Unit, onExportPdf: () -> Unit, onRecommencer: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            ActionButton(text = "Partager", icon = Icons.Rounded.Share, primary = true, modifier = Modifier.weight(1f), onClick = onShare)
-            ActionButton(text = "Export PDF", icon = Icons.Rounded.PictureAsPdf, primary = true, modifier = Modifier.weight(1f), onClick = onExportPdf)
+            ActionButton(text = stringResource(R.string.btn_partager), icon = Icons.Rounded.Share, primary = true, modifier = Modifier.weight(1f), onClick = onShare)
+            ActionButton(text = stringResource(R.string.btn_export_pdf), icon = Icons.Rounded.PictureAsPdf, primary = true, modifier = Modifier.weight(1f), onClick = onExportPdf)
         }
-        ActionButton(text = "Copier le résumé", icon = Icons.Rounded.ContentCopy, primary = false, modifier = Modifier.fillMaxWidth(), onClick = onCopy)
+        ActionButton(text = stringResource(R.string.btn_copier_resume), icon = Icons.Rounded.ContentCopy, primary = false, modifier = Modifier.fillMaxWidth(), onClick = onCopy)
     }
 }
 
@@ -964,12 +981,12 @@ fun RaceCard(raceCategorie: String?, racePrecise: String?) {
         else -> return
     }
     PremiumCard(centered = true) {
-        EditorialKicker("Profil de race", centered = true)
+        EditorialKicker(stringResource(R.string.kicker_profil_race), centered = true)
         Spacer(modifier = Modifier.height(10.dp))
         Text(nomAffiche, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = PremiumPalette.Primary, textAlign = TextAlign.Center)
         if (categorie?.predispositions?.isNotEmpty() == true) {
             Spacer(modifier = Modifier.height(14.dp))
-            Text("Prédispositions fréquentes dans cette famille", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.label_predispositions), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             categorie.predispositions.forEach { pred ->
                 Row(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top) {
@@ -1004,13 +1021,11 @@ fun HighlightAdviceCard(title: String, advice: String) {
             modifier = Modifier.fillMaxWidth().background(backgroundBrush).padding(horizontal = 24.dp, vertical = 26.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AccentChip("Le point d'appui principal")
-            Spacer(modifier = Modifier.height(14.dp))
-            Text(title, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+            AccentChip(title)
             Spacer(modifier = Modifier.height(14.dp))
             Text(advice, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(14.dp))
-            Text("C'est souvent ici que le changement commence à prendre forme.", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.highlight_footer), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -1041,16 +1056,16 @@ fun Bullet(text: String, centered: Boolean = false) {
 fun FacteursCard(analyse: ResultatAnalyse) {
     if (analyse.facteursAggravants.isEmpty() && analyse.facteursProtecteurs.isEmpty()) return
     PremiumCard(centered = true) {
-        EditorialKicker("Facteurs repérés", centered = true)
+        EditorialKicker(stringResource(R.string.kicker_facteurs), centered = true)
         if (analyse.facteursAggravants.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
-            SubsectionTitle("Ce qui peut aggraver")
+            SubsectionTitle(stringResource(R.string.subsection_aggrave))
             Spacer(modifier = Modifier.height(8.dp))
             analyse.facteursAggravants.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
         }
         if (analyse.facteursProtecteurs.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
-            SubsectionTitle("Ce qui protège")
+            SubsectionTitle(stringResource(R.string.subsection_protege))
             Spacer(modifier = Modifier.height(8.dp))
             analyse.facteursProtecteurs.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
         }
@@ -1068,13 +1083,13 @@ fun AlerteMorsureCard(nomChat: String) {
         Column(modifier = Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(Icons.Rounded.Warning, contentDescription = null, tint = PremiumPalette.PrioriteUrgente, modifier = Modifier.size(22.dp))
-                Text("GRIFFURE / MORSURE SIGNALÉE", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.ExtraBold, color = PremiumPalette.PrioriteUrgente, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.alerte_morsure_titre), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.ExtraBold, color = PremiumPalette.PrioriteUrgente, textAlign = TextAlign.Center)
                 Icon(Icons.Rounded.Warning, contentDescription = null, tint = PremiumPalette.PrioriteUrgente, modifier = Modifier.size(22.dp))
             }
             Spacer(modifier = Modifier.height(14.dp))
-            Text("Il y a déjà eu griffure ou morsure chez $nomChat. Cette situation mérite une attention particulière.", style = MaterialTheme.typography.titleMedium, color = PremiumPalette.PrioriteUrgente, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.alerte_morsure_corps, nomChat), style = MaterialTheme.typography.titleMedium, color = PremiumPalette.PrioriteUrgente, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
-            Text("Un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.", color = if (isDark) Color(0xFFFFCFC5) else Color(0xFF5C1A0A), textAlign = TextAlign.Center)
+            Text(stringResource(R.string.alerte_morsure_conseil), color = if (isDark) Color(0xFFFFCFC5) else Color(0xFF5C1A0A), textAlign = TextAlign.Center)
         }
     }
 }
@@ -1083,9 +1098,13 @@ fun AlerteMorsureCard(nomChat: String) {
 fun DictionnaireInfoScreen(modifier: Modifier = Modifier, onOpenFiche: (String) -> Unit) {
     val fiches = remember { comportementEntries() }
     var recherche by remember { mutableStateOf("") }
+    val context = LocalContext.current
     val fichesFiltrees = remember(recherche) {
         if (recherche.isBlank()) fiches
-        else fiches.filter { it.titre.contains(recherche, ignoreCase = true) || it.resume.contains(recherche, ignoreCase = true) }
+        else fiches.filter {
+            context.getString(it.titreKey).contains(recherche, ignoreCase = true) ||
+                    context.getString(it.resumeKey).contains(recherche, ignoreCase = true)
+        }
     }
 
     EditorialContainer(
@@ -1095,13 +1114,13 @@ fun DictionnaireInfoScreen(modifier: Modifier = Modifier, onOpenFiche: (String) 
     ) {
         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             PremiumCard(centered = true) {
-                EditorialKicker("Dictionnaire comportemental", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_dictionnaire), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Repères pour mieux lire le langage de votre chat", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.titre_dictionnaire), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(14.dp))
                 OutlinedTextField(
                     value = recherche, onValueChange = { recherche = it },
-                    placeholder = { Text("Rechercher une fiche...") }, singleLine = true,
+                    placeholder = { Text(stringResource(R.string.placeholder_recherche)) }, singleLine = true,
                     modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = PremiumPalette.Primary, unfocusedBorderColor = MaterialTheme.colorScheme.outline,
@@ -1112,14 +1131,16 @@ fun DictionnaireInfoScreen(modifier: Modifier = Modifier, onOpenFiche: (String) 
                 )
             }
             if (fichesFiltrees.isEmpty()) {
-                PremiumCard(centered = true) { Text("Aucune fiche ne correspond à \"$recherche\".", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                PremiumCard(centered = true) {
+                    Text(stringResource(R.string.aucune_fiche, recherche), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             } else {
                 fichesFiltrees.forEach { fiche -> ComportementListItem(entry = fiche, onClick = { onOpenFiche(fiche.id) }) }
             }
             PremiumCard(centered = true) {
-                EditorialKicker("Important", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_important), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Ces fiches donnent des repères de lecture du comportement félin. Elles ne remplacent pas l'avis d'un professionnel.", textAlign = TextAlign.Center)
+                Text(stringResource(R.string.texte_important_dictionnaire), textAlign = TextAlign.Center)
             }
         }
     }
@@ -1135,22 +1156,36 @@ fun DictionnaireDetailScreen(modifier: Modifier = Modifier, ficheId: String) {
     ) {
         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             if (fiche == null) {
-                PremiumCard(centered = true) { Text("Fiche introuvable.", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center) }
+                PremiumCard(centered = true) {
+                    Text(stringResource(R.string.fiche_introuvable), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                }
             } else {
                 PremiumCard(centered = true) {
-                    EditorialKicker("Fiche comportementale", centered = true)
+                    EditorialKicker(stringResource(R.string.kicker_fiche_comportementale), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(fiche.titre, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                    Text(stringResource(fiche.titreKey), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(fiche.resume, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(fiche.resumeKey), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                PremiumCard { EditorialKicker("Explication"); Spacer(modifier = Modifier.height(12.dp)); Text(fiche.explication, style = MaterialTheme.typography.bodyLarge) }
-                PremiumCard { EditorialKicker("Que faire"); Spacer(modifier = Modifier.height(12.dp)); Bullet(fiche.queFaire) }
-                PremiumCard { EditorialKicker("À éviter"); Spacer(modifier = Modifier.height(12.dp)); Bullet(fiche.aEviter) }
+                PremiumCard {
+                    EditorialKicker(stringResource(R.string.kicker_explication))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(stringResource(fiche.explicationKey), style = MaterialTheme.typography.bodyLarge)
+                }
+                PremiumCard {
+                    EditorialKicker(stringResource(R.string.kicker_que_faire))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Bullet(stringResource(fiche.queFaireKey))
+                }
+                PremiumCard {
+                    EditorialKicker(stringResource(R.string.kicker_a_eviter_fiche))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Bullet(stringResource(fiche.aEviterKey))
+                }
                 PremiumCard(centered = true) {
                     EditorialKicker("Rappel", centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text("Un comportement isolé ne suffit pas toujours à conclure. Le contexte et l'ensemble du langage corporel comptent autant.", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.texte_rappel_fiche), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -1167,9 +1202,9 @@ fun ComportementListItem(entry: ComportementEntry, onClick: () -> Unit) {
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(entry.titre, style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(entry.titreKey), style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(entry.resume, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(entry.resumeKey), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.width(12.dp))
             Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1194,41 +1229,41 @@ fun DictionnaireScreen(modifier: Modifier = Modifier) {
                 selectedEntryState.value != null -> {
                     val entry = selectedEntryState.value!!
                     PremiumCard {
-                        AccentChip(entry.categorie.titre); Spacer(modifier = Modifier.height(14.dp))
-                        Text(entry.titre, style = MaterialTheme.typography.headlineSmall); Spacer(modifier = Modifier.height(12.dp))
-                        Text(entry.contenu, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); Spacer(modifier = Modifier.height(18.dp))
-                        SecondaryPremiumButton("Retour à la catégorie", onClick = { selectedEntryState.value = null }, leading = { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null) })
+                        AccentChip(entry.categorie.titre()); Spacer(modifier = Modifier.height(14.dp))
+                        Text(stringResource(entry.titreKey), style = MaterialTheme.typography.headlineSmall); Spacer(modifier = Modifier.height(12.dp))
+                        Text(stringResource(entry.contenuKey), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); Spacer(modifier = Modifier.height(18.dp))
+                        SecondaryPremiumButton(stringResource(R.string.btn_retour_categorie), onClick = { selectedEntryState.value = null }, leading = { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null) })
                     }
                     PremiumCard(centered = true) {
-                        EditorialKicker("Rappel", centered = true); Spacer(modifier = Modifier.height(10.dp))
-                        Text("En cas de symptômes ou d'ingestion douteuse, privilégiez un avis vétérinaire.", textAlign = TextAlign.Center)
+                        EditorialKicker(stringResource(R.string.kicker_important), centered = true); Spacer(modifier = Modifier.height(10.dp))
+                        Text(stringResource(R.string.texte_rappel_alimentation), textAlign = TextAlign.Center)
                     }
                 }
                 selectedCategoryState.value != null -> {
                     val categorie = selectedCategoryState.value!!
                     val items = entries.filter { it.categorie == categorie }
                     PremiumCard(centered = true) {
-                        EditorialKicker("Alimentation", centered = true); Spacer(modifier = Modifier.height(10.dp))
-                        Text(categorie.titre, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                        EditorialKicker(stringResource(R.string.kicker_alimentation_detail), centered = true); Spacer(modifier = Modifier.height(10.dp))
+                        Text(categorie.titre(), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                     }
                     items.forEach { entry -> DictionnaireListItem(entry = entry, onClick = { selectedEntryState.value = entry }) }
-                    SecondaryPremiumButton("Retour aux rubriques", onClick = { selectedCategoryState.value = null }, leading = { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null) })
+                    SecondaryPremiumButton(stringResource(R.string.btn_retour_rubriques), onClick = { selectedCategoryState.value = null }, leading = { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null) })
                 }
                 else -> {
                     PremiumCard(centered = true) {
-                        EditorialKicker("Alimentation du chat", centered = true); Spacer(modifier = Modifier.height(10.dp))
-                        Text("Repères pratiques pour nourrir votre chat sereinement.", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        EditorialKicker(stringResource(R.string.kicker_alimentation), centered = true); Spacer(modifier = Modifier.height(10.dp))
+                        Text(stringResource(R.string.texte_alimentation_intro), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     PremiumCard {
-                        EditorialKicker("À retenir d'abord"); Spacer(modifier = Modifier.height(12.dp))
-                        Bullet("Le chat est un carnivore strict — son alimentation doit être majoritairement animale."); Spacer(modifier = Modifier.height(8.dp))
-                        Bullet("Certaines plantes et aliments courants peuvent être très toxiques pour lui."); Spacer(modifier = Modifier.height(8.dp))
-                        Bullet("En cas d'ingestion suspecte, consultez rapidement un vétérinaire.")
+                        EditorialKicker(stringResource(R.string.kicker_a_retenir_alimentation)); Spacer(modifier = Modifier.height(12.dp))
+                        Bullet(stringResource(R.string.bullet_carnivore)); Spacer(modifier = Modifier.height(8.dp))
+                        Bullet(stringResource(R.string.bullet_plantes_toxiques)); Spacer(modifier = Modifier.height(8.dp))
+                        Bullet(stringResource(R.string.bullet_ingestion_suspecte))
                     }
                     categories.forEach { categorie -> DictionnaireCategoryButton(categorie = categorie, onClick = { selectedCategoryState.value = categorie }) }
                     PremiumCard(centered = true) {
-                        EditorialKicker("Important", centered = true); Spacer(modifier = Modifier.height(10.dp))
-                        Text("Ce guide donne des repères généraux. Il ne remplace pas un vétérinaire.", textAlign = TextAlign.Center)
+                        EditorialKicker(stringResource(R.string.kicker_important), centered = true); Spacer(modifier = Modifier.height(10.dp))
+                        Text(stringResource(R.string.texte_important_alimentation), textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -1246,13 +1281,13 @@ fun DictionnaireCategoryButton(categorie: DictionnaireCategorie, onClick: () -> 
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 20.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(categorie.titre, style = MaterialTheme.typography.titleLarge)
+                Text(categorie.titre(), style = MaterialTheme.typography.titleLarge)
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(when (categorie) {
-                    DictionnaireCategorie.DANGEREUX -> "Les aliments et plantes à éviter absolument."
-                    DictionnaireCategorie.AUTORISES -> "Ce qui peut être donné avec modération."
-                    DictionnaireCategorie.INGESTION -> "Les bons réflexes si le chat a ingéré quelque chose."
-                    DictionnaireCategorie.DIGESTION -> "Herbe, vomissements, boules de poils et selles."
+                    DictionnaireCategorie.DANGEREUX -> stringResource(R.string.cat_dangereux_desc)
+                    DictionnaireCategorie.AUTORISES -> stringResource(R.string.cat_autorises_desc)
+                    DictionnaireCategorie.INGESTION -> stringResource(R.string.cat_ingestion_desc)
+                    DictionnaireCategorie.DIGESTION -> stringResource(R.string.cat_digestion_desc)
                 }, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -1271,9 +1306,9 @@ fun DictionnaireListItem(entry: DictionnaireEntry, onClick: () -> Unit) {
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(entry.titre, style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(entry.titreKey), style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(entry.resume, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(entry.resumeKey), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.width(12.dp))
             Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1295,36 +1330,36 @@ fun ParametresScreen(modifier: Modifier = Modifier, onRevoirOnboarding: () -> Un
     ) {
         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             PremiumCard(centered = true) {
-                EditorialKicker("Paramètres", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_parametres), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Comprendre mon chat", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.titre_parametres), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(6.dp))
-                AccentChip("Version $version")
+                AccentChip(stringResource(R.string.label_version, version))
             }
 
             PremiumCard {
-                EditorialKicker("Tutoriel")
+                EditorialKicker(stringResource(R.string.kicker_tutoriel))
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("Revoir la présentation de l'application depuis le début.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.texte_tutoriel), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(14.dp))
-                SecondaryPremiumButton("Revoir l'introduction", onClick = onRevoirOnboarding, leading = { Icon(Icons.Rounded.AutoStories, contentDescription = null) })
+                SecondaryPremiumButton(stringResource(R.string.btn_revoir_intro), onClick = onRevoirOnboarding, leading = { Icon(Icons.Rounded.AutoStories, contentDescription = null) })
             }
 
             PremiumCard {
-                EditorialKicker("Confidentialité")
+                EditorialKicker(stringResource(R.string.kicker_confidentialite))
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("Cette application ne collecte aucune donnée personnelle. Les bilans sont stockés uniquement sur votre appareil. Les notifications sont locales.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.texte_confidentialite), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(14.dp))
-                SecondaryPremiumButton("Politique de confidentialité", onClick = {
+                SecondaryPremiumButton(stringResource(R.string.btn_politique_confidentialite), onClick = {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchien/confidentialite.html"))
                     context.startActivity(intent)
                 }, leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null) })
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker("À propos", centered = true)
+                EditorialKicker(stringResource(R.string.kicker_a_propos), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("Développée pour aider les propriétaires à mieux comprendre leur chat et améliorer sa qualité de vie.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.texte_a_propos), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
         }
     }

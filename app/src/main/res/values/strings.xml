@@ -1,3 +1,256 @@
 <resources>
+    <!-- App -->
     <string name="app_name">Comprendre mon chat</string>
+
+    <!-- Accueil -->
+    <string name="btn_demarrer">Démarrer le bilan</string>
+    <string name="btn_dictionnaire">Dictionnaire comportemental</string>
+    <string name="btn_alimentation">Alimentation</string>
+    <string name="btn_reprendre">Reprendre le questionnaire</string>
+
+    <!-- Questionnaire -->
+    <string name="label_sur">sur</string>
+    <string name="btn_continuer">Continuer</string>
+    <string name="placeholder_prenom_chat">Ex. Luna, Milo, Simba…</string>
+    <string name="label_prenom_chat">Prénom de votre chat</string>
+    <string name="hint_saisir_prenom">Saisissez le prénom de votre chat pour continuer</string>
+    <string name="hint_choisir_reponse">Choisissez une réponse pour continuer</string>
+
+    <!-- Chargement -->
+    <string name="chargement_analyse">Analyse en cours…</string>
+    <string name="chargement_profil">Lecture du profil de votre chat…</string>
+    <string name="chargement_bilan">Préparation de votre bilan…</string>
+
+    <!-- Résultat -->
+    <string name="kicker_votre_bilan">Votre bilan</string>
+    <string name="titre_bilan_pour">Bilan pour</string>
+    <string name="kicker_lecture_principale">Lecture principale</string>
+    <string name="label_priorite">Priorité : </string>
+    <string name="kicker_ressent">Ce que ressent probablement</string>
+    <string name="kicker_coup_oeil">En un coup d\'œil</string>
+    <string name="kicker_facteurs">Facteurs repérés</string>
+    <string name="subsection_aggrave">Ce qui peut aggraver</string>
+    <string name="subsection_protege">Ce qui protège</string>
+    <string name="kicker_niveau_situation">Niveau de situation</string>
+    <string name="kicker_inquieter">Faut-il s\'inquiéter ?</string>
+    <string name="kicker_ce_qui_passe">Ce qui se passe probablement</string>
+    <string name="highlight_chip">Le point d\'appui principal</string>
+    <string name="highlight_footer">C\'est souvent ici que le changement commence à prendre forme.</string>
+    <string name="kicker_3_jours">Les 3 prochains jours</string>
+    <string name="subsection_a_faire">À faire</string>
+    <string name="subsection_a_eviter">À éviter</string>
+    <string name="subsection_a_observer">À observer</string>
+    <string name="kicker_conseils">Conseils complémentaires</string>
+    <string name="kicker_demander_aide">Quand demander de l\'aide</string>
+    <string name="texte_morsure_signale">Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.</string>
+    <string name="kicker_important">Important</string>
+    <string name="texte_important_bilan">Ce bilan reste indicatif. Il ne remplace ni un vétérinaire ni un comportementaliste félin.</string>
+    <string name="kicker_aller_plus_loin">Pour aller plus loin avec</string>
+    <string name="label_fiches_comportementales">Fiches comportementales</string>
+    <string name="label_reperes_alimentation">Repères alimentation</string>
+    <string name="kicker_a_retenir">À retenir</string>
+    <string name="kicker_le_livre">Le livre</string>
+    <string name="texte_livre">Si vous souhaitez aller plus loin</string>
+    <string name="btn_voir_livres">Voir mes livres</string>
+    <string name="btn_partager">Partager</string>
+    <string name="btn_export_pdf">Export PDF</string>
+    <string name="btn_copier_resume">Copier le résumé</string>
+    <string name="btn_recommencer">Recommencer depuis le début</string>
+
+    <!-- Alerte morsure -->
+    <string name="alerte_morsure_titre">GRIFFURE / MORSURE SIGNALÉE</string>
+    <string name="alerte_morsure_corps">Il y a déjà eu griffure ou morsure chez %1$s. Cette situation mérite une attention particulière.</string>
+    <string name="alerte_morsure_conseil">Un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé.</string>
+
+    <!-- Profil de race -->
+    <string name="kicker_profil_race">Profil de race</string>
+    <string name="label_predispositions">Prédispositions fréquentes dans cette famille</string>
+    <string name="kicker_origines">Pourquoi est-il comme ça ?</string>
+    <string name="chip_comprendre_agir">Comprendre pour mieux agir</string>
+
+    <!-- Dictionnaire comportemental -->
+    <string name="kicker_dictionnaire">Dictionnaire comportemental</string>
+    <string name="titre_dictionnaire">Repères pour mieux lire le langage de votre chat</string>
+    <string name="placeholder_recherche">Rechercher une fiche…</string>
+    <string name="aucune_fiche">Aucune fiche ne correspond à \"%1$s\".</string>
+    <string name="texte_important_dictionnaire">Ces fiches donnent des repères de lecture du comportement félin. Elles ne remplacent pas l\'avis d\'un professionnel.</string>
+    <string name="kicker_fiche_comportementale">Fiche comportementale</string>
+    <string name="kicker_explication">Explication</string>
+    <string name="kicker_que_faire">Que faire</string>
+    <string name="kicker_a_eviter_fiche">À éviter</string>
+    <string name="texte_rappel_fiche">Un comportement isolé ne suffit pas toujours à conclure. Le contexte et l\'ensemble du langage corporel comptent autant.</string>
+    <string name="fiche_introuvable">Fiche introuvable.</string>
+
+    <!-- Alimentation -->
+    <string name="kicker_alimentation">Alimentation du chat</string>
+    <string name="texte_alimentation_intro">Repères pratiques pour nourrir votre chat sereinement.</string>
+    <string name="kicker_a_retenir_alimentation">À retenir d\'abord</string>
+    <string name="bullet_carnivore">Le chat est un carnivore strict — son alimentation doit être majoritairement animale.</string>
+    <string name="bullet_plantes_toxiques">Certaines plantes et aliments courants peuvent être très toxiques pour lui.</string>
+    <string name="bullet_ingestion_suspecte">En cas d\'ingestion suspecte, consultez rapidement un vétérinaire.</string>
+    <string name="texte_important_alimentation">Ce guide donne des repères généraux. Il ne remplace pas un vétérinaire.</string>
+    <string name="texte_rappel_alimentation">En cas de symptômes ou d\'ingestion douteuse, privilégiez un avis vétérinaire.</string>
+    <string name="btn_retour_categorie">Retour à la catégorie</string>
+    <string name="btn_retour_rubriques">Retour aux rubriques</string>
+    <string name="kicker_alimentation_detail">Alimentation</string>
+
+    <!-- Catégories alimentation -->
+    <string name="cat_dangereux_titre">Aliments dangereux pour le chat</string>
+    <string name="cat_dangereux_desc">Les aliments et plantes à éviter absolument.</string>
+    <string name="cat_autorises_titre">Aliments autorisés avec modération</string>
+    <string name="cat_autorises_desc">Ce qui peut être donné avec modération.</string>
+    <string name="cat_ingestion_titre">Que faire en cas d\'ingestion</string>
+    <string name="cat_ingestion_desc">Les bons réflexes si le chat a ingéré quelque chose.</string>
+    <string name="cat_digestion_titre">Digestion / herbe / vomissements / selles</string>
+    <string name="cat_digestion_desc">Herbe, vomissements, boules de poils et selles.</string>
+
+    <!-- Paramètres -->
+    <string name="kicker_parametres">Paramètres</string>
+    <string name="titre_parametres">Comprendre mon chat</string>
+    <string name="label_version">Version %1$s</string>
+    <string name="kicker_tutoriel">Tutoriel</string>
+    <string name="texte_tutoriel">Revoir la présentation de l\'application depuis le début.</string>
+    <string name="btn_revoir_intro">Revoir l\'introduction</string>
+    <string name="kicker_confidentialite">Confidentialité</string>
+    <string name="texte_confidentialite">Cette application ne collecte aucune donnée personnelle. Les bilans sont stockés uniquement sur votre appareil. Les notifications sont locales.</string>
+    <string name="btn_politique_confidentialite">Politique de confidentialité</string>
+    <string name="kicker_a_propos">À propos</string>
+    <string name="texte_a_propos">Développée pour aider les propriétaires à mieux comprendre leur chat et améliorer sa qualité de vie.</string>
+
+    <!-- Navigation / TopBar -->
+    <string name="nav_retour">Retour</string>
+
+    <!-- Fiches comportement — Titres et résumés -->
+    <string name="comp_ronronnement_titre">Ronronnement</string>
+    <string name="comp_ronronnement_resume">Pas toujours synonyme de bien-être, il peut aussi signaler un stress.</string>
+    <string name="comp_ronronnement_explication">Le ronronnement est produit par vibration du larynx. Il signale souvent le bien-être, mais aussi l\'auto-apaisement en cas de stress ou de douleur.</string>
+    <string name="comp_ronronnement_que_faire">Observer le contexte global avant de conclure que le chat est heureux.</string>
+    <string name="comp_ronronnement_a_eviter">Ignorer un ronronnement inhabituel ou excessif.</string>
+
+    <string name="comp_clin_oeil_titre">Clin d\'œil lent</string>
+    <string name="comp_clin_oeil_resume">Signe de confiance et d\'affection du chat.</string>
+    <string name="comp_clin_oeil_explication">Le chat plisse les yeux lentement vers vous en signe de confiance. Répondre de la même façon renforce le lien.</string>
+    <string name="comp_clin_oeil_que_faire">Reproduire ce signal pour renforcer la relation.</string>
+    <string name="comp_clin_oeil_a_eviter">Fixer le chat dans les yeux sans cligner — cela peut être perçu comme une menace.</string>
+
+    <string name="comp_queue_dressee_titre">Queue dressée</string>
+    <string name="comp_queue_dressee_resume">Signal de salutation amical.</string>
+    <string name="comp_queue_dressee_explication">Une queue verticale indique une intention amicale et de la confiance. Le petit crochet au bout signale une salutation particulièrement chaleureuse.</string>
+    <string name="comp_queue_dressee_que_faire">Répondre positivement à cette invitation au contact.</string>
+    <string name="comp_queue_dressee_a_eviter">Ignorer ce signal de sociabilité.</string>
+
+    <string name="comp_queue_fouettante_titre">Queue qui fouette</string>
+    <string name="comp_queue_fouettante_resume">Signal d\'agitation ou d\'irritation.</string>
+    <string name="comp_queue_fouettante_explication">Contrairement au chien, un chat qui fouette la queue est irrité ou surexcité. Ce n\'est pas un signe de joie.</string>
+    <string name="comp_queue_fouettante_que_faire">S\'arrêter d\'interagir et laisser le chat se calmer.</string>
+    <string name="comp_queue_fouettante_a_eviter">Continuer à caresser ou jouer avec un chat dont la queue fouette.</string>
+
+    <string name="comp_oreilles_arriere_titre">Oreilles aplaties en arrière</string>
+    <string name="comp_oreilles_arriere_resume">Signal d\'alerte maximal.</string>
+    <string name="comp_oreilles_arriere_explication">Quand les oreilles se plaquent en arrière, le chat est apeuré ou prêt à réagir agressivement. Arrêtez toute interaction immédiatement.</string>
+    <string name="comp_oreilles_arriere_que_faire">Créer de la distance immédiatement.</string>
+    <string name="comp_oreilles_arriere_a_eviter">Continuer à toucher ou approcher un chat avec les oreilles en arrière.</string>
+
+    <string name="comp_ventre_expose_titre">Ventre exposé</string>
+    <string name="comp_ventre_expose_resume">Signe de confiance, pas forcément une invitation.</string>
+    <string name="comp_ventre_expose_explication">Exposer le ventre montre une confiance extrême, mais n\'est pas toujours une invitation à être caressé. Beaucoup de chats griffent si on touche cette zone vulnérable.</string>
+    <string name="comp_ventre_expose_que_faire">Observer si le chat accepte vraiment les caresses sur le ventre avant d\'insister.</string>
+    <string name="comp_ventre_expose_a_eviter">Caresser automatiquement le ventre d\'un chat qui se retourne.</string>
+
+    <string name="comp_petrir_titre">Pétrir (faire du pain)</string>
+    <string name="comp_petrir_resume">Comportement de bien-être issu de la période de tétée.</string>
+    <string name="comp_petrir_explication">Le chat pétrit avec ses pattes avant — geste hérité du chaton tétant sa mère. Signe de confort et de sécurité.</string>
+    <string name="comp_petrir_que_faire">Laisser ce comportement se produire, c\'est un très bon signe.</string>
+    <string name="comp_petrir_a_eviter">Punir ou interrompre brusquement ce moment de bien-être.</string>
+
+    <string name="comp_frotter_tete_titre">Frottement de tête (bunting)</string>
+    <string name="comp_frotter_tete_resume">Marquage affectif et signe de confiance.</string>
+    <string name="comp_frotter_tete_explication">Le chat frotte son museau, ses joues ou sa tempe pour déposer ses phéromones. C\'est un signe de confiance et d\'appropriation affective.</string>
+    <string name="comp_frotter_tete_que_faire">Répondre positivement à ce contact initié par le chat.</string>
+    <string name="comp_frotter_tete_a_eviter">Repousser le chat qui vient frotter sa tête.</string>
+
+    <string name="comp_chatter_titre">Claquement de dents (chatter)</string>
+    <string name="comp_chatter_resume">Réaction face à une proie inaccessible.</string>
+    <string name="comp_chatter_explication">Ce bruit rapide est produit lorsque le chat observe un oiseau ou une proie qu\'il ne peut pas attraper. Expression de frustration et d\'instinct de chasse activé.</string>
+    <string name="comp_chatter_que_faire">Proposer une session de jeu avec une canne à plume pour canaliser cet instinct.</string>
+    <string name="comp_chatter_a_eviter">S\'inquiéter — c\'est un comportement normal.</string>
+
+    <string name="comp_griffage_titre">Griffage des surfaces</string>
+    <string name="comp_griffage_resume">Besoin vital de marquage et d\'entretien des griffes.</string>
+    <string name="comp_griffage_explication">Le chat griffe pour marquer son territoire (phéromones des coussinets), s\'étirer et entretenir ses griffes. C\'est un besoin fondamental.</string>
+    <string name="comp_griffage_que_faire">Proposer des griffoirs variés aux bons endroits (près des zones de repos).</string>
+    <string name="comp_griffage_a_eviter">Punir le griffage — cela ne supprime pas le besoin, le chat cherchera d\'autres surfaces.</string>
+
+    <string name="comp_marquage_urinaire_titre">Marquage urinaire (spray)</string>
+    <string name="comp_marquage_urinaire_resume">Communication territoriale, souvent liée au stress.</string>
+    <string name="comp_marquage_urinaire_explication">Le chat urine debout en reculant, queue tremblante. Comportement de marquage distinct de l\'élimination normale. Chez un chat stérilisé, c\'est souvent le signe d\'un stress territorial.</string>
+    <string name="comp_marquage_urinaire_que_faire">Identifier et réduire la source de stress (chat extérieur visible, conflit avec un cohabitant).</string>
+    <string name="comp_marquage_urinaire_a_eviter">Punir le chat — cela aggrave le stress et donc le marquage.</string>
+
+    <string name="comp_hyperactivite_titre">Hyperactivité nocturne</string>
+    <string name="comp_hyperactivite_resume">Souvent liée à un manque de stimulation diurne.</string>
+    <string name="comp_hyperactivite_explication">Le chat est naturellement actif à l\'aube et au crépuscule. Un manque de jeu en journée peut se traduire par une agitation nocturne.</string>
+    <string name="comp_hyperactivite_que_faire">Proposer une session de jeu intense avant le coucher, puis un repas.</string>
+    <string name="comp_hyperactivite_a_eviter">Laisser le chat s\'ennuyer toute la journée et s\'étonner de son agitation nocturne.</string>
+
+    <string name="comp_destruction_titre">Destructions en l\'absence du maître</string>
+    <string name="comp_destruction_resume">Souvent liées au stress ou à l\'ennui.</string>
+    <string name="comp_destruction_explication">Un chat qui détruit quand il est seul n\'agit pas par vengeance. C\'est un signe de détresse ou d\'ennui.</string>
+    <string name="comp_destruction_que_faire">Enrichir l\'environnement : jouets rotatifs, fenêtres accessibles, cachettes.</string>
+    <string name="comp_destruction_a_eviter">Punir après coup — le chat ne fait pas le lien avec son comportement passé.</string>
+
+    <string name="comp_vocalisation_titre">Vocalisations excessives</string>
+    <string name="comp_vocalisation_resume">Plusieurs causes possibles selon le contexte.</string>
+    <string name="comp_vocalisation_explication">Des miaulements excessifs peuvent signaler la faim, l\'ennui, une demande d\'attention, une douleur, ou chez le chat âgé, un début de syndrome cognitif. Les Siamois et orientaux sont naturellement plus vocaux.</string>
+    <string name="comp_vocalisation_que_faire">Consulter un vétérinaire si les vocalisations sont nouvelles ou nocturnes et intenses.</string>
+    <string name="comp_vocalisation_a_eviter">Répondre systématiquement aux demandes vocales — cela renforce le comportement.</string>
+
+    <!-- Fiches alimentation — Titres et résumés -->
+    <string name="alim_dangereux1_titre">Quels aliments éviter absolument ?</string>
+    <string name="alim_dangereux1_resume">Certains aliments humains peuvent être dangereux pour le chat.</string>
+    <string name="alim_dangereux1_contenu">Par prudence, il faut éviter le chocolat, l\'oignon, l\'ail, le raisin, l\'alcool, les os cuits, les aliments très gras ou très salés. Le lait de vache est également mal toléré par la plupart des chats adultes. En cas d\'ingestion suspecte, consultez rapidement si des symptômes apparaissent.</string>
+
+    <string name="alim_dangereux2_titre">Les plantes toxiques pour le chat</string>
+    <string name="alim_dangereux2_resume">Certaines plantes courantes sont dangereuses.</string>
+    <string name="alim_dangereux2_contenu">Le lys (très toxique, peut provoquer une insuffisance rénale), le philodendron, le pothos, l\'azalée, le muguet sont parmi les plantes les plus dangereuses. Si votre chat a mâché une plante inconnue et présente des symptômes, consultez en urgence.</string>
+
+    <string name="alim_dangereux3_titre">Pourquoi éviter les os pour chats ?</string>
+    <string name="alim_dangereux3_resume">Les os cuits peuvent être dangereux.</string>
+    <string name="alim_dangereux3_contenu">Les os cuits peuvent se fragmenter et provoquer des blessures internes. Évitez-les systématiquement. Les os crus peuvent être proposés sous surveillance, mais demandez l\'avis de votre vétérinaire.</string>
+
+    <string name="alim_autorises1_titre">Le chat peut-il manger des légumes ?</string>
+    <string name="alim_autorises1_resume">Avec modération et selon les légumes.</string>
+    <string name="alim_autorises1_contenu">Certains légumes cuits comme la carotte ou la courgette peuvent être tolérés en petite quantité. L\'alimentation du chat doit rester majoritairement carnée — il est un carnivore strict et ne peut pas synthétiser certains acides aminés essentiels comme la taurine.</string>
+
+    <string name="alim_autorises2_titre">Les friandises pour chat : utile ou risqué ?</string>
+    <string name="alim_autorises2_resume">Utiles en renforcement positif, à encadrer.</string>
+    <string name="alim_autorises2_contenu">Les friandises peuvent être utiles lors des sessions de jeu ou d\'apprentissage. Elles ne doivent pas dépasser 10% de la ration quotidienne. Choisissez des friandises adaptées aux chats, sans additifs en excès.</string>
+
+    <string name="alim_autorises3_titre">Comment changer la nourriture de son chat ?</string>
+    <string name="alim_autorises3_resume">Une transition progressive est indispensable.</string>
+    <string name="alim_autorises3_contenu">Changez l\'alimentation sur 7 à 10 jours en mélangeant progressivement l\'ancien et le nouvel aliment. Les chats sont très sensibles aux changements alimentaires et peuvent refuser brutalement une nouvelle nourriture ou développer des troubles digestifs.</string>
+
+    <string name="alim_ingestion1_titre">Que faire si mon chat a mangé quelque chose de douteux ?</string>
+    <string name="alim_ingestion1_resume">Réagir calmement et rapidement.</string>
+    <string name="alim_ingestion1_contenu">Identifiez ce que le chat a ingéré et en quelle quantité approximative. N\'essayez pas de faire vomir vous-même. Contactez votre vétérinaire ou le centre antipoison vétérinaire si la substance est potentiellement toxique.</string>
+
+    <string name="alim_ingestion2_titre">Quels signes doivent alerter après ingestion ?</string>
+    <string name="alim_ingestion2_resume">Certains signes nécessitent une consultation urgente.</string>
+    <string name="alim_ingestion2_contenu">Vomissements répétés, diarrhée intense, abattement, tremblements, difficultés respiratoires, bave excessive, convulsions ou comportement inhabituel sont des signes d\'alerte. Consultez sans attendre.</string>
+
+    <string name="alim_digestion1_titre">Pourquoi mon chat mange de l\'herbe ?</string>
+    <string name="alim_digestion1_resume">Comportement normal, à surveiller si excessif.</string>
+    <string name="alim_digestion1_contenu">L\'herbe aide le chat à éliminer les boules de poils et peut agir comme purgatif naturel. Proposez de l\'herbe à chat ou de l\'herbe à mâcher en pot — c\'est bénéfique pour la plupart des chats d\'intérieur.</string>
+
+    <string name="alim_digestion2_titre">Mon chat vomit, est-ce grave ?</string>
+    <string name="alim_digestion2_resume">Cela dépend de la fréquence et du contexte.</string>
+    <string name="alim_digestion2_contenu">Un vomissement isolé de boules de poils est souvent bénin. Des vomissements fréquents, avec sang, associés à un abattement ou un refus de manger nécessitent une consultation vétérinaire.</string>
+
+    <string name="alim_digestion3_titre">Boules de poils : comment aider son chat ?</string>
+    <string name="alim_digestion3_resume">Un problème fréquent, des solutions simples.</string>
+    <string name="alim_digestion3_contenu">Brossez régulièrement votre chat, proposez de l\'herbe à chat, et envisagez une alimentation spécifique anti-boules de poils. En cas de vomissements très fréquents ou de constipation, consultez.</string>
+
+    <string name="alim_digestion4_titre">Mon chat réclame tout le temps à manger</string>
+    <string name="alim_digestion4_resume">La demande alimentaire peut avoir plusieurs causes.</string>
+    <string name="alim_digestion4_contenu">Un chat qui réclame souvent peut manquer de stimulation, avoir une ration insuffisante, ou avoir pris l\'habitude de mendier. Les food puzzles (jouets distributeurs) peuvent aider à canaliser ce comportement tout en le stimulant mentalement.</string>
 </resources>

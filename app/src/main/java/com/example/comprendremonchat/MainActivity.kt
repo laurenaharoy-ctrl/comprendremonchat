@@ -41,6 +41,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.Locale
 
 private val Context.dataStore by preferencesDataStore(name = "comprendre_mon_chat_state")
 
@@ -91,6 +92,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        // Forcer la locale
+        val locale = Locale.getDefault()
+        val config = resources.configuration
+        config.setLocale(locale)
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         setContent {
             ComprendreMonchatTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -249,22 +258,23 @@ Envoyé depuis l'application Comprendre mon chat
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
+                val context = androidx.compose.ui.platform.LocalContext.current
                 val titreEcran = when (screen) {
                     AppScreen.Accueil -> ""
                     AppScreen.Onboarding -> ""
-                    AppScreen.Questionnaire -> "Questionnaire"
-                    AppScreen.Chargement -> "Analyse"
-                    AppScreen.Resultat -> "Résultat"
-                    AppScreen.Dictionnaire -> "Dictionnaire comportemental"
+                    AppScreen.Questionnaire -> if (isEnglish()) "Questionnaire" else "Questionnaire"
+                    AppScreen.Chargement -> if (isEnglish()) "Analysis" else "Analyse"
+                    AppScreen.Resultat -> if (isEnglish()) "Report" else "Résultat"
+                    AppScreen.Dictionnaire -> if (isEnglish()) "Behavioral dictionary" else "Dictionnaire comportemental"
                     is AppScreen.DictionnaireDetail -> {
                         val ficheId = (screen as AppScreen.DictionnaireDetail).ficheId
-                        getComportementEntryById(ficheId)?.titre ?: "Fiche comportementale"
+                        context.getString(R.string.kicker_fiche_comportementale)
                     }
-                    AppScreen.Alimentation -> "Alimentation"
-                    AppScreen.Feedback -> "Signalement"
-                    AppScreen.Historique -> "Historique des bilans"
-                    is AppScreen.HistoriqueDetail -> "Détail du bilan"
-                    AppScreen.Parametres -> "Paramètres"
+                    AppScreen.Alimentation -> if (isEnglish()) "Nutrition" else "Alimentation"
+                    AppScreen.Feedback -> if (isEnglish()) "Report an issue" else "Signalement"
+                    AppScreen.Historique -> if (isEnglish()) "Report history" else "Historique des bilans"
+                    is AppScreen.HistoriqueDetail -> if (isEnglish()) "Report detail" else "Détail du bilan"
+                    AppScreen.Parametres -> if (isEnglish()) "Settings" else "Paramètres"
                 }
 
                 val onBack: (() -> Unit)? = if (screen != AppScreen.Accueil && screen != AppScreen.Chargement) {
@@ -544,41 +554,26 @@ Envoyé depuis l'application Comprendre mon chat
 
 fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>): Boolean {
     return when (question.id) {
-
-        // Si accès extérieur libre → pas besoin de demander l'environnement intérieur
         "vie_interieur" -> reponsesChoix["acces_exterieur"] != 0
-
-        // Si jamais agressif pendant caresses → on saute a_deja_griffe_mordu
         "a_deja_griffe_mordu" -> reponsesChoix["agressivite_caresses"] != 0
-
-        // Questions de contexte → seulement si problème signalé
         "apparition", "duree_probleme", "evolution_probleme",
         "frequence_probleme", "intensite_probleme", "generalisation_probleme",
         "changement_recent", "signe_physique" -> reponsesChoix["a_un_probleme"] == 0
-
         else -> true
     }
 }
 
 fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): String {
     val nom = nomChatAffiche(nomChat)
-    return """
-Bilan émotionnel pour $nom
+    val titrePartage = if (isEnglish()) "Emotional report for $nom" else "Bilan émotionnel pour $nom"
+    val hypotheseLabel = if (isEnglish()) "Hypothesis:" else "Hypothèse :"
+    val prioriteLabel = if (isEnglish()) "Priority:" else "Priorité :"
+    val scoresLabel = if (isEnglish()) "Scores:" else "Scores :"
+    val securiteLabel = if (isEnglish()) "Emotional security" else "Sécurité émotionnelle"
+    val lienLabel = if (isEnglish()) "Human bond" else "Lien humain"
+    val instinctsLabel = if (isEnglish()) "Instincts" else "Instincts"
+    val cohabLabel = if (isEnglish()) "Cohabitation" else "Cohabitation"
+    val avertissement = if (isEnglish()) "⚠️ Indicative report" else "⚠️ Bilan indicatif"
 
-Hypothèse :
-${analyse.hypothesePrincipale}
-
-Priorité :
-${textePrioriteAction(analyse.prioriteAction)}
-
-${analyse.syntheseAvancee}
-
-Scores :
-Sécurité émotionnelle : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}
-Lien humain : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}
-Instincts : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}
-Cohabitation : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}
-
-⚠️ Bilan indicatif
-    """.trimIndent()
+    return "$titrePartage\n\n$hypotheseLabel\n${analyse.hypothesePrincipale}\n\n$prioriteLabel\n${textePrioriteAction(analyse.prioriteAction)}\n\n${analyse.syntheseAvancee}\n\n$scoresLabel\n$securiteLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}\n$lienLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}\n$instinctsLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}\n$cohabLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}\n\n$avertissement"
 }
