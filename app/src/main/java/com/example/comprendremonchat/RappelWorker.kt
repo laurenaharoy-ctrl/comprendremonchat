@@ -13,7 +13,7 @@ class RappelWorker(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val nomChat = inputData.getString("nom_chat") ?: "votre chat"
+        val nomChat = inputData.getString("nom_chat") ?: if (isEnglish()) "your cat" else "votre chat"
 
         val channelId = "rappel_bilan_chat"
         val notificationManager =
@@ -21,17 +21,17 @@ class RappelWorker(
 
         val channel = NotificationChannel(
             channelId,
-            "Rappels bien-être du chat",
+            if (isEnglish()) "Cat well-being reminders" else "Rappels bien-être du chat",
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "Rappels mensuels pour refaire le Bilan émotionnel"
+            description = if (isEnglish()) "Monthly reminders to redo the emotional report" else "Rappels mensuels pour refaire le Bilan émotionnel"
         }
         notificationManager.createNotificationChannel(channel)
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("Il est temps de refaire le bilan !")
-            .setContentText("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.")
+            .setContentTitle(if (isEnglish()) "Time to redo the assessment!" else "Il est temps de refaire le bilan !")
+            .setContentText(if (isEnglish()) "$nomChat may have changed this past month. Do a new emotional report." else "$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()
