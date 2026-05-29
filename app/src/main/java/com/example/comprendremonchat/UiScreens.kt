@@ -737,7 +737,7 @@ fun ResultatScreen(
                 PrimaryGlowButton(
                     text = stringResource(R.string.btn_voir_livres),
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy.carrd.co"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (isEnglish()) "https://understanding-my-cat.carrd.co" else "https://comprendre-mon-chat.carrd.co"))
                         context.startActivity(intent)
                     },
                     leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null, tint = Color.White) }
