@@ -105,7 +105,13 @@ data class CategorieRace(
     val predispositions: List<String>, val nuanceAnalyse: String
 )
 
-val categoriesRaces = listOf(
+// ═══════════════════════════════════════════════════════════
+// DONNÉES DE RACES — BILINGUES
+// ═══════════════════════════════════════════════════════════
+
+val categoriesRaces get() = if (isEnglish()) categoriesRacesChatEn else categoriesRacesChatFr
+
+val categoriesRacesChatFr = listOf(
     CategorieRace("europeen", "Européen / Gouttière",
         listOf("Grande adaptabilité", "Tempérament variable selon l'histoire individuelle"),
         "L'histoire de socialisation précoce joue un rôle déterminant dans son équilibre émotionnel."),
@@ -136,6 +142,39 @@ val categoriesRaces = listOf(
     CategorieRace("autre", "Autre race / inconnu",
         listOf("Profil individuel à observer"),
         "L'histoire individuelle et la socialisation précoce sont les facteurs les plus déterminants.")
+)
+
+val categoriesRacesChatEn = listOf(
+    CategorieRace("europeen", "European / Mixed breed",
+        listOf("Great adaptability", "Temperament varies according to individual history"),
+        "Early socialisation history plays a determining role in its emotional balance."),
+    CategorieRace("maine_coon", "Maine Coon",
+        listOf("Marked sociability", "Strong need for stimulation", "Strong attachment to its family"),
+        "A lack of stimulation can generate boredom and compensatory behaviours."),
+    CategorieRace("persan", "Persian",
+        listOf("Calm and composed temperament", "Sensitivity to changes", "Need for calm"),
+        "Environmental disturbances can easily destabilise it despite its apparent calm."),
+    CategorieRace("siamois", "Siamese",
+        listOf("Strong vocalisation", "Intense attachment", "Very emotionally expressive"),
+        "Separation anxiety and excessive vocalisation are more frequent in this family."),
+    CategorieRace("ragdoll", "Ragdoll",
+        listOf("Very high tolerance", "Strong need for human presence", "Non-conflictual"),
+        "Be careful not to confuse its tolerance with an absence of needs — it can suffer in silence."),
+    CategorieRace("bengal", "Bengal",
+        listOf("Very high energy level", "Intense need for stimulation", "Strong personality"),
+        "A lack of physical and mental stimulation can quickly generate problematic behaviours."),
+    CategorieRace("british", "British Shorthair",
+        listOf("Calm and independent temperament", "Good tolerance for solitude", "Not very expressive"),
+        "Its apparent calm can mask stress if subtle signals are not detected."),
+    CategorieRace("abyssin", "Abyssinian",
+        listOf("Very active and curious", "Need for freedom", "Low tolerance for boredom"),
+        "Environmental enrichment is essential — it gets bored quickly and reacts strongly."),
+    CategorieRace("sacre_birmanie", "Sacred Birman",
+        listOf("Gentle and balanced", "Moderate attachment", "Good cohabitation"),
+        "Generally balanced, but sensitive to tensions in the household."),
+    CategorieRace("autre", "Other breed / unknown",
+        listOf("Individual profile to be observed"),
+        "Individual history and early socialisation are the most determining factors.")
 )
 
 fun getNuanceAnalyse(race: String): String? =
@@ -355,17 +394,9 @@ object QuestionnaireEngine {
         return listOf(intro, "$hypoLabel : $hypothese", aggr, prot).filter { it.isNotBlank() }.joinToString("\n\n")
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // ORIGINES POSSIBLES
-    // ═══════════════════════════════════════════════════════════
-
     fun genererOriginesPossibles(
-        nomChat: String,
-        axe: Axe,
-        securite: Int,
-        lien: Int,
-        instincts: Int,
-        cohabitation: Int,
+        nomChat: String, axe: Axe,
+        securite: Int, lien: Int, instincts: Int, cohabitation: Int,
         reponsesChoix: Map<String, Int>
     ): String {
         val nom = nomChatAffiche(nomChat)
@@ -379,7 +410,7 @@ object QuestionnaireEngine {
             when (axe) {
                 Axe.SECURITE -> buildString {
                     append("$nom's emotional insecurity can have several origins. ")
-                    append("Insufficient early socialization — few exposures to humans, sounds or varied environments before the age of 7 weeks — is often a factor. ")
+                    append("Insufficient early socialisation — few exposures to humans, sounds or varied environments before the age of 7 weeks — is often a factor. ")
                     append("Past negative experiences, even isolated ones, can leave a lasting imprint on how a cat perceives its world. ")
                     if (reponsesChoix["acces_exterieur"] == 2) append("A solely indoor cat may sometimes lack varied stimulation, which weakens its ability to cope with novelty. ")
                     if (reponsesChoix["age"] == 0) append("Under one year old, the construction of a sense of security is still underway — some sensitivity is normal at this age. ")
