@@ -7,11 +7,8 @@ import java.util.Locale
 // ═══════════════════════════════════════════════════════════
 
 fun isEnglish(): Boolean {
-    val locales = android.os.LocaleList.getDefault()
-    for (i in 0 until locales.size()) {
-        if (locales[i].language == "en") return true
-    }
-    return false
+    val locale = android.os.LocaleList.getDefault()[0]
+    return locale.language == "en"
 }
 
 // ═══════════════════════════════════════════════════════════
