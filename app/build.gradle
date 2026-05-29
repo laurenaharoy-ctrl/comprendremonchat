@@ -8,7 +8,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.laurena.understandingmycat"
+        applicationId "com.laurena.comprendremonchat"
         minSdk 28
         targetSdk 35
         versionCode 3
