@@ -1,6 +1,6 @@
 <resources>
     <!-- App -->
-    <string name="app_name">Comprendre mon chat</string>
+    <string name="app_name">Understanding My Cat</string>
 
     <!-- Accueil -->
     <string name="btn_demarrer">Démarrer le bilan</string>
