@@ -628,11 +628,11 @@ fun titreSectionTraduit(questionId: String): String {
         when (questionId) {
             "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur", "senior_desorientation", "senior_vocalise_nocturne" -> "Your cat"
             "race_categorie" -> "Breed profile"
-            "reaction_bruit", "reaction_inconnu", "cache_souvent", "adaptation_changement",
-            "reaction_veterinaire", "surtoilettage" -> "Emotional security"
-            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress", "proprete_type",
-            "demande_attention", "dort_avec_vous" -> "Human bond"
-            "joue_activement", "chasse_interieur", "griffage_surfaces", "hyperactivite_nocturne",
+            "reaction_stress_ponctuel", "reaction_inconnu", "cache_souvent", "adaptation_changement",
+            "surtoilettage" -> "Emotional security"
+            "recherche_proximite", "reaction_absence", "proprete_stress", "proprete_type",
+            "demande_attention_vocale" -> "Human bond"
+            "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
             "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression of instincts"
             "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
             "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
@@ -643,11 +643,11 @@ fun titreSectionTraduit(questionId: String): String {
         when (questionId) {
             "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur", "senior_desorientation", "senior_vocalise_nocturne" -> "Votre chat"
             "race_categorie" -> "Profil de race"
-            "reaction_bruit", "reaction_inconnu", "cache_souvent", "adaptation_changement",
-            "reaction_veterinaire", "surtoilettage" -> "Sécurité émotionnelle"
-            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress", "proprete_type",
-            "demande_attention", "dort_avec_vous" -> "Lien humain"
-            "joue_activement", "chasse_interieur", "griffage_surfaces", "hyperactivite_nocturne",
+            "reaction_stress_ponctuel", "reaction_inconnu", "cache_souvent", "adaptation_changement",
+            "surtoilettage" -> "Sécurité émotionnelle"
+            "recherche_proximite", "reaction_absence", "proprete_stress", "proprete_type",
+            "demande_attention_vocale" -> "Lien humain"
+            "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
             "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression des instincts"
             "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
             "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"

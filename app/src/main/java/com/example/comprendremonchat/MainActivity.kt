@@ -556,7 +556,6 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
     return when (question.id) {
         "vie_interieur" -> reponsesChoix["acces_exterieur"] != 0
         "proprete_type" -> (reponsesChoix["proprete_stress"] ?: 0) != 0
-        "precision_malproprete" -> reponsesChoix["proprete_stress"] == 3
         "chaleur_marquage" -> reponsesChoix["sterilise"] == 3 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
         "marquage_habitude_post_sterilisation" -> reponsesChoix["sterilise"] == 1 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
         "senior_desorientation" -> reponsesChoix["age"] == 3

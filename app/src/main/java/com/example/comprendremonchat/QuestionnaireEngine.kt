@@ -425,7 +425,7 @@ object QuestionnaireEngine {
                     append("$nom's intense need for closeness can be explained in several ways. ")
                     append("Weaning too early — before 8 weeks — can durably weaken the construction of emotional autonomy. ")
                     append("An environment where the cat has never learned to be alone can also reinforce this need for constant presence. ")
-                    if (reponsesChoix["suit_partout"] == 3) append("Permanently following its human can be both a symptom and a factor that maintains this relational dependency. ")
+                    if (reponsesChoix["recherche_proximite"] == 3) append("Permanently following its human can be both a symptom and a factor that maintains this relational dependency. ")
                     if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("In an unneutered cat, some manifestations may also be influenced by hormonal cycles. ")
                     append("This functioning is not a whim: it reflects a genuine difficulty in finding internal support in the absence of the reassuring figure.")
                 }
@@ -469,7 +469,7 @@ object QuestionnaireEngine {
                     append("Le besoin de proximité intense de $nom peut s'expliquer de plusieurs façons. ")
                     append("Un sevrage trop précoce — avant 8 semaines — peut fragiliser la construction de l'autonomie émotionnelle de façon durable. ")
                     append("Un environnement où le chat n'a jamais appris à rester seul peut aussi renforcer ce besoin de présence constante. ")
-                    if (reponsesChoix["suit_partout"] == 3) append("Le fait de suivre en permanence son humain peut être à la fois un symptôme et un facteur qui entretient cette dépendance relationnelle. ")
+                    if (reponsesChoix["recherche_proximite"] == 3) append("Le fait de suivre en permanence son humain peut être à la fois un symptôme et un facteur qui entretient cette dépendance relationnelle. ")
                     if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("Chez un chat non stérilisé, certaines manifestations peuvent aussi être influencées par les cycles hormonaux. ")
                     append("Ce fonctionnement n'est pas un caprice : il reflète une vraie difficulté à trouver un appui interne en l'absence de la figure rassurante.")
                 }
@@ -617,15 +617,15 @@ fun questionsApplication(): List<Question> {
                 "Correct mais peut mieux faire", "Peu stimulant",
                 "Je ne sais pas vraiment", "Mon chat a accès à l'extérieur")),
 
-        QuestionChoix("reaction_bruit",
-            if (isEnglish()) "How does your cat react to sudden or loud noises (vacuum cleaner, thunder, construction)?"
-            else "Comment votre chat réagit-il aux bruits soudains ou forts (aspirateur, tonnerre, travaux) ?",
-            if (isEnglish()) listOf("It stays calm or slightly surprised, recovers quickly",
-                "It startles and moves away but recovers within a few minutes",
-                "It hides and takes a long time to come back",
-                "It panics completely and stays unsettled for a long time")
-            else listOf("Il reste calme ou légèrement surpris, récupère vite",
-                "Il sursaute et s'éloigne mais récupère en quelques minutes",
+        QuestionChoix("reaction_stress_ponctuel",
+            if (isEnglish()) "Faced with a one-off stressful situation (loud noise, transport, vet visit...), your cat:"
+            else "Face à une situation stressante ponctuelle (bruit fort, transport, vétérinaire...), votre chat :",
+            if (isEnglish()) listOf("Stays calm or recovers quickly",
+                "Startles or gets agitated but recovers within a few minutes",
+                "Hides and takes a long time to come back",
+                "Panics completely and stays unsettled for a long time")
+            else listOf("Il reste calme ou récupère vite",
+                "Il sursaute ou s'agite mais récupère en quelques minutes",
                 "Il se cache et met longtemps à revenir",
                 "Il panique totalement et reste perturbé longtemps"),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
@@ -667,20 +667,6 @@ fun questionsApplication(): List<Question> {
                 "Très mal — chaque changement provoque une crise durable"),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4)),
 
-        QuestionChoix("reaction_veterinaire",
-            if (isEnglish()) "How does a veterinary visit go?" else "Comment se passe une visite chez le vétérinaire ?",
-            if (isEnglish()) listOf("Relatively well, it tolerates transport and the consultation",
-                "Stressful but manageable",
-                "Very difficult — it panics in the carrier or at the vet",
-                "Extremely difficult — it is traumatic every time",
-                "My cat never goes to the vet")
-            else listOf("Relativement bien, il supporte le transport et la consultation",
-                "Stressant mais gérable",
-                "Très difficile — il panique dans la caisse ou chez le vétérinaire",
-                "Extrêmement difficile — c'est un traumatisme à chaque fois",
-                "Mon chat ne va jamais chez le vétérinaire"),
-            axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4, 0)),
-
         QuestionChoix("surtoilettage",
             if (isEnglish()) "Have you noticed over-grooming (sparse fur areas, repeated excessive licking)?"
             else "Avez-vous observé un surtoilettage (zones de poils clairsemés, léchages répétitifs excessifs) ?",
@@ -692,16 +678,17 @@ fun questionsApplication(): List<Question> {
                 "Oui, avec des zones légèrement clairsemées"),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3), signalAlerte = true),
 
-        QuestionChoix("suit_partout",
-            if (isEnglish()) "Does your cat follow you everywhere in the house?" else "Votre chat vous suit-il partout dans la maison ?",
-            if (isEnglish()) listOf("No, it is fairly independent",
+        QuestionChoix("recherche_proximite",
+            if (isEnglish()) "Does your cat seek physical closeness with you (following you around, sleeping close, being on you), day and night?"
+            else "Votre chat recherche-t-il la proximité physique avec vous (vous suit, dort collé, cherche à être sur vous), le jour comme la nuit ?",
+            if (isEnglish()) listOf("No, it is fairly independent, day and night",
                 "Sometimes, depending on its mood",
-                "Often — it likes to be in the same room as you",
-                "Always — it barely leaves your side")
-            else listOf("Non, il est plutôt indépendant",
+                "Often — it likes to stay close to you",
+                "Always — it barely leaves your side and gets agitated if separated")
+            else listOf("Non, il est plutôt indépendant, le jour comme la nuit",
                 "Parfois, selon son humeur",
-                "Souvent — il aime être dans la même pièce que vous",
-                "Toujours — il ne vous quitte pratiquement pas"),
+                "Souvent — il aime rester près de vous",
+                "Toujours — il ne vous quitte pratiquement pas et s'agite si séparé"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 1, 3)),
 
         QuestionChoix("reaction_absence",
@@ -709,27 +696,14 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) listOf("It seems to manage calmly",
                 "It may vocalize a little at your departure but settles down",
                 "It vocalizes or becomes notably agitated",
-                "It shows signs of distress (destruction, accidents, neighbors alerted)",
+                "It shows marked distress signs (intense agitation, prolonged loud vocalizing)",
                 "I don't know")
             else listOf("Il semble gérer sereinement",
                 "Il peut vocaliser un peu à votre départ mais se calme",
                 "Il vocalise ou s'agite de façon notable",
-                "Il présente des signes de détresse (destructions, malpropreté, voisins alertés)",
+                "Il montre des signes de détresse marqués (agitation intense, vocalises fortes et prolongées)",
                 "Je ne sais pas"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4, 0), signalAlerte = true),
-
-        QuestionChoix("vocalise_absence",
-            if (isEnglish()) "Does your cat vocalize excessively (repeated, insistent meowing)?"
-            else "Votre chat vocalise-t-il de façon excessive (miaulements répétés, insistants) ?",
-            if (isEnglish()) listOf("No, it is quiet or vocalizes normally",
-                "Sometimes, particularly at mealtimes",
-                "Often, to demand your attention",
-                "Very often, in an overwhelming way")
-            else listOf("Non, il est peu vocal ou vocal de façon normale",
-                "Parfois, notamment au moment des repas",
-                "Souvent, pour demander votre attention",
-                "Très souvent, de façon envahissante"),
-            axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 3)),
 
         QuestionChoix("proprete_stress",
             if (isEnglish()) "Has your cat ever relieved itself outside its litter box?"
@@ -749,54 +723,30 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) listOf("Urine", "Stools", "Both")
             else listOf("Urine", "Selles", "Les deux")),
 
-        QuestionChoix("precision_malproprete",
-            if (isEnglish()) "When it happens, is it rather:" else "Quand cela arrive, est-ce plutôt :",
-            if (isEnglish()) listOf("Always in the same spot", "In different spots")
-            else listOf("Toujours au même endroit", "À des endroits différents")),
-
-        QuestionChoix("demande_attention",
-            if (isEnglish()) "How does your cat react when you don't give it attention?"
-            else "Comment votre chat réagit-il quand vous ne lui accordez pas d'attention ?",
-            if (isEnglish()) listOf("It accepts easily and goes about its business",
-                "It insists a little then calms down",
-                "It insists strongly, meows or causes trouble to get attention",
+        QuestionChoix("demande_attention_vocale",
+            if (isEnglish()) "Does your cat vocalize insistently to get your attention (whether you are present or after an absence)?"
+            else "Votre chat vocalise-t-il de façon insistante pour obtenir votre attention (que vous soyez présent(e) ou après une absence) ?",
+            if (isEnglish()) listOf("It accepts easily, little or no vocal demand",
+                "It sometimes vocalizes to ask for attention, then calms down",
+                "It insists strongly (meows, causes trouble) to get attention",
                 "It can become agitated or aggressive if ignored")
-            else listOf("Il accepte facilement et va vaquer à ses occupations",
-                "Il insiste un peu puis se calme",
-                "Il insiste fortement, miaule ou fait des bêtises pour attirer l'attention",
+            else listOf("Il accepte facilement, peu ou pas de demande vocale",
+                "Il vocalise parfois pour demander de l'attention, puis se calme",
+                "Il insiste fortement (miaule, fait des bêtises) pour attirer l'attention",
                 "Il peut devenir agité ou agressif si ignoré"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 3)),
 
-        QuestionChoix("dort_avec_vous",
-            if (isEnglish()) "Does your cat sleep with you or try to stay close to you at night?"
-            else "Votre chat dort-il avec vous ou cherche-t-il à être collé à vous la nuit ?",
-            if (isEnglish()) listOf("No, it has its own spots",
-                "Sometimes, depending on its mood",
-                "Often — it prefers to be on your bed",
-                "It gets agitated or vocalizes if you close the bedroom door")
-            else listOf("Non, il a ses endroits à lui",
-                "Parfois, selon son envie",
-                "Souvent — il préfère être sur votre lit",
-                "Il s'agite ou vocalise si vous fermez la porte de la chambre"),
-            axe = Axe.LIEN, scoreParOption = listOf(0, 0, 1, 2)),
-
-        QuestionChoix("joue_activement",
-            if (isEnglish()) "Does your cat actively play with toys?" else "Votre chat joue-t-il activement avec des jouets ?",
-            if (isEnglish()) listOf("Yes, enthusiastically — it initiates play sessions itself",
+        QuestionChoix("jeu_chasse",
+            if (isEnglish()) "Does your cat actively play/hunt (stalking, pouncing, catching toys or small objects)?"
+            else "Votre chat joue/chasse-t-il activement (épier, bondir, attraper des jouets ou petits objets) ?",
+            if (isEnglish()) listOf("Yes, enthusiastically — it initiates sessions itself",
                 "Yes, when encouraged",
                 "A little — it gets bored quickly or shows little interest",
-                "No, no interest in play at all")
+                "No, no interest or behavior of this kind")
             else listOf("Oui, avec enthousiasme — il initie lui-même des sessions",
                 "Oui, s'il est sollicité",
                 "Peu — il s'ennuie rapidement ou montre peu d'intérêt",
-                "Non, aucun intérêt pour le jeu"),
-            axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
-
-        QuestionChoix("chasse_interieur",
-            if (isEnglish()) "Does your cat display hunting behaviors indoors (stalking, pouncing, catching)?"
-            else "Votre chat pratique-t-il des comportements de chasse à l'intérieur (épier, bondir, attraper) ?",
-            if (isEnglish()) listOf("Yes, regularly with toys or small objects", "Sometimes", "Rarely", "Never — behavior completely absent")
-            else listOf("Oui, régulièrement avec des jouets ou de petits objets", "Parfois", "Rarement", "Jamais — comportement totalement absent"),
+                "Non, aucun intérêt ni comportement de ce type"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("griffage_surfaces",
