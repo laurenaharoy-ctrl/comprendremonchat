@@ -227,7 +227,23 @@ fun genererProfilGlobalTraduit(nomChat: String, securite: Int, lien: Int, instin
     }
 }
 
-fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, cohabitation: Int): String {
+fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, cohabitation: Int, reponsesChoix: Map<String, Int> = emptyMap()): String {
+    if (reponsesChoix["proprete_type"] == 0) return if (isEnglish())
+        "Urinary house-soiling can have purely medical causes (urinary infection, kidney or bladder issues, bladder stones) that produce the exact same symptoms as a behavioral problem: the cat starts avoiding the litter box because it associates the box itself with pain, with no link to emotional stress."
+    else
+        "La malpropreté urinaire peut avoir des causes purement médicales (infection urinaire, problèmes rénaux ou vésicaux, calculs) qui produisent exactement les mêmes symptômes qu'un problème comportemental : le chat en vient à éviter le bac parce qu'il associe le geste d'y uriner à une douleur, sans lien avec un stress émotionnel."
+    if (reponsesChoix["proprete_type"] == 2) return if (isEnglish())
+        "When both urine and stools are involved, the two aspects usually don't share the same origin. The urinary part can be purely medical (infection, bladder stones, pain), while the stool aspect is more often linked to the litter box itself — cleanliness, size, or location — or to stress, once a medical cause has been ruled out."
+    else
+        "Quand l'urine et les selles sont concernées à la fois, les deux aspects n'ont généralement pas la même origine. La partie urinaire peut être purement médicale (infection, calculs, douleur), tandis que l'aspect selles est plus souvent lié au bac lui-même — propreté, taille ou emplacement — ou au stress, une fois la cause médicale écartée."
+    if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2)) return if (isEnglish())
+        "In an older cat, disorientation and unexplained night vocalizing can reflect normal brain aging (age-related cognitive decline) rather than a behavioral problem to correct — a phenomenon fairly close to what is sometimes observed in aging humans."
+    else
+        "Chez un chat âgé, la désorientation et les vocalises nocturnes inexpliquées peuvent refléter un vieillissement cérébral normal (déclin cognitif lié à l'âge) plutôt qu'un problème comportemental à corriger — un phénomène assez proche de ce que l'on observe parfois chez l'humain vieillissant."
+    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) return if (isEnglish())
+        "In practice, this means the behavior can no longer be resolved simply by waiting for hormones to settle — the gesture itself needs to be unlearned, much like any acquired habit. This generally takes more patience and consistency than territorial or stress-related marking, but it is very much possible to work on."
+    else
+        "Concrètement, cela signifie que ce comportement ne peut plus se résoudre en attendant que les hormones se stabilisent — c'est le geste en lui-même qu'il faut désapprendre, comme n'importe quelle habitude acquise. Cela demande généralement plus de patience et de constance qu'un marquage territorial ou lié au stress, mais reste tout à fait travaillable."
     if (maxOf(securite, lien, instincts, cohabitation) <= 25) return if (isEnglish())
         "The information collected does not highlight any marked difficulty at this stage."
     else
@@ -403,22 +419,34 @@ fun genererConseilsPratiquesToTraduit(nomChat: String, reponsesChoix: Map<String
     val conseils = mutableListOf<String>()
     val nom = nomChatAffiche(nomChat)
     if (isEnglish()) {
+        if (reponsesChoix["proprete_type"] == 0)
+            conseils += "Write down the location and time of each accident, along with $nom's behavior while urinating (crying, posture, quantity) — these notes will help your vet's diagnosis."
+        if (reponsesChoix["proprete_type"] == 2)
+            conseils += "Write down the location and time of each accident, along with $nom's behavior while urinating — and also check the litter box upkeep (daily cleaning, size, no hood if possible), which can be enough to resolve the stool aspect once the urinary cause is medically explained."
+        if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2))
+            conseils += "Keep $nom's environment as stable and predictable as possible — avoid moving furniture, food and litter box locations."
         if (securite >= 50) conseils += "Multiply refuges and hiding spots so $nom can feel safe at all times."
         if (lien >= 50) conseils += "Gradually work on autonomy while maintaining stable, predictable rituals."
         if (instincts >= 50) conseils += "Offer daily interactive play sessions to channel natural instincts."
         if (cohabitation >= 50) conseils += "Ensure duplicate resources (bowls, litter boxes, scratching posts) to reduce competition."
         if (reponsesChoix["surtoilettage"] == 1) conseils += "Over-grooming is often a sign of chronic stress — identify and reduce sources of tension."
-        if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "Urine marking in a neutered cat generally signals territorial stress."
+        if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "To ease the territorial stress behind the marking, multiply resources (litter boxes, water points, scratching posts) and limit sudden changes in $nom's environment."
         if (estMaleEntier(reponsesChoix) && cohabitation >= 40) conseils += "In an intact male, marking and territorial tensions are more frequent — neutering can be discussed with your vet."
         if (estFemelleEntiere(reponsesChoix) && securite >= 40) conseils += "In an intact female, some behaviors may vary with the cycle — observe whether tensions increase at certain times."
         if (conseils.isEmpty()) conseils += "Continue observing daily life and maintain the benchmarks already in place."
     } else {
+        if (reponsesChoix["proprete_type"] == 0)
+            conseils += "Notez les lieux et horaires de chaque accident, ainsi que le comportement de $nom au moment d'uriner (miaulements, position, quantité) — ces observations aideront votre vétérinaire à orienter son diagnostic."
+        if (reponsesChoix["proprete_type"] == 2)
+            conseils += "Notez les lieux et horaires de chaque accident, ainsi que le comportement de $nom au moment d'uriner — et vérifiez aussi l'entretien du bac (nettoyage quotidien, taille adaptée, retrait du capot si possible), qui peut suffire à résoudre l'aspect selles une fois la cause urinaire écartée médicalement."
+        if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2))
+            conseils += "Gardez l'environnement de $nom aussi stable et prévisible que possible — évitez de déplacer meubles, gamelles et litière."
         if (securite >= 50) conseils += "Multiplier les refuges et cachettes pour que $nom puisse se sentir en sécurité à tout moment."
         if (lien >= 50) conseils += "Travailler progressivement l'autonomie en gardant des rituels stables et prévisibles."
         if (instincts >= 50) conseils += "Proposer des sessions de jeu interactif quotidiennes pour canaliser les instincts naturels."
         if (cohabitation >= 50) conseils += "Assurer des ressources en double (gamelles, litières, griffoirs) pour réduire la compétition."
         if (reponsesChoix["surtoilettage"] == 1) conseils += "Le surtoilettage est souvent un signe de stress chronique — identifier et réduire les sources de tension."
-        if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "Le marquage urinaire chez un chat stérilisé signale généralement un stress territorial."
+        if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "Pour apaiser le stress territorial à l'origine du marquage, multipliez les ressources (litières, points d'eau, griffoirs) et limitez les changements soudains dans l'environnement de $nom."
         if (estMaleEntier(reponsesChoix) && cohabitation >= 40) conseils += "Chez un mâle entier, le marquage et les tensions territoriales sont plus fréquents — la stérilisation peut être discutée avec votre vétérinaire."
         if (estFemelleEntiere(reponsesChoix) && securite >= 40) conseils += "Chez une femelle entière, certains comportements peuvent varier selon le cycle — observer si les tensions augmentent à certaines périodes."
         if (conseils.isEmpty()) conseils += "Continuer l'observation du quotidien et maintenir les repères déjà en place."
@@ -432,7 +460,12 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
     val nom = nomChatAffiche(nomChat)
     return if (isEnglish()) {
         when {
-            reponsesChoix["a_deja_griffe_mordu"] == 1 -> "A scratch or bite has been reported — support from a veterinary behaviorist or feline behaviorist is recommended for $nom."
+            reponsesChoix["proprete_type"] == 0 -> "Seek care urgently if you notice emergency signs in $nom: crying in pain while urinating, frequent unsuccessful trips to the litter box, or no urine at all for over 24 hours. These signs can indicate a urinary blockage, which is a veterinary emergency."
+            reponsesChoix["proprete_type"] == 2 -> "Seek care urgently if you notice signs of a urinary blockage in $nom (crying in pain while urinating, unsuccessful trips to the litter box, no urine for over 24 hours). For the stool aspect, a vet visit is also worth it if diarrhea persists, or if you notice blood or unexplained weight loss."
+            reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Given $nom's age and the signs described, a veterinary check-up is recommended as a priority to rule out or confirm age-related cognitive decline before considering a behavioral approach."
+            reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This marking behavior has become a learned habit rather than a hormonal one — a feline behaviorist can help $nom unlearn this specific gesture, which often takes longer than addressing stress-related marking."
+            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or a cohabitation that needs to be reframed — a feline behaviorist can help you rebuild a safer, more gradual introduction between animals."
+            reponsesChoix["a_deja_griffe_mordu"] == 1 -> "A scratch or bite toward a person has been reported — support from a veterinary behaviorist or feline behaviorist is recommended for $nom, both for your safety and $nom's well-being."
             contexte.physique >= 4 -> "Physical signs have been noted — a veterinary consultation is recommended as a priority for $nom before any behavioral approach."
             reponsesChoix["surtoilettage"] == 1 -> "Over-grooming can have a medical origin — veterinary advice is recommended for $nom before acting on the behavioral level."
             reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Urine marking in a neutered cat warrants a veterinary check-up for $nom first to rule out a urinary infection."
@@ -442,7 +475,12 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
         }
     } else {
         when {
-            reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Une griffure ou morsure a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom."
+            reponsesChoix["proprete_type"] == 0 -> "Consultez rapidement si vous observez des signes d'urgence chez $nom : miaulements de douleur en urinant, allers-retours fréquents à la litière sans résultat, ou absence totale d'urine depuis plus de 24h. Ces signes peuvent indiquer un blocage urinaire, qui est une urgence vétérinaire."
+            reponsesChoix["proprete_type"] == 2 -> "Consultez rapidement si vous observez chez $nom des signes de blocage urinaire (miaulements de douleur en urinant, allers-retours infructueux à la litière, absence d'urine depuis plus de 24h). Pour l'aspect selles, une consultation reste utile en cas de diarrhée persistante, de sang, ou de perte de poids inexpliquée."
+            reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Compte tenu de l'âge de $nom et des signes décrits, un bilan vétérinaire est recommandé en priorité pour écarter ou confirmer un déclin cognitif lié à l'âge avant d'envisager une approche comportementale."
+            reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Ce marquage est devenu une habitude acquise plutôt qu'un comportement hormonal — un comportementaliste félin peut aider $nom à désapprendre ce geste précis, ce qui prend souvent plus de temps qu'un marquage lié au stress."
+            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Une griffure ou morsure envers un autre animal a été signalée. Cela évoque souvent un manque de sociabilisation ou une cohabitation à reprendre autrement — un comportementaliste félin peut vous aider à reconstruire une présentation plus progressive et sécurisée entre les animaux."
+            reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Une griffure ou morsure envers une personne a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom, à la fois pour votre sécurité et pour son bien-être."
             contexte.physique >= 4 -> "Des signes physiques ont été relevés — une consultation vétérinaire est recommandée en priorité pour $nom avant toute approche comportementale."
             reponsesChoix["surtoilettage"] == 1 -> "Le surtoilettage peut avoir une origine médicale — un avis vétérinaire est conseillé pour $nom avant d'agir sur le plan comportemental."
             reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Le marquage urinaire chez un chat stérilisé mérite d'abord un bilan vétérinaire pour $nom pour écarter une infection urinaire."
@@ -457,9 +495,13 @@ fun detecterHypothesePrincipaleTraduit(reponsesChoix: Map<String, Int>,
                                        securite: Int, lien: Int, instincts: Int, cohabitation: Int, contexte: ContexteAnalyse): String {
     return if (isEnglish()) {
         when {
-            contexte.physique >= 4 -> "The reported elements suggest first ruling out a physical or medical component with a veterinarian."
+            reponsesChoix["proprete_type"] == 0 -> "Since this house-soiling involves urine, a medical cause should be ruled out first with a veterinarian."
+            reponsesChoix["proprete_type"] == 2 -> "Since this house-soiling involves both urine and stools, the medical cause for the urinary part should be ruled out first, before considering behavioral work on the stool aspect."
+            reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Some signs (disorientation, unexplained night vocalizing) may suggest age-related cognitive changes rather than a purely behavioral issue."
+            reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This urine marking seems to have started during heat periods, before spaying, and has since become a learned habit rather than a hormonal behavior."
+            contexte.physique >= 4 -> "The reported elements suggest considering a physical or medical component before going further on the behavioral level."
             reponsesChoix["surtoilettage"] == 1 && securite >= 50 -> "Over-grooming combined with emotional insecurity suggests chronic stress expressing itself physically."
-            reponsesChoix["marquage_urinaire"] == 1 -> "Urine marking suggests territorial stress — to explore after veterinary check-up."
+            reponsesChoix["marquage_urinaire"] == 1 -> "Urine marking suggests territorial or hormonal stress, depending on neutering status."
             securite >= 65 && lien >= 65 -> "Anxious attachment combined with emotional insecurity — your cat is constantly seeking reassurance."
             securite >= 65 -> "Significant emotional insecurity translating into permanent vigilance and fear reactions."
             lien >= 65 -> "Over-attachment or difficulty managing separation generating distress in your absence."
@@ -469,9 +511,13 @@ fun detecterHypothesePrincipaleTraduit(reponsesChoix: Map<String, Int>,
         }
     } else {
         when {
-            contexte.physique >= 4 -> "Les éléments signalés invitent d'abord à écarter une composante physique ou médicale avec un vétérinaire."
+            reponsesChoix["proprete_type"] == 0 -> "Puisque cette malpropreté concerne de l'urine, une cause médicale doit d'abord être écartée avec un vétérinaire."
+            reponsesChoix["proprete_type"] == 2 -> "Puisque cette malpropreté concerne à la fois de l'urine et des selles, la cause médicale de la partie urinaire doit d'abord être écartée, avant d'envisager un travail comportemental sur l'aspect selles."
+            reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Certains signes (désorientation, vocalises nocturnes inexpliquées) peuvent évoquer un déclin cognitif lié à l'âge plutôt qu'un souci purement comportemental."
+            reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Ce marquage urinaire semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise plutôt qu'en comportement hormonal."
+            contexte.physique >= 4 -> "Les éléments signalés invitent à considérer une composante physique ou médicale avant d'aller plus loin sur le plan comportemental."
             reponsesChoix["surtoilettage"] == 1 && securite >= 50 -> "Le surtoilettage associé à une insécurité émotionnelle évoque un stress chronique qui s'exprime corporellement."
-            reponsesChoix["marquage_urinaire"] == 1 -> "Le marquage urinaire évoque un stress territorial — à explorer après bilan vétérinaire."
+            reponsesChoix["marquage_urinaire"] == 1 -> "Le marquage urinaire évoque un stress territorial ou hormonal, selon le statut de stérilisation."
             securite >= 65 && lien >= 65 -> "Un attachement anxieux doublé d'une insécurité émotionnelle — votre chat cherche constamment à se rassurer."
             securite >= 65 -> "Une insécurité émotionnelle importante qui se traduit par une vigilance permanente et des réactions de peur."
             lien >= 65 -> "Un hyperattachement ou une difficulté à gérer la séparation qui génère de la détresse en votre absence."
@@ -487,8 +533,11 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
     val nom = nomChatAffiche(nomChat)
     return if (isEnglish()) {
         when {
+            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: rework the introduction with other animals",
+                "Since there has already been a scratch or bite toward another animal, cohabitation should be reframed calmly for $nom.",
+                listOf("Temporarily separate the animals in conflict.", "Consider support from a feline behaviorist for a gradual reintroduction."))
             reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a professional",
-                "Since there has already been a scratch or bite, the situation should not be minimized for $nom.",
+                "Since there has already been a scratch or bite toward a person, the situation should not be minimized for $nom.",
                 listOf("Avoid identified risk situations.", "Consult a veterinary behaviorist or feline behaviorist."))
             contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a veterinarian",
                 "Physical signs have been reported for $nom — the priority is medical.",
@@ -505,8 +554,11 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
         }
     } else {
         when {
+            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : reprendre la présentation avec les autres animaux",
+                "Comme il y a déjà eu griffure ou morsure envers un autre animal, la cohabitation doit être reprise calmement pour $nom.",
+                listOf("Séparer temporairement les animaux en conflit.", "Envisager un accompagnement par un comportementaliste félin pour une réintroduction progressive."))
             reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un professionnel",
-                "Comme il y a déjà eu griffure ou morsure, la situation ne doit pas être banalisée pour $nom.",
+                "Comme il y a déjà eu griffure ou morsure envers une personne, la situation ne doit pas être banalisée pour $nom.",
                 listOf("Éviter les situations à risque identifiées.", "Consulter un vétérinaire comportementaliste ou un comportementaliste félin."))
             contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un vétérinaire",
                 "Des signes physiques sont signalés chez $nom — la priorité est médicale.",
@@ -544,7 +596,7 @@ fun detecterFacteursAggravantsTraduit(reponsesChoix: Map<String, Int>, contexte:
         if (reponsesChoix["acces_exterieur"] == 0 && instincts >= 50) facteurs += "Chat d'intérieur avec instincts peu canalisés"
         if (maxOf(securite, lien, instincts, cohabitation) >= 75) facteurs += "Niveau élevé sur au moins un axe"
         if (reponsesChoix["plusieurs_chats"] == 1 && cohabitation >= 50) facteurs += "Cohabitation multi-chats conflictuelle"
-        if (estMaleEntier(reponsesChoix) && cohabitation >= 40) facteurs += "Mâle entier — marquage et tensions territoriales plus fréquents"
+        if (estMaleEntier(reponsesChoix) && cohabitation >= 40) facteurs += "Mâle entier — marquage et tensions territoriales plus fréquentes"
     }
     return facteurs.distinct()
 }
@@ -574,31 +626,31 @@ fun detecterFacteursProtecteursTraduit(reponsesChoix: Map<String, Int>, contexte
 fun titreSectionTraduit(questionId: String): String {
     return if (isEnglish()) {
         when (questionId) {
-            "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur" -> "Your cat"
+            "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur", "senior_desorientation", "senior_vocalise_nocturne" -> "Your cat"
             "race_categorie" -> "Breed profile"
             "reaction_bruit", "reaction_inconnu", "cache_souvent", "adaptation_changement",
             "reaction_veterinaire", "surtoilettage" -> "Emotional security"
-            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress",
+            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress", "proprete_type",
             "demande_attention", "dort_avec_vous" -> "Human bond"
             "joue_activement", "chasse_interieur", "griffage_surfaces", "hyperactivite_nocturne",
             "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression of instincts"
             "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-            "a_deja_griffe_mordu", "defense_ressources" -> "Cohabitation"
+            "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
             "a_un_probleme" -> "Going further"
             else -> "Current context"
         }
     } else {
         when (questionId) {
-            "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur" -> "Votre chat"
+            "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur", "senior_desorientation", "senior_vocalise_nocturne" -> "Votre chat"
             "race_categorie" -> "Profil de race"
             "reaction_bruit", "reaction_inconnu", "cache_souvent", "adaptation_changement",
             "reaction_veterinaire", "surtoilettage" -> "Sécurité émotionnelle"
-            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress",
+            "suit_partout", "reaction_absence", "vocalise_absence", "proprete_stress", "proprete_type",
             "demande_attention", "dort_avec_vous" -> "Lien humain"
             "joue_activement", "chasse_interieur", "griffage_surfaces", "hyperactivite_nocturne",
             "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression des instincts"
             "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-            "a_deja_griffe_mordu", "defense_ressources" -> "Cohabitation"
+            "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
             "a_un_probleme" -> "Pour aller plus loin"
             else -> "Contexte actuel"
         }
@@ -616,6 +668,10 @@ fun aideQuestionTraduit(questionId: String): String? {
             "a_deja_griffe_mordu" -> "Even a one-time or minor scratch or bite counts."
             "signe_physique" -> "Even a doubt or suspicion is worth reporting."
             "marquage_urinaire" -> "Urine marking is done standing up, tail raised, on vertical surfaces."
+            "senior_desorientation" -> "For example, it seems lost near its bowl, litter box or a familiar door."
+            "senior_vocalise_nocturne" -> "This means loud, insistent meowing with no obvious trigger."
+            "proprete_type" -> "This distinction helps identify whether a medical cause should be checked first."
+            "cible_agression" -> "This helps tell apart a safety concern toward people from a socialization issue with other animals."
             else -> null
         }
     } else {
@@ -628,6 +684,10 @@ fun aideQuestionTraduit(questionId: String): String? {
             "a_deja_griffe_mordu" -> "Même une griffure ou morsure ponctuelle, même légère, compte."
             "signe_physique" -> "Même un doute ou une suspicion mérite d'être signalé."
             "marquage_urinaire" -> "Le marquage urinaire se fait debout, queue dressée, sur des surfaces verticales."
+            "senior_desorientation" -> "Par exemple, il semble perdu près de sa gamelle, de sa litière ou d'une porte familière."
+            "senior_vocalise_nocturne" -> "Il s'agit de miaulements forts et insistants, sans déclencheur évident."
+            "proprete_type" -> "Cette précision aide à savoir s'il faut d'abord vérifier une cause médicale."
+            "cible_agression" -> "Cela permet de distinguer un enjeu de sécurité envers des personnes d'une difficulté de sociabilisation avec d'autres animaux."
             else -> null
         }
     }
@@ -645,6 +705,10 @@ fun questionsApplicationTraduites(): List<Question> {
                 "Bengal", "British Shorthair", "Abyssinian", "Sacred Birman", "Other breed / unknown")),
         QuestionChoix("age", "How old is your cat?",
             listOf("Under 1 year (kitten)", "Between 1 and 3 years", "Between 4 and 8 years", "9 years and over (senior)")),
+        QuestionChoix("senior_desorientation", "Does your cat sometimes seem disoriented or lost in places it knows well?",
+            listOf("No, never", "Sometimes, occasionally", "Yes, regularly")),
+        QuestionChoix("senior_vocalise_nocturne", "Has your cat recently been vocalizing or wandering at night without an apparent reason (not hungry, no identifiable demand for attention)?",
+            listOf("No, never", "Sometimes, occasionally", "Yes, regularly")),
         QuestionChoix("sterilise", "Your cat is:",
             listOf("A neutered male", "A spayed female", "An intact male", "An intact female")),
         QuestionChoix("acces_exterieur", "Does your cat have access to the outdoors?",
@@ -681,8 +745,9 @@ fun questionsApplicationTraduites(): List<Question> {
             listOf("Relatively well, it tolerates transport and the consultation",
                 "Stressful but manageable",
                 "Very difficult — it panics in the carrier or at the vet",
-                "Extremely difficult — it is traumatic every time"),
-            axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4)),
+                "Extremely difficult — it is traumatic every time",
+                "My cat never goes to the vet"),
+            axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4, 0)),
         QuestionChoix("surtoilettage", "Have you noticed over-grooming (sparse fur areas, repeated excessive licking)?",
             listOf("No, its coat is normal",
                 "Sometimes, without leaving visible marks",
@@ -698,8 +763,9 @@ fun questionsApplicationTraduites(): List<Question> {
             listOf("It seems to manage calmly",
                 "It may vocalize a little at your departure but settles down",
                 "It vocalizes or becomes notably agitated",
-                "It shows signs of distress (destruction, accidents, neighbors alerted)"),
-            axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
+                "It shows signs of distress (destruction, accidents, neighbors alerted)",
+                "I don't know"),
+            axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4, 0), signalAlerte = true),
         QuestionChoix("vocalise_absence", "Does your cat vocalize excessively (repeated, insistent meowing)?",
             listOf("No, it is quiet or vocalizes normally",
                 "Sometimes, particularly at mealtimes",
@@ -712,6 +778,10 @@ fun questionsApplicationTraduites(): List<Question> {
                 "Occasionally, often linked to a stressful event",
                 "Regularly"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 4), signalAlerte = true),
+        QuestionChoix("proprete_type", "It is rather:",
+            listOf("Urine", "Stools", "Both")),
+        QuestionChoix("precision_malproprete", "When it happens, is it rather:",
+            listOf("Always in the same spot", "In different spots")),
         QuestionChoix("demande_attention", "How does your cat react when you don't give it attention?",
             listOf("It accepts easily and goes about its business",
                 "It insists a little then calms down",
@@ -764,6 +834,10 @@ fun questionsApplicationTraduites(): List<Question> {
                 "Yes, from time to time",
                 "Yes, frequently"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
+        QuestionChoix("chaleur_marquage", "Does this marking happen mainly during her heat periods (times when she calls, meows loudly, rubs a lot)?",
+            listOf("Yes, mainly during heat periods", "No, at other times too", "I don't know")),
+        QuestionChoix("marquage_habitude_post_sterilisation", "Did this marking start before she was spayed?",
+            listOf("Yes, and it has continued since", "No, it appeared after spaying", "I don't know / I adopted her already spayed")),
         QuestionChoix("relation_autres_chats", "If you have several cats, how are their relations?",
             listOf("Good understanding in general, even mutual affection",
                 "Neutral coexistence — they ignore each other",
@@ -787,6 +861,9 @@ fun questionsApplicationTraduites(): List<Question> {
         QuestionChoix("a_deja_griffe_mordu", "Has your cat ever scratched or bitten someone (you, a family member, a child)?",
             listOf("No, never", "Yes, it has happened"),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 4), poids = 2, signalCritique = true),
+        QuestionChoix("cible_agression", "Who was it directed at?",
+            listOf("A person", "Another animal (cat, dog...)", "Both"),
+            axe = Axe.COHABITATION),
         QuestionChoix("defense_ressources", "Does your cat defend its resources (bowl, litter box, resting spot) aggressively?",
             listOf("No, never",
                 "Sometimes — it growls or hisses if approached",
@@ -815,3 +892,23 @@ fun questionsApplicationTraduites(): List<Question> {
                 "Yes, a notable change", "Yes, something that really concerns me"))
     ) else questionsApplication()
 }
+
+// ═══════════════════════════════════════════════════════════
+// CONSULTATION PERSONNALISÉE (FR uniquement)
+// ═══════════════════════════════════════════════════════════
+
+fun showConsultation(): Boolean = !isEnglish()
+
+const val CONSULTATION_BOOKING_URL = "https://tidycal.com/laurenaharoy/30-minute-meeting"
+
+fun strConsultationTitre() = "Besoin d'aide pour interpréter ce bilan ?"
+
+fun strConsultationSousTitre() = "Consultation personnalisée du bilan émotionnel de votre chat"
+
+fun strConsultationDescription() = "Vous avez reçu le bilan émotionnel de votre animal et vous souhaitez mieux comprendre ses résultats ?\n\nJe vous propose une consultation personnalisée de 30 minutes en visio pour vous aider à mettre les scores en perspective avec le quotidien de votre chat.\n\nPensez à m'envoyer votre bilan PDF par email avant notre rendez-vous, via le bouton Partager de l'application, à l'adresse laurenaharoy@gmail.com."
+
+fun strConsultationDisclaimer() = "Cette consultation ne remplace pas une consultation vétérinaire et ne constitue pas une thérapie comportementale complète.\n\nEn cas de changement brutal de comportement, douleur, malpropreté soudaine, agressivité inhabituelle ou symptôme physique, consultez d'abord un vétérinaire."
+
+fun strConsultationPrix() = "35 € / 30 minutes"
+
+fun strConsultationBouton() = "Réserver ma consultation"

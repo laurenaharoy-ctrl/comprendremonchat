@@ -205,6 +205,12 @@
     <string name="comp_vocalisation_que_faire">Consult a vet if vocalizations are new, nocturnal and intense.</string>
     <string name="comp_vocalisation_a_eviter">Systematically responding to vocal demands — this reinforces the behavior.</string>
 
+    <string name="comp_coup_de_chaleur_titre">Heatstroke</string>
+    <string name="comp_coup_de_chaleur_resume">A veterinary emergency that is less visible in cats than in dogs.</string>
+    <string name="comp_coup_de_chaleur_explication">Cats regulate their temperature very poorly: they barely sweat and pant far less than dogs. Open-mouth breathing in a cat is therefore never trivial — it is often already a sign of advanced distress. In hot weather, during prolonged travel, or in a confined space without ventilation, body temperature can rise dangerously without very visible early signs. Brachycephalic breeds (Persian, Exotic Shorthair...), older cats, overweight cats, or cats trapped in a hot space are particularly at risk. Warning signs include rapid or open-mouth breathing, prostration, vomiting, excessive drooling or collapse.</string>
+    <string name="comp_coup_de_chaleur_que_faire">Immediately move the cat to a cool, ventilated area, wet the body and paws with lukewarm water (never ice-cold), offer water without forcing, and contact a vet urgently even if the cat seems to improve.</string>
+    <string name="comp_coup_de_chaleur_a_eviter">Using ice-cold water or ice packs directly on the skin, forcing the cat to drink all at once, or waiting to see if it passes before calling a vet — in cats, visible signs often appear late.</string>
+
     <!-- Nutrition fact sheets -->
     <string name="alim_dangereux1_titre">Which foods to avoid entirely?</string>
     <string name="alim_dangereux1_resume">Some human foods can be dangerous for cats.</string>

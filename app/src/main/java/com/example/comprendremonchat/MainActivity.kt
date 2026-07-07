@@ -555,10 +555,14 @@ Envoyé depuis l'application Comprendre mon chat
 fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>): Boolean {
     return when (question.id) {
         "vie_interieur" -> reponsesChoix["acces_exterieur"] != 0
+        "proprete_type" -> (reponsesChoix["proprete_stress"] ?: 0) != 0
+        "precision_malproprete" -> reponsesChoix["proprete_stress"] == 3
+        "chaleur_marquage" -> reponsesChoix["sterilise"] == 3 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
+        "marquage_habitude_post_sterilisation" -> reponsesChoix["sterilise"] == 1 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
+        "senior_desorientation" -> reponsesChoix["age"] == 3
+        "senior_vocalise_nocturne" -> reponsesChoix["age"] == 3
         "a_deja_griffe_mordu" -> reponsesChoix["agressivite_caresses"] != 0
-        "apparition", "duree_probleme", "evolution_probleme",
-        "frequence_probleme", "intensite_probleme", "generalisation_probleme",
-        "changement_recent", "signe_physique" -> reponsesChoix["a_un_probleme"] == 0
+        "cible_agression" -> reponsesChoix["a_deja_griffe_mordu"] == 1
         else -> true
     }
 }

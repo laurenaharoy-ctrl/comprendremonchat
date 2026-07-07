@@ -211,7 +211,8 @@ fun comportementEntries(): List<ComportementEntry> {
         ComportementEntry("marquage-urinaire", R.string.comp_marquage_urinaire_titre, R.string.comp_marquage_urinaire_resume, R.string.comp_marquage_urinaire_explication, R.string.comp_marquage_urinaire_que_faire, R.string.comp_marquage_urinaire_a_eviter),
         ComportementEntry("hyperactivite-nocturne", R.string.comp_hyperactivite_titre, R.string.comp_hyperactivite_resume, R.string.comp_hyperactivite_explication, R.string.comp_hyperactivite_que_faire, R.string.comp_hyperactivite_a_eviter),
         ComportementEntry("destruction-absence", R.string.comp_destruction_titre, R.string.comp_destruction_resume, R.string.comp_destruction_explication, R.string.comp_destruction_que_faire, R.string.comp_destruction_a_eviter),
-        ComportementEntry("vocalisation-excessive", R.string.comp_vocalisation_titre, R.string.comp_vocalisation_resume, R.string.comp_vocalisation_explication, R.string.comp_vocalisation_que_faire, R.string.comp_vocalisation_a_eviter)
+        ComportementEntry("vocalisation-excessive", R.string.comp_vocalisation_titre, R.string.comp_vocalisation_resume, R.string.comp_vocalisation_explication, R.string.comp_vocalisation_que_faire, R.string.comp_vocalisation_a_eviter),
+        ComportementEntry("coup-de-chaleur", R.string.comp_coup_de_chaleur_titre, R.string.comp_coup_de_chaleur_resume, R.string.comp_coup_de_chaleur_explication, R.string.comp_coup_de_chaleur_que_faire, R.string.comp_coup_de_chaleur_a_eviter)
     )
 }
 
@@ -485,6 +486,8 @@ fun QuestionnaireScreen(
         is QuestionTexte -> valeurTexte.isNotBlank()
         is QuestionChoix -> choixSelectionne != null
     }
+    val scrollStateQuestion = rememberScrollState()
+    LaunchedEffect(question.id) { scrollStateQuestion.scrollTo(0) }
 
     EditorialContainer(
         modifier = modifier.fillMaxSize()
@@ -505,7 +508,7 @@ fun QuestionnaireScreen(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(modifier = Modifier.weight(1f).verticalScroll(scrollStateQuestion), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 when (question) {
                     is QuestionTexte -> {
                         PremiumCard {
@@ -629,7 +632,7 @@ fun ResultatScreen(
             PremiumCard(centered = true) {
                 EditorialKicker(stringResource(R.string.kicker_lecture_principale), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(analyse.hypothesePrincipale, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Text(analyse.hypothesePrincipale, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(12.dp))
                 val couleur = couleurPriorite(analyse.prioriteAction)
                 val couleurFond = couleurFondPriorite(analyse.prioriteAction)
@@ -655,8 +658,6 @@ fun ResultatScreen(
                 Spacer(modifier = Modifier.height(14.dp))
                 QuatreAxesGrid(analyse = analyse)
             }
-
-            FacteursCard(analyse = analyse)
 
             PremiumCard(centered = true) {
                 EditorialKicker(stringResource(R.string.kicker_niveau_situation), centered = true)
@@ -744,6 +745,8 @@ fun ResultatScreen(
                 )
             }
 
+            ConsultationCard()
+
             ActionButtonsGrid(onShare = onShare, onCopy = onCopy, onExportPdf = onExportPdf, onRecommencer = onRecommencer)
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -755,6 +758,69 @@ fun ResultatScreen(
                 Text(stringResource(R.string.btn_recommencer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// CARTE CONSULTATION PERSONNALISÉE (FR uniquement)
+// ═══════════════════════════════════════════════════════════
+
+@Composable
+fun ConsultationCard() {
+    if (!showConsultation()) return
+    val context = LocalContext.current
+    val backgroundBrush = if (isSystemInDarkTheme())
+        Brush.verticalGradient(listOf(Color(0xFF2E2018), Color(0xFF231B14)))
+    else
+        Brush.verticalGradient(listOf(Color(0xFFF5EBE0), Color(0xFFEEE0D2)))
+    Card(
+        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, if (isSystemInDarkTheme()) Color(0xFF5A4035) else Color(0xFFD4B8A8))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().background(backgroundBrush).padding(horizontal = 24.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            EditorialKicker(strConsultationTitre(), centered = true)
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                strConsultationSousTitre(),
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                color = PremiumPalette.Primary
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            Text(strConsultationDescription(), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
+                    .background(if (isSystemInDarkTheme()) Color(0xFF2A1F1A) else Color(0xFFF4EDE6))
+                    .padding(14.dp)
+            ) {
+                Text(
+                    strConsultationDisclaimer(),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                strConsultationPrix(),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            PrimaryGlowButton(
+                text = strConsultationBouton(),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(CONSULTATION_BOOKING_URL))
+                    context.startActivity(intent)
+                }
+            )
         }
     }
 }
@@ -791,40 +857,28 @@ fun OriginesPossiblesCard(origines: String) {
 @Composable
 fun QuatreAxesGrid(analyse: ResultatAnalyse) {
     val axes = listOf(
-        Triple("Sécurité émotionnelle", analyse.niveauPeur, analyse.peur),
-        Triple("Lien humain", analyse.niveauAttachement, analyse.attachement),
-        Triple("Instincts", analyse.niveauImpulsivite, analyse.impulsivite),
-        Triple("Cohabitation", analyse.niveauReactivite, analyse.reactivite)
+        Triple(libelleAxe(Axe.SECURITE), analyse.niveauPeur, analyse.peur),
+        Triple(libelleAxe(Axe.LIEN), analyse.niveauAttachement, analyse.attachement),
+        Triple(libelleAxe(Axe.INSTINCTS), analyse.niveauImpulsivite, analyse.impulsivite),
+        Triple(libelleAxe(Axe.COHABITATION), analyse.niveauReactivite, analyse.reactivite)
     )
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         axes.chunked(2).forEach { row ->
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 row.forEach { (label, niveau, score) ->
-                    val couleurNiveau = when (niveau) {
-                        NiveauAxe.PEU_MARQUE -> PremiumPalette.PrioriteFaible
-                        NiveauAxe.A_SURVEILLER -> PremiumPalette.PrioriteModere
-                        NiveauAxe.MARQUE -> PremiumPalette.PrioriteElevee
-                        NiveauAxe.TRES_MARQUE -> PremiumPalette.PrioriteUrgente
-                    }
-                    val fondNiveau = when (niveau) {
-                        NiveauAxe.PEU_MARQUE -> PremiumPalette.PrioriteFaibleBg
-                        NiveauAxe.A_SURVEILLER -> PremiumPalette.PrioriteModereBg
-                        NiveauAxe.MARQUE -> PremiumPalette.PrioriteEleveeBg
-                        NiveauAxe.TRES_MARQUE -> PremiumPalette.PrioriteUrgenteBg
-                    }
                     val animated by animateFloatAsState((score / 100f).coerceIn(0f, 1f), label = "axe_$label")
                     Column(
                         modifier = Modifier.weight(1f).clip(RoundedCornerShape(16.dp))
-                            .background(if (isSystemInDarkTheme()) Color(0xFF2A1F1A) else fondNiveau)
-                            .border(1.dp, couleurNiveau.copy(alpha = 0.3f), RoundedCornerShape(16.dp))
+                            .background(if (isSystemInDarkTheme()) Color(0xFF231B17) else PremiumPalette.PaperSoft)
+                            .border(1.dp, PremiumPalette.Border, RoundedCornerShape(16.dp))
                             .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-                        Text(QuestionnaireEngine.libelleNiveauAxe(niveau), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = couleurNiveau, textAlign = TextAlign.Center)
-                        Box(modifier = Modifier.fillMaxWidth().height(5.dp).clip(RoundedCornerShape(999.dp)).background(couleurNiveau.copy(alpha = 0.2f))) {
-                            Box(modifier = Modifier.fillMaxWidth(animated).height(5.dp).clip(RoundedCornerShape(999.dp)).background(couleurNiveau))
+                        Text(QuestionnaireEngine.libelleNiveauAxe(niveau), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = PremiumPalette.Primary, textAlign = TextAlign.Center)
+                        Box(modifier = Modifier.fillMaxWidth().height(5.dp).clip(RoundedCornerShape(999.dp)).background(PremiumPalette.PrimarySoft.copy(alpha = 0.2f))) {
+                            Box(modifier = Modifier.fillMaxWidth(animated).height(5.dp).clip(RoundedCornerShape(999.dp)).background(PremiumPalette.PrimarySoft))
                         }
                     }
                 }
@@ -1048,26 +1102,6 @@ fun Bullet(text: String, centered: Boolean = false) {
             Box(modifier = Modifier.padding(top = 8.dp).size(7.dp).background(PremiumPalette.PrimarySoft, CircleShape))
             Spacer(modifier = Modifier.width(10.dp))
             Text(text, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
-        }
-    }
-}
-
-@Composable
-fun FacteursCard(analyse: ResultatAnalyse) {
-    if (analyse.facteursAggravants.isEmpty() && analyse.facteursProtecteurs.isEmpty()) return
-    PremiumCard(centered = true) {
-        EditorialKicker(stringResource(R.string.kicker_facteurs), centered = true)
-        if (analyse.facteursAggravants.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(12.dp))
-            SubsectionTitle(stringResource(R.string.subsection_aggrave))
-            Spacer(modifier = Modifier.height(8.dp))
-            analyse.facteursAggravants.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
-        }
-        if (analyse.facteursProtecteurs.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(12.dp))
-            SubsectionTitle(stringResource(R.string.subsection_protege))
-            Spacer(modifier = Modifier.height(8.dp))
-            analyse.facteursProtecteurs.forEach { Bullet(it, centered = true); Spacer(modifier = Modifier.height(8.dp)) }
         }
     }
 }

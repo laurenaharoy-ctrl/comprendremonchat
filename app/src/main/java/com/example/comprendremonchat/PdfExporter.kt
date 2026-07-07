@@ -39,6 +39,7 @@ object PdfExporter {
     private val COLOR_PRIORITE_ELEVEE_BG = Color.parseColor("#F2E0D6")
     private val COLOR_MORSURE_TEXTE = Color.parseColor("#B8845A")
     private val COLOR_MORSURE_BG = Color.parseColor("#F5E8DC")
+    private val COLOR_LIEN = Color.parseColor("#1155CC")
 
     private const val PAGE_W = 595
     private const val PAGE_H = 842
@@ -49,6 +50,7 @@ object PdfExporter {
 
     private fun t(fr: String, en: String) = if (isEnglish()) en else fr
     private fun appName() = t("Comprendre mon chat", "Understanding My Cat")
+    private fun totalPagesActuel(): Int = if (showConsultation()) 5 else 4
 
     fun exporterBilanPdf(context: Context, nomChat: String, analyse: ResultatAnalyse): File {
         val document = PdfDocument()
@@ -64,6 +66,9 @@ object PdfExporter {
         dessinePage2(document, nom, analyse)
         dessinePage3(document, nom, analyse)
         dessinePage4(document, nom, analyse, couleurPriorite)
+        if (showConsultation()) {
+            dessinePage5Consultation(document)
+        }
 
         val nomFichierSafe = nom.lowercase(Locale.getDefault())
             .replace("\\s+".toRegex(), "_")
@@ -180,6 +185,19 @@ object PdfExporter {
             val explicationH = measureStaticTextHeight(analyse.explicationPrincipale, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
             if (y + explicationH < CONTENT_BOTTOM) {
                 drawStaticText(canvas, analyse.explicationPrincipale, MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
+                y += explicationH + 24f
+            }
+        }
+
+        if (analyse.marquageHabitudePostSterilisation && y < CONTENT_BOTTOM - 40f) {
+            val texteHabitude = t(
+                "Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.",
+                "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the gesture remains ingrained — this type of habitual marking is often longer to correct than stress-related marking."
+            )
+            val habitudeH = measureStaticTextHeight(texteHabitude, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true)) + 32f
+            if (y + habitudeH < CONTENT_BOTTOM) {
+                drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + habitudeH, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, 14f)
+                drawStaticText(canvas, texteHabitude, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true))
             }
         }
 
@@ -230,9 +248,12 @@ object PdfExporter {
         }
 
         if (analyse.aDejaMordu && y < CONTENT_BOTTOM - 40f) {
-            val morsuText = t(
-                "Une griffure ou morsure a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.",
-                "A scratch or bite has been reported. Support from a veterinary behaviorist is recommended to assess the situation."
+            val morsuText = if (analyse.cibleAgressionAnimal) t(
+                "Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.",
+                "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely."
+            ) else t(
+                "Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.",
+                "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation."
             )
             val morsuH = measureStaticTextHeight(morsuText, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_MORSURE_TEXTE, bold = true)) + 32f
             if (y + morsuH < CONTENT_BOTTOM) {
@@ -299,6 +320,76 @@ object PdfExporter {
         }
 
         dessineFooterAvecQr(canvas)
+        document.finishPage(page)
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // PAGE 5 — Consultation personnalisée (FR uniquement, page dédiée)
+    // ════════════════════════════════════════════════════════════
+    private fun dessinePage5Consultation(document: PdfDocument) {
+        val page = demarrerPage(document, 5)
+        val canvas = page.canvas
+        val y = MARGIN + 60f
+
+        drawPageHeader(canvas, strConsultationTitre())
+
+        val titre = strConsultationTitre()
+        val sousTitre = strConsultationSousTitre()
+        val description = strConsultationDescription()
+        val disclaimer = strConsultationDisclaimer()
+        val prix = strConsultationPrix()
+        val bouton = strConsultationBouton()
+        val url = CONSULTATION_BOOKING_URL
+
+        val innerW = (CONTENT_W - 40f).toInt()
+        val paintTitre = makePaint(16f, COLOR_PRIMARY, bold = true)
+        val paintSousTitre = makePaint(12f, COLOR_PRIMARY_SOFT, bold = true)
+        val paintDescription = makePaint(11f, COLOR_INK)
+        val paintDisclaimer = makePaint(9.5f, COLOR_INK_SOFT)
+        val paintPrix = makePaint(14f, COLOR_INK, bold = true)
+        val paintLienLabel = makePaint(10.5f, COLOR_INK, bold = true)
+        val paintLien = makePaint(11f, COLOR_LIEN, bold = true)
+
+        val titreH = measureStaticTextHeight(titre, innerW, paintTitre)
+        val sousTitreH = measureStaticTextHeight(sousTitre, innerW, paintSousTitre)
+        val descriptionH = measureStaticTextHeight(description, innerW, paintDescription)
+        val disclaimerH = measureStaticTextHeight(disclaimer, innerW, paintDisclaimer)
+
+        val totalH = 24f + titreH + 12f + sousTitreH + 18f + descriptionH + 20f +
+                disclaimerH + 24f + 24f + 18f + 20f + 24f
+
+        val cardTop = y
+        val cardBottom = y + totalH
+        drawCard(canvas, MARGIN, cardTop, PAGE_W - MARGIN, cardBottom, COLOR_WARM_BG_ALT, COLOR_ACCENT, 18f)
+
+        var cy = cardTop + 24f
+        val cx = MARGIN + 20f
+
+        drawStaticText(canvas, titre, cx, cy, innerW, paintTitre)
+        cy += titreH + 12f
+
+        drawStaticText(canvas, sousTitre, cx, cy, innerW, paintSousTitre)
+        cy += sousTitreH + 18f
+
+        drawStaticText(canvas, description, cx, cy, innerW, paintDescription)
+        cy += descriptionH + 20f
+
+        drawStaticText(canvas, disclaimer, cx, cy, innerW, paintDisclaimer)
+        cy += disclaimerH + 24f
+
+        canvas.drawText(prix, cx, cy, paintPrix)
+        cy += 24f
+
+        val lienLabel = "$bouton :"
+        canvas.drawText(lienLabel, cx, cy, paintLienLabel)
+        cy += 18f
+
+        canvas.drawText(url, cx, cy, paintLien)
+        val underlineY = cy + 2f
+        canvas.drawLine(cx, underlineY, cx + paintLien.measureText(url), underlineY,
+            Paint(Paint.ANTI_ALIAS_FLAG).apply { color = COLOR_LIEN; strokeWidth = 0.8f })
+
+        dessineFooter(canvas, 5)
         document.finishPage(page)
     }
 
@@ -382,7 +473,8 @@ object PdfExporter {
             "${appName()}  \u2022  Indicative emotional report"
         )
         canvas.drawText(footerText, MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
-        val pageLabel = t("Page $pageNum / 4", "Page $pageNum / 4")
+        val total = totalPagesActuel()
+        val pageLabel = t("Page $pageNum / $total", "Page $pageNum / $total")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), footerY, pagePaint)
     }
@@ -407,7 +499,8 @@ object PdfExporter {
             ),
             tx, footerTop + 40f, makePaint(8.5f, COLOR_INK_SOFT)
         )
-        val pageLabel = t("Page 4 / 4", "Page 4 / 4")
+        val total = totalPagesActuel()
+        val pageLabel = t("Page 4 / $total", "Page 4 / $total")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), PAGE_H - MARGIN - 4f, pagePaint)
     }

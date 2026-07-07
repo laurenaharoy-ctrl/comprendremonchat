@@ -73,7 +73,10 @@ data class ResultatAnalyse(
     val prioriteImmediate: PrioriteImmediate, val explicationResultat: ExplicationResultat,
     val facteursAggravants: List<String>, val facteursProtecteurs: List<String>,
     val syntheseAvancee: String, val raceCategorie: String?, val racePrecise: String?,
-    val originesPossibles: String = ""
+    val originesPossibles: String = "",
+    val marquageHabitudePostSterilisation: Boolean = false,
+    val suspicionDeclinCognitif: Boolean = false,
+    val cibleAgressionAnimal: Boolean = false
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -336,6 +339,7 @@ object QuestionnaireEngine {
                                  securite: Int, lien: Int, instincts: Int, cohabitation: Int): PrioriteAction {
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
         return when {
+            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteAction.ELEVEE
             reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteAction.URGENTE
             contexte.physique >= 4 -> PrioriteAction.URGENTE
             contexte.scoreContexte >= 10 -> PrioriteAction.ELEVEE
@@ -426,6 +430,13 @@ object QuestionnaireEngine {
                     append("This functioning is not a whim: it reflects a genuine difficulty in finding internal support in the absence of the reassuring figure.")
                 }
                 Axe.INSTINCTS -> buildString {
+                    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) {
+                        append("$nom's urine marking seems to have started during her heat periods, before she was spayed. ")
+                        append("The original hormonal cause is gone, but the behavior has turned into an acquired habit — the gesture remains ingrained even though the initial reason no longer exists. ")
+                        append("This type of habitual marking is often longer to correct than marking purely linked to stress, since a repeated gesture needs to be unlearned rather than simply reducing a source of tension. ")
+                        append("Targeted behavioral support on this specific point is recommended.")
+                        return@buildString
+                    }
                     append("$nom's instinctive frustration can have several origins. ")
                     append("The cat is a solitary predator whose needs for hunting, exploration and scratching are deeply ingrained — an environment that does not allow them to be expressed inevitably generates frustration. ")
                     if (reponsesChoix["acces_exterieur"] == 2) append("The absence of access to the outdoors deprives the cat of many natural stimulations that channel these instincts. ")
@@ -463,6 +474,13 @@ object QuestionnaireEngine {
                     append("Ce fonctionnement n'est pas un caprice : il reflète une vraie difficulté à trouver un appui interne en l'absence de la figure rassurante.")
                 }
                 Axe.INSTINCTS -> buildString {
+                    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) {
+                        append("Le marquage urinaire de $nom semble avoir débuté pendant ses chaleurs, avant sa stérilisation. ")
+                        append("La cause hormonale d'origine a disparu, mais le comportement s'est transformé en habitude acquise — le geste reste ancré même si la raison initiale n'existe plus. ")
+                        append("Ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage purement lié au stress, car il faut désapprendre un geste répété plutôt que simplement réduire une source de tension. ")
+                        append("Un accompagnement comportemental ciblé sur ce point précis est recommandé.")
+                        return@buildString
+                    }
                     append("La frustration instinctive de $nom peut avoir plusieurs origines. ")
                     append("Le chat est un prédateur solitaire dont les besoins de chasse, d'exploration et de griffage sont profondément ancrés — un environnement qui ne permet pas de les exprimer génère inévitablement de la frustration. ")
                     if (reponsesChoix["acces_exterieur"] == 2) append("L'absence d'accès à l'extérieur prive le chat de nombreuses stimulations naturelles qui canalisent ces instincts. ")
@@ -484,9 +502,15 @@ object QuestionnaireEngine {
     }
 
     fun calculerResultat(questions: List<Question>, reponsesTexte: Map<String, String>, reponsesChoix: Map<String, Int>): ResultatAnalyse {
+        val marquageHormonal = reponsesChoix["chaleur_marquage"] == 0
         val securite = calculerPourcentageAxe(Axe.SECURITE, questions, reponsesChoix)
         val lien = calculerPourcentageAxe(Axe.LIEN, questions, reponsesChoix)
-        val instincts = calculerPourcentageAxe(Axe.INSTINCTS, questions, reponsesChoix)
+        val instincts = if (marquageHormonal) {
+            val reponsesAjustees = reponsesChoix.toMutableMap().apply { put("marquage_urinaire", 0) }
+            calculerPourcentageAxe(Axe.INSTINCTS, questions, reponsesAjustees)
+        } else {
+            calculerPourcentageAxe(Axe.INSTINCTS, questions, reponsesChoix)
+        }
         val cohabitation = calculerPourcentageAxe(Axe.COHABITATION, questions, reponsesChoix)
         val profil = genererProfilGlobalTraduit(reponsesTexte["nom_chat"].orEmpty(), securite, lien, instincts, cohabitation)
         val contexte = calculerContexte(reponsesChoix)
@@ -515,7 +539,7 @@ object QuestionnaireEngine {
             profil = profil, vigilance = vigilance, niveauSituation = niveauSituation, contexte = contexte,
             problemePrincipal = problemePrincipal,
             problemesImportants = determinerProblemesImportants(securite, lien, instincts, cohabitation),
-            explicationPrincipale = explicationProblemeTraduit(problemePrincipal, securite, lien, instincts, cohabitation),
+            explicationPrincipale = explicationProblemeTraduit(problemePrincipal, securite, lien, instincts, cohabitation, reponsesChoix),
             conseilPrincipal = conseilPrincipalTraduit(problemePrincipal, securite, lien, instincts, cohabitation),
             conseilsPratiques = genererConseilsPratiquesToTraduit(reponsesTexte["nom_chat"].orEmpty(), reponsesChoix, securite, lien, instincts, cohabitation),
             planAction = planAction,
@@ -528,7 +552,11 @@ object QuestionnaireEngine {
             prioriteImmediate = prioriteImmediate, explicationResultat = explicationResultat,
             facteursAggravants = facteursAggravants, facteursProtecteurs = facteursProtecteurs,
             syntheseAvancee = syntheseAvancee, raceCategorie = raceCategorieTexte, racePrecise = null,
-            originesPossibles = originesPossibles
+            originesPossibles = originesPossibles,
+            marquageHabitudePostSterilisation = reponsesChoix["marquage_habitude_post_sterilisation"] == 0,
+            suspicionDeclinCognitif = reponsesChoix["age"] == 3 &&
+                    (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2),
+            cibleAgressionAnimal = reponsesChoix["cible_agression"] == 1
         )
     }
 
@@ -557,6 +585,18 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) "How old is your cat?" else "Quel âge a votre chat ?",
             if (isEnglish()) listOf("Under 1 year (kitten)", "Between 1 and 3 years", "Between 4 and 8 years", "9 years and over (senior)")
             else listOf("Moins d'1 an (chaton)", "Entre 1 et 3 ans", "Entre 4 et 8 ans", "9 ans et plus (senior)")),
+
+        QuestionChoix("senior_desorientation",
+            if (isEnglish()) "Does your cat sometimes seem disoriented or lost in places it knows well?"
+            else "Votre chat semble-t-il parfois désorienté ou perdu dans des endroits qu'il connaît bien ?",
+            if (isEnglish()) listOf("No, never", "Sometimes, occasionally", "Yes, regularly")
+            else listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement")),
+
+        QuestionChoix("senior_vocalise_nocturne",
+            if (isEnglish()) "Has your cat recently been vocalizing or wandering at night without an apparent reason (not hungry, no identifiable demand for attention)?"
+            else "Depuis quelque temps, votre chat vocalise-t-il ou erre-t-il la nuit sans raison apparente (pas de faim, pas de demande d'attention identifiable) ?",
+            if (isEnglish()) listOf("No, never", "Sometimes, occasionally", "Yes, regularly")
+            else listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement")),
 
         QuestionChoix("sterilise",
             if (isEnglish()) "Your cat is:" else "Votre chat est :",
@@ -632,12 +672,14 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) listOf("Relatively well, it tolerates transport and the consultation",
                 "Stressful but manageable",
                 "Very difficult — it panics in the carrier or at the vet",
-                "Extremely difficult — it is traumatic every time")
+                "Extremely difficult — it is traumatic every time",
+                "My cat never goes to the vet")
             else listOf("Relativement bien, il supporte le transport et la consultation",
                 "Stressant mais gérable",
                 "Très difficile — il panique dans la caisse ou chez le vétérinaire",
-                "Extrêmement difficile — c'est un traumatisme à chaque fois"),
-            axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4)),
+                "Extrêmement difficile — c'est un traumatisme à chaque fois",
+                "Mon chat ne va jamais chez le vétérinaire"),
+            axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4, 0)),
 
         QuestionChoix("surtoilettage",
             if (isEnglish()) "Have you noticed over-grooming (sparse fur areas, repeated excessive licking)?"
@@ -667,12 +709,14 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) listOf("It seems to manage calmly",
                 "It may vocalize a little at your departure but settles down",
                 "It vocalizes or becomes notably agitated",
-                "It shows signs of distress (destruction, accidents, neighbors alerted)")
+                "It shows signs of distress (destruction, accidents, neighbors alerted)",
+                "I don't know")
             else listOf("Il semble gérer sereinement",
                 "Il peut vocaliser un peu à votre départ mais se calme",
                 "Il vocalise ou s'agite de façon notable",
-                "Il présente des signes de détresse (destructions, malpropreté, voisins alertés)"),
-            axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
+                "Il présente des signes de détresse (destructions, malpropreté, voisins alertés)",
+                "Je ne sais pas"),
+            axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4, 0), signalAlerte = true),
 
         QuestionChoix("vocalise_absence",
             if (isEnglish()) "Does your cat vocalize excessively (repeated, insistent meowing)?"
@@ -699,6 +743,16 @@ fun questionsApplication(): List<Question> {
                 "Occasionnellement, souvent lié à un événement stressant",
                 "Régulièrement"),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 4), signalAlerte = true),
+
+        QuestionChoix("proprete_type",
+            if (isEnglish()) "It is rather:" else "Il s'agit plutôt de :",
+            if (isEnglish()) listOf("Urine", "Stools", "Both")
+            else listOf("Urine", "Selles", "Les deux")),
+
+        QuestionChoix("precision_malproprete",
+            if (isEnglish()) "When it happens, is it rather:" else "Quand cela arrive, est-ce plutôt :",
+            if (isEnglish()) listOf("Always in the same spot", "In different spots")
+            else listOf("Toujours au même endroit", "À des endroits différents")),
 
         QuestionChoix("demande_attention",
             if (isEnglish()) "How does your cat react when you don't give it attention?"
@@ -800,6 +854,18 @@ fun questionsApplication(): List<Question> {
                 "Oui, de temps en temps", "Oui, fréquemment"),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
 
+        QuestionChoix("chaleur_marquage",
+            if (isEnglish()) "Does this marking happen mainly during her heat periods (times when she calls, meows loudly, rubs a lot)?"
+            else "Ce marquage a-t-il lieu principalement pendant ses chaleurs (périodes où elle réclame, miaule fort, se frotte beaucoup) ?",
+            if (isEnglish()) listOf("Yes, mainly during heat periods", "No, at other times too", "I don't know")
+            else listOf("Oui, principalement pendant les chaleurs", "Non, à d'autres moments aussi", "Je ne sais pas")),
+
+        QuestionChoix("marquage_habitude_post_sterilisation",
+            if (isEnglish()) "Did this marking start before she was spayed?"
+            else "Ce marquage a-t-il commencé avant sa stérilisation ?",
+            if (isEnglish()) listOf("Yes, and it has continued since", "No, it appeared after spaying", "I don't know / I adopted her already spayed")
+            else listOf("Oui, et ça a continué depuis", "Non, c'est apparu après la stérilisation", "Je ne sais pas / je l'ai adoptée déjà stérilisée")),
+
         QuestionChoix("relation_autres_chats",
             if (isEnglish()) "If you have several cats, how are their relations?" else "Si vous avez plusieurs chats, comment se passent leurs relations ?",
             if (isEnglish()) listOf("Good understanding in general, even mutual affection",
@@ -847,6 +913,12 @@ fun questionsApplication(): List<Question> {
             if (isEnglish()) listOf("No, never", "Yes, it has happened")
             else listOf("Non, jamais", "Oui, cela s'est déjà produit"),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 4), poids = 2, signalCritique = true),
+
+        QuestionChoix("cible_agression",
+            if (isEnglish()) "Who was it directed at?" else "Envers qui cela s'est-il produit ?",
+            if (isEnglish()) listOf("A person", "Another animal (cat, dog...)", "Both")
+            else listOf("Une personne", "Un autre animal (chat, chien...)", "Les deux"),
+            axe = Axe.COHABITATION),
 
         QuestionChoix("defense_ressources",
             if (isEnglish()) "Does your cat defend its resources (bowl, litter box, resting spot) aggressively?"

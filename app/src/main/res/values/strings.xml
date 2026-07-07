@@ -1,6 +1,6 @@
 <resources>
     <!-- App -->
-    <string name="app_name">Understanding My Cat</string>
+    <string name="app_name">Comprendre mon chat</string>
 
     <!-- Accueil -->
     <string name="btn_demarrer">Démarrer le bilan</string>
@@ -204,6 +204,12 @@
     <string name="comp_vocalisation_explication">Des miaulements excessifs peuvent signaler la faim, l\'ennui, une demande d\'attention, une douleur, ou chez le chat âgé, un début de syndrome cognitif. Les Siamois et orientaux sont naturellement plus vocaux.</string>
     <string name="comp_vocalisation_que_faire">Consulter un vétérinaire si les vocalisations sont nouvelles ou nocturnes et intenses.</string>
     <string name="comp_vocalisation_a_eviter">Répondre systématiquement aux demandes vocales — cela renforce le comportement.</string>
+
+    <string name="comp_coup_de_chaleur_titre">Coup de chaleur</string>
+    <string name="comp_coup_de_chaleur_resume">Une urgence vétérinaire moins visible chez le chat que chez le chien.</string>
+    <string name="comp_coup_de_chaleur_explication">Le chat régule très mal sa température : il ne transpire quasiment pas et halète beaucoup moins que le chien. Un halètement bouche ouverte chez un chat n\'est donc jamais anodin — c\'est souvent déjà un signe de détresse avancée. En cas de forte chaleur, de transport prolongé ou d\'espace confiné sans ventilation, sa température peut monter dangereusement sans que les signes soient très visibles au départ. Les races brachycéphales (Persan, Exotic Shorthair...), les chats âgés, en surpoids ou enfermés dans un endroit chaud sont particulièrement à risque. Les signes d\'alerte incluent une respiration rapide ou bouche ouverte, une prostration, des vomissements, une salivation excessive ou un effondrement.</string>
+    <string name="comp_coup_de_chaleur_que_faire">Déplacez immédiatement le chat dans un endroit frais et ventilé, mouillez-le à l\'eau tiède (jamais glacée) sur le corps et les pattes, proposez de l\'eau sans forcer, et contactez un vétérinaire en urgence même si l\'état semble s\'améliorer.</string>
+    <string name="comp_coup_de_chaleur_a_eviter">Utiliser de l\'eau glacée ou des packs de glace directement sur la peau, forcer le chat à boire d\'un coup, ou attendre de voir si ça passe avant d\'appeler un vétérinaire — chez le chat, les signes visibles arrivent souvent tard.</string>
 
     <!-- Fiches alimentation — Titres et résumés -->
     <string name="alim_dangereux1_titre">Quels aliments éviter absolument ?</string>
