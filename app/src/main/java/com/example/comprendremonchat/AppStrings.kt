@@ -905,11 +905,15 @@ const val CONSULTATION_BOOKING_URL_1H = "https://tidycal.com/laurenaharoy/consul
 
 const val CGV_URL = "https://laurenaharoy-ctrl.github.io/comprendremonchat/cgv.html"
 
+const val WEBSITE_URL = "https://comportementaliste91.fr"
+
 fun strConsultationFormule30() = "Consultation conseil — 30 min — 35 €"
 
 fun strConsultationFormule60() = "Consultation comportementale — 1 heure — 50 €"
 
 fun strConsultationCGV() = "Consulter les Conditions Générales de Vente"
+
+fun strConsultationSite() = "Visiter mon site internet"
 
 fun strConsultationTitre() = "Besoin d'aide pour interpréter ce bilan ?"
 
