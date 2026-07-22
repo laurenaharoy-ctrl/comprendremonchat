@@ -8,12 +8,13 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.laurena.comprendremonchat"
-        minSdk 28
-        targetSdk 36
-        versionCode 6
-        versionName "1.4.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "com.laurena.comprendremonchien"
+        minSdk = 28
+        targetSdk = 36
+        versionCode = 6
+        versionName = "1.4.1"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
