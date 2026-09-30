@@ -1,0 +1,262 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">Meine Katze verstehen</string>
+
+    <!-- Home -->
+    <string name="btn_demarrer">Einschätzung starten</string>
+    <string name="btn_dictionnaire">Verhaltenslexikon</string>
+    <string name="btn_alimentation">Ernährung</string>
+    <string name="btn_reprendre">Fragebogen fortsetzen</string>
+
+    <!-- Questionnaire -->
+    <string name="label_sur">von</string>
+    <string name="btn_continuer">Weiter</string>
+    <string name="placeholder_prenom_chat">z. B. Luna, Milo, Simba …</string>
+    <string name="label_prenom_chat">Name Ihrer Katze</string>
+    <string name="hint_saisir_prenom">Geben Sie den Namen Ihrer Katze ein, um fortzufahren</string>
+    <string name="hint_choisir_reponse">Wählen Sie eine Antwort, um fortzufahren</string>
+
+    <!-- Loading -->
+    <string name="chargement_analyse">Analyse läuft …</string>
+    <string name="chargement_profil">Das Profil Ihrer Katze wird gelesen …</string>
+    <string name="chargement_bilan">Ihre Einschätzung wird vorbereitet …</string>
+
+    <!-- Results -->
+    <string name="kicker_votre_bilan">Ihre Einschätzung</string>
+    <string name="titre_bilan_pour">Einschätzung für</string>
+    <string name="kicker_lecture_principale">Hauptlesart</string>
+    <string name="label_priorite">Priorität: </string>
+    <string name="kicker_ressent">Was bewegt</string>
+    <string name="kicker_coup_oeil">Auf einen Blick</string>
+    <string name="kicker_facteurs">Erkannte Faktoren</string>
+    <string name="subsection_aggrave">Was die Lage verschlimmern kann</string>
+    <string name="subsection_protege">Was hilft</string>
+    <string name="kicker_niveau_situation">Stand der Situation</string>
+    <string name="kicker_inquieter">Muss man sich Sorgen machen?</string>
+    <string name="kicker_ce_qui_passe">Was wahrscheinlich geschieht</string>
+    <string name="highlight_chip">Der wichtigste Ansatzpunkt</string>
+    <string name="highlight_footer">Oft beginnt genau hier die Veränderung.</string>
+    <string name="kicker_3_jours">Die nächsten 3 Tage</string>
+    <string name="subsection_a_faire">Zu tun</string>
+    <string name="subsection_a_eviter">Zu vermeiden</string>
+    <string name="subsection_a_observer">Zu beobachten</string>
+    <string name="kicker_conseils">Weitere Tipps</string>
+    <string name="kicker_demander_aide">Wann Sie Hilfe suchen sollten</string>
+    <string name="texte_morsure_signale">Es wurde ein Kratzer oder Biss gemeldet – eine Begleitung durch einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten wird empfohlen.</string>
+    <string name="kicker_important">Wichtig</string>
+    <string name="texte_important_bilan">Diese Einschätzung ist nur ein Anhaltspunkt. Sie ersetzt weder einen Tierarzt noch eine Fachperson für Katzenverhalten.</string>
+    <string name="kicker_aller_plus_loin">Weiter mit</string>
+    <string name="label_fiches_comportementales">Verhaltensblätter</string>
+    <string name="label_reperes_alimentation">Ernährung auf einen Blick</string>
+    <string name="kicker_a_retenir">Das Wichtigste</string>
+    <string name="kicker_le_livre">Das Buch</string>
+    <string name="texte_livre">Wenn Sie weitergehen möchten</string>
+    <string name="btn_voir_livres">Meine Bücher ansehen</string>
+    <string name="btn_partager">Teilen</string>
+    <string name="btn_export_pdf">PDF</string>
+    <string name="btn_copier_resume">Zusammenfassung kopieren</string>
+    <string name="btn_recommencer">Von vorn beginnen</string>
+
+    <!-- Bite alert -->
+    <string name="alerte_morsure_titre">KRATZER / BISS GEMELDET</string>
+    <string name="alerte_morsure_corps">%1$s hat bereits gekratzt oder gebissen. Diese Situation verdient besondere Aufmerksamkeit.</string>
+    <string name="alerte_morsure_conseil">Eine Begleitung durch einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten wird empfohlen.</string>
+
+    <!-- Breed profile -->
+    <string name="kicker_profil_race">Rasseprofil</string>
+    <string name="label_predispositions">Häufige Veranlagungen in dieser Gruppe</string>
+    <string name="kicker_origines">Warum ist sie so?</string>
+    <string name="chip_comprendre_agir">Verstehen, um besser zu handeln</string>
+
+    <!-- Behavioral dictionary -->
+    <string name="kicker_dictionnaire">Verhaltenslexikon</string>
+    <string name="titre_dictionnaire">Anhaltspunkte, um die Körpersprache Ihrer Katze besser zu lesen</string>
+    <string name="placeholder_recherche">Ein Blatt suchen …</string>
+    <string name="aucune_fiche">Kein Blatt passt zu \"%1$s\".</string>
+    <string name="texte_important_dictionnaire">Diese Blätter geben Anhaltspunkte, um das Verhalten von Katzen zu lesen. Sie ersetzen nicht den Rat einer Fachperson.</string>
+    <string name="kicker_fiche_comportementale">Verhaltensblatt</string>
+    <string name="kicker_explication">Erklärung</string>
+    <string name="kicker_que_faire">Was tun</string>
+    <string name="kicker_a_eviter_fiche">Zu vermeiden</string>
+    <string name="texte_rappel_fiche">Ein einzelnes Verhalten reicht nicht immer aus, um Schlüsse zu ziehen. Der Kontext und die gesamte Körpersprache zählen genauso.</string>
+    <string name="fiche_introuvable">Blatt nicht gefunden.</string>
+
+    <!-- Nutrition -->
+    <string name="kicker_alimentation">Ernährung der Katze</string>
+    <string name="texte_alimentation_intro">Praktische Anhaltspunkte, um Ihre Katze entspannt zu füttern.</string>
+    <string name="kicker_a_retenir_alimentation">Zuerst das Wichtigste</string>
+    <string name="bullet_carnivore">Katzen sind strikte Fleischfresser – ihre Ernährung muss überwiegend tierisch sein.</string>
+    <string name="bullet_plantes_toxiques">Manche alltäglichen Pflanzen und Lebensmittel können für sie hochgiftig sein.</string>
+    <string name="bullet_ingestion_suspecte">Wenn Ihre Katze etwas Verdächtiges verschluckt hat, wenden Sie sich rasch an einen Tierarzt.</string>
+    <string name="texte_important_alimentation">Dieser Leitfaden gibt allgemeine Anhaltspunkte. Er ersetzt keinen Tierarzt.</string>
+    <string name="texte_rappel_alimentation">Bei Symptomen oder Verdacht auf eine Aufnahme holen Sie lieber tierärztlichen Rat ein.</string>
+    <string name="btn_retour_categorie">Zurück zur Kategorie</string>
+    <string name="btn_retour_rubriques">Zurück zu den Rubriken</string>
+    <string name="kicker_alimentation_detail">Ernährung</string>
+
+    <!-- Nutrition categories -->
+    <string name="cat_dangereux_titre">Für Katzen gefährliche Lebensmittel</string>
+    <string name="cat_dangereux_desc">Lebensmittel und Pflanzen, die Sie ganz meiden sollten.</string>
+    <string name="cat_autorises_titre">In Maßen erlaubte Lebensmittel</string>
+    <string name="cat_autorises_desc">Was Sie in Maßen geben dürfen.</string>
+    <string name="cat_ingestion_titre">Was tun beim Verschlucken</string>
+    <string name="cat_ingestion_desc">Die richtigen Reflexe, wenn Ihre Katze etwas verschluckt hat.</string>
+    <string name="cat_digestion_titre">Verdauung / Gras / Erbrechen / Kot</string>
+    <string name="cat_digestion_desc">Gras, Erbrechen, Haarballen und Kot.</string>
+
+    <!-- Settings -->
+    <string name="kicker_parametres">Einstellungen</string>
+    <string name="titre_parametres">Meine Katze verstehen</string>
+    <string name="label_version">Version %1$s</string>
+    <string name="kicker_tutoriel">Einführung</string>
+    <string name="texte_tutoriel">Die Vorstellung der App noch einmal von vorn ansehen.</string>
+    <string name="btn_revoir_intro">Einführung ansehen</string>
+    <string name="kicker_confidentialite">Datenschutz</string>
+    <string name="texte_confidentialite">Diese App erhebt keine personenbezogenen Daten. Die Einschätzungen werden nur auf Ihrem Gerät gespeichert. Die Benachrichtigungen sind lokal.</string>
+    <string name="btn_politique_confidentialite">Datenschutzerklärung</string>
+    <string name="kicker_a_propos">Über die App</string>
+    <string name="texte_a_propos">Entwickelt, um Haltern zu helfen, ihre Katze besser zu verstehen und ihre Lebensqualität zu verbessern.</string>
+
+    <!-- Navigation / TopBar -->
+    <string name="nav_retour">Zurück</string>
+
+    <!-- Behavioral fact sheets -->
+    <string name="comp_ronronnement_titre">Schnurren</string>
+    <string name="comp_ronronnement_resume">Nicht immer ein Zeichen von Wohlbefinden – es kann auch Stress anzeigen.</string>
+    <string name="comp_ronronnement_explication">Das Schnurren entsteht durch Schwingungen des Kehlkopfs. Oft zeigt es Wohlbefinden an, aber auch Selbstberuhigung bei Stress oder Schmerzen.</string>
+    <string name="comp_ronronnement_que_faire">Den gesamten Kontext beobachten, bevor man schließt, dass die Katze zufrieden ist.</string>
+    <string name="comp_ronronnement_a_eviter">Ungewöhnliches oder übermäßiges Schnurren ignorieren.</string>
+
+    <string name="comp_clin_oeil_titre">Langsames Blinzeln</string>
+    <string name="comp_clin_oeil_resume">Ein Zeichen von Vertrauen und Zuneigung Ihrer Katze.</string>
+    <string name="comp_clin_oeil_explication">Die Katze schließt ihre Augen langsam halb, als Zeichen des Vertrauens. Wenn Sie es erwidern, stärkt das die Bindung.</string>
+    <string name="comp_clin_oeil_que_faire">Dieses Signal erwidern, um die Beziehung zu stärken.</string>
+    <string name="comp_clin_oeil_a_eviter">Die Katze anstarren, ohne zu blinzeln – das kann als Bedrohung wahrgenommen werden.</string>
+
+    <string name="comp_queue_dressee_titre">Aufgerichteter Schwanz</string>
+    <string name="comp_queue_dressee_resume">Ein freundliches Begrüßungssignal.</string>
+    <string name="comp_queue_dressee_explication">Ein senkrecht aufgerichteter Schwanz zeigt eine freundliche Absicht und Selbstvertrauen. Ein kleiner Haken an der Spitze kündigt eine besonders herzliche Begrüßung an.</string>
+    <string name="comp_queue_dressee_que_faire">Positiv auf diese Einladung zum Kontakt reagieren.</string>
+    <string name="comp_queue_dressee_a_eviter">Dieses Signal der Geselligkeit ignorieren.</string>
+
+    <string name="comp_queue_fouettante_titre">Peitschender Schwanz</string>
+    <string name="comp_queue_fouettante_resume">Ein Zeichen von Unruhe oder Gereiztheit.</string>
+    <string name="comp_queue_fouettante_explication">Anders als beim Hund ist eine Katze, die mit dem Schwanz peitscht, gereizt oder überreizt. Es ist kein Zeichen von Freude.</string>
+    <string name="comp_queue_fouettante_que_faire">Die Interaktion beenden und die Katze zur Ruhe kommen lassen.</string>
+    <string name="comp_queue_fouettante_a_eviter">Eine Katze mit peitschendem Schwanz weiter streicheln oder mit ihr spielen.</string>
+
+    <string name="comp_oreilles_arriere_titre">Nach hinten angelegte Ohren</string>
+    <string name="comp_oreilles_arriere_resume">Höchste Alarmstufe.</string>
+    <string name="comp_oreilles_arriere_explication">Wenn die Ohren flach nach hinten angelegt sind, hat die Katze Angst oder ist bereit, aggressiv zu reagieren. Beenden Sie sofort jede Interaktion.</string>
+    <string name="comp_oreilles_arriere_que_faire">Sofort Abstand schaffen.</string>
+    <string name="comp_oreilles_arriere_a_eviter">Eine Katze mit angelegten Ohren weiter berühren oder sich ihr nähern.</string>
+
+    <string name="comp_ventre_expose_titre">Gezeigter Bauch</string>
+    <string name="comp_ventre_expose_resume">Ein Zeichen von Vertrauen, nicht unbedingt eine Einladung.</string>
+    <string name="comp_ventre_expose_explication">Den Bauch zu zeigen ist ein Zeichen großen Vertrauens, aber nicht immer eine Einladung zum Streicheln. Viele Katzen kratzen, wenn man diese empfindliche Stelle berührt.</string>
+    <string name="comp_ventre_expose_que_faire">Prüfen, ob die Katze Streicheln am Bauch wirklich mag, bevor man weitermacht.</string>
+    <string name="comp_ventre_expose_a_eviter">Einer Katze, die sich auf den Rücken rollt, automatisch den Bauch streicheln.</string>
+
+    <string name="comp_petrir_titre">Treteln (Milchtritt)</string>
+    <string name="comp_petrir_resume">Ein Wohlfühlverhalten aus der Säugezeit.</string>
+    <string name="comp_petrir_explication">Die Katze tritt mit den Vorderpfoten – eine Bewegung, die Kätzchen beim Saugen an der Mutter machen. Ein Zeichen von Wohlbefinden und Sicherheit.</string>
+    <string name="comp_petrir_que_faire">Dieses Verhalten zulassen – es ist ein sehr gutes Zeichen.</string>
+    <string name="comp_petrir_a_eviter">Diesen Moment des Wohlbefindens bestrafen oder abrupt unterbrechen.</string>
+
+    <string name="comp_frotter_tete_titre">Köpfchengeben</string>
+    <string name="comp_frotter_tete_resume">Zärtliches Markieren und ein Zeichen von Vertrauen.</string>
+    <string name="comp_frotter_tete_explication">Die Katze reibt Schnauze, Wangen oder Schläfen, um Pheromone abzugeben. Das ist ein Zeichen von Vertrauen und liebevoller Bindung.</string>
+    <string name="comp_frotter_tete_que_faire">Positiv auf diesen Kontakt reagieren, den die Katze selbst sucht.</string>
+    <string name="comp_frotter_tete_a_eviter">Eine Katze wegschieben, die Köpfchen gibt.</string>
+
+    <string name="comp_chatter_titre">Keckern (Zähneklappern)</string>
+    <string name="comp_chatter_resume">Eine Reaktion auf eine unerreichbare Beute.</string>
+    <string name="comp_chatter_explication">Dieses schnelle Geräusch entsteht, wenn die Katze einen Vogel oder eine Beute beobachtet, die sie nicht fangen kann. Ausdruck von Frust und aktiviertem Jagdtrieb.</string>
+    <string name="comp_chatter_que_faire">Eine Spieleinheit mit der Federangel anbieten, um diesen Instinkt auszuleben.</string>
+    <string name="comp_chatter_a_eviter">Sich Sorgen machen – das ist ein normales Verhalten.</string>
+
+    <string name="comp_griffage_titre">Kratzen an Flächen</string>
+    <string name="comp_griffage_resume">Ein lebenswichtiges Bedürfnis zum Markieren und zur Krallenpflege.</string>
+    <string name="comp_griffage_explication">Katzen kratzen, um ihr Revier zu markieren (Pheromone der Pfotenballen), sich zu strecken und ihre Krallen zu pflegen. Das ist ein Grundbedürfnis.</string>
+    <string name="comp_griffage_que_faire">Verschiedene Kratzmöglichkeiten an den richtigen Stellen anbieten (in der Nähe der Ruheplätze).</string>
+    <string name="comp_griffage_a_eviter">Das Kratzen bestrafen – das Bedürfnis verschwindet dadurch nicht, die Katze sucht sich andere Flächen.</string>
+
+    <string name="comp_marquage_urinaire_titre">Harnmarkieren (Spritzen)</string>
+    <string name="comp_marquage_urinaire_resume">Eine Reviermitteilung, oft stressbedingt.</string>
+    <string name="comp_marquage_urinaire_explication">Die Katze uriniert im Stehen rückwärts, mit zitterndem Schwanz. Dieses Markieren unterscheidet sich vom normalen Harnabsatz. Bei einer kastrierten Katze deutet es oft auf Revierstress hin.</string>
+    <string name="comp_marquage_urinaire_que_faire">Die Stressquelle erkennen und verringern (sichtbare fremde Katze draußen, Konflikt mit einem Mitbewohner).</string>
+    <string name="comp_marquage_urinaire_a_eviter">Die Katze bestrafen – das verstärkt den Stress und damit das Markieren.</string>
+
+    <string name="comp_hyperactivite_titre">Nächtliche Überaktivität</string>
+    <string name="comp_hyperactivite_resume">Oft verbunden mit zu wenig Beschäftigung am Tag.</string>
+    <string name="comp_hyperactivite_explication">Katzen sind von Natur aus in der Morgen- und Abenddämmerung aktiv. Zu wenig Spiel am Tag kann zu nächtlicher Unruhe führen.</string>
+    <string name="comp_hyperactivite_que_faire">Vor dem Schlafengehen eine intensive Spieleinheit anbieten und danach eine Mahlzeit geben.</string>
+    <string name="comp_hyperactivite_a_eviter">Die Katze den ganzen Tag sich langweilen lassen und sich dann über ihre nächtliche Unruhe wundern.</string>
+
+    <string name="comp_destruction_titre">Zerstörung in Abwesenheit des Halters</string>
+    <string name="comp_destruction_resume">Oft verbunden mit Stress oder Langeweile.</string>
+    <string name="comp_destruction_explication">Eine Katze, die zerstört, wenn sie allein ist, handelt nicht aus Rache. Es ist ein Zeichen von Not oder Langeweile.</string>
+    <string name="comp_destruction_que_faire">Die Umgebung bereichern: wechselndes Spielzeug, zugängliche Fenster, Verstecke.</string>
+    <string name="comp_destruction_a_eviter">Im Nachhinein bestrafen – die Katze verbindet die Strafe nicht mit ihrem früheren Verhalten.</string>
+
+    <string name="comp_vocalisation_titre">Übermäßiges Miauen</string>
+    <string name="comp_vocalisation_resume">Je nach Kontext mehrere mögliche Ursachen.</string>
+    <string name="comp_vocalisation_explication">Übermäßiges Miauen kann Hunger, Langeweile, den Wunsch nach Aufmerksamkeit, Schmerzen oder bei älteren Katzen ein beginnendes kognitives Syndrom anzeigen. Siam- und orientalische Rassen sind von Natur aus gesprächiger.</string>
+    <string name="comp_vocalisation_que_faire">Einen Tierarzt aufsuchen, wenn das Miauen neu, nächtlich und intensiv ist.</string>
+    <string name="comp_vocalisation_a_eviter">Jedes Mal auf lautstarke Forderungen eingehen – das verstärkt das Verhalten.</string>
+
+    <string name="comp_coup_de_chaleur_titre">Hitzschlag</string>
+    <string name="comp_coup_de_chaleur_resume">Ein tierärztlicher Notfall, der bei Katzen weniger sichtbar ist als bei Hunden.</string>
+    <string name="comp_coup_de_chaleur_explication">Katzen regulieren ihre Temperatur sehr schlecht: Sie schwitzen kaum und hecheln viel weniger als Hunde. Eine Katze, die mit offenem Maul atmet, ist daher nie harmlos – oft ist das bereits ein Zeichen fortgeschrittener Not. Bei großer Hitze, auf längeren Fahrten oder in einem engen, schlecht belüfteten Raum kann die Körpertemperatur gefährlich steigen, ohne dass frühe Anzeichen deutlich sichtbar sind. Kurzköpfige Rassen (Perser, Exotic Shorthair …), ältere, übergewichtige oder in einem heißen Raum eingesperrte Katzen sind besonders gefährdet. Warnzeichen sind schnelles Atmen oder Atmen mit offenem Maul, Teilnahmslosigkeit, Erbrechen, übermäßiges Speicheln oder ein Zusammenbruch.</string>
+    <string name="comp_coup_de_chaleur_que_faire">Bringen Sie die Katze sofort an einen kühlen, gut belüfteten Ort, befeuchten Sie Körper und Pfoten mit lauwarmem (niemals eiskaltem) Wasser, bieten Sie Wasser an, ohne zu zwingen, und kontaktieren Sie umgehend einen Tierarzt, auch wenn es ihr besser zu gehen scheint.</string>
+    <string name="comp_coup_de_chaleur_a_eviter">Eiskaltes Wasser oder Eisbeutel direkt auf der Haut verwenden, die Katze zwingen, auf einmal viel zu trinken, oder abwarten, ob es vorbeigeht, bevor man einen Tierarzt ruft – bei Katzen zeigen sich die Anzeichen oft spät.</string>
+
+    <!-- Nutrition fact sheets -->
+    <string name="alim_dangereux1_titre">Welche Lebensmittel sollte man ganz meiden?</string>
+    <string name="alim_dangereux1_resume">Manche Lebensmittel für Menschen können für Katzen gefährlich sein.</string>
+    <string name="alim_dangereux1_contenu">Aus Vorsicht meiden Sie Schokolade, Zwiebeln, Knoblauch, Trauben, Alkohol, gekochte Knochen sowie sehr fettige oder salzige Speisen. Auch Kuhmilch wird von den meisten erwachsenen Katzen schlecht vertragen. Bei Verdacht auf eine Aufnahme und wenn Symptome auftreten, wenden Sie sich rasch an einen Tierarzt.</string>
+
+    <string name="alim_dangereux2_titre">Für Katzen giftige Pflanzen</string>
+    <string name="alim_dangereux2_resume">Manche alltäglichen Pflanzen sind gefährlich.</string>
+    <string name="alim_dangereux2_contenu">Lilien (hochgiftig, können Nierenversagen auslösen), Philodendron, Efeutute, Azaleen und Maiglöckchen gehören zu den gefährlichsten Pflanzen. Wenn Ihre Katze an einer unbekannten Pflanze gekaut hat und Symptome zeigt, suchen Sie sofort einen tierärztlichen Notdienst auf.</string>
+
+    <string name="alim_dangereux3_titre">Warum sollte man Katzen keine Knochen geben?</string>
+    <string name="alim_dangereux3_resume">Gekochte Knochen können gefährlich sein.</string>
+    <string name="alim_dangereux3_contenu">Gekochte Knochen können splittern und innere Verletzungen verursachen. Meiden Sie sie ganz. Rohe Knochen können unter Aufsicht angeboten werden, fragen Sie aber vorher Ihren Tierarzt.</string>
+
+    <string name="alim_autorises1_titre">Dürfen Katzen Gemüse fressen?</string>
+    <string name="alim_autorises1_resume">In Maßen und je nach Gemüse.</string>
+    <string name="alim_autorises1_contenu">Manches gekochte Gemüse wie Karotte oder Zucchini kann in kleinen Mengen vertragen werden. Die Ernährung einer Katze muss jedoch überwiegend aus Fleisch bestehen – Katzen sind strikte Fleischfresser und können bestimmte lebenswichtige Aminosäuren wie Taurin nicht selbst bilden.</string>
+
+    <string name="alim_autorises2_titre">Katzenleckerlis: nützlich oder riskant?</string>
+    <string name="alim_autorises2_resume">Nützlich zur positiven Verstärkung, aber in Maßen.</string>
+    <string name="alim_autorises2_contenu">Leckerlis können beim Spielen oder Üben nützlich sein. Sie sollten 10 % der täglichen Ration nicht überschreiten. Wählen Sie Leckerlis, die für Katzen gemacht sind, mit möglichst wenig Zusatzstoffen.</string>
+
+    <string name="alim_autorises3_titre">Wie stellt man das Futter seiner Katze um?</string>
+    <string name="alim_autorises3_resume">Eine schrittweise Umstellung ist unerlässlich.</string>
+    <string name="alim_autorises3_contenu">Stellen Sie das Futter über 7 bis 10 Tage um, indem Sie das alte und das neue Futter nach und nach mischen. Katzen reagieren sehr empfindlich auf Futterwechsel und können neues Futter plötzlich verweigern oder Verdauungsprobleme bekommen.</string>
+
+    <string name="alim_ingestion1_titre">Was tun, wenn meine Katze etwas Fragwürdiges gefressen hat?</string>
+    <string name="alim_ingestion1_resume">Ruhig und schnell reagieren.</string>
+    <string name="alim_ingestion1_contenu">Finden Sie heraus, was die Katze in etwa welcher Menge aufgenommen hat. Versuchen Sie nicht selbst, Erbrechen auszulösen. Wenden Sie sich an Ihren Tierarzt oder an eine Giftnotrufzentrale für Tiere, wenn der Stoff giftig sein könnte.</string>
+
+    <string name="alim_ingestion2_titre">Welche Anzeichen sollten nach dem Verschlucken alarmieren?</string>
+    <string name="alim_ingestion2_resume">Manche Anzeichen erfordern eine dringende tierärztliche Untersuchung.</string>
+    <string name="alim_ingestion2_contenu">Wiederholtes Erbrechen, starker Durchfall, Mattigkeit, Zittern, Atembeschwerden, übermäßiges Speicheln, Krämpfe oder ungewöhnliches Verhalten sind Warnzeichen. Suchen Sie ohne Verzögerung einen Tierarzt auf.</string>
+
+    <string name="alim_digestion1_titre">Warum frisst meine Katze Gras?</string>
+    <string name="alim_digestion1_resume">Ein normales Verhalten, bei Übermaß beobachten.</string>
+    <string name="alim_digestion1_contenu">Gras hilft Katzen, Haarballen loszuwerden, und kann als natürliches Abführmittel wirken. Bieten Sie Katzengras oder einen Topf mit Kaugras an – für die meisten Wohnungskatzen ist das nützlich.</string>
+
+    <string name="alim_digestion2_titre">Meine Katze erbricht sich – ist das ernst?</string>
+    <string name="alim_digestion2_resume">Das hängt von Häufigkeit und Kontext ab.</string>
+    <string name="alim_digestion2_contenu">Ein einzelnes Erbrechen eines Haarballens ist oft harmlos. Häufiges Erbrechen mit Blut, verbunden mit Mattigkeit oder Futterverweigerung, erfordert einen Tierarztbesuch.</string>
+
+    <string name="alim_digestion3_titre">Haarballen: Wie hilft man seiner Katze?</string>
+    <string name="alim_digestion3_resume">Ein häufiges Problem mit einfachen Lösungen.</string>
+    <string name="alim_digestion3_contenu">Bürsten Sie Ihre Katze regelmäßig, bieten Sie Katzengras an und denken Sie an ein spezielles Futter gegen Haarballen. Bei sehr häufigem Erbrechen oder Verstopfung wenden Sie sich an einen Tierarzt.</string>
+
+    <string name="alim_digestion4_titre">Meine Katze bettelt ständig um Futter</string>
+    <string name="alim_digestion4_resume">Das Betteln kann mehrere Ursachen haben.</string>
+    <string name="alim_digestion4_contenu">Eine Katze, die oft bettelt, ist vielleicht unterfordert, bekommt eine zu kleine Ration oder hat sich das Betteln angewöhnt. Futterpuzzles (Leckerli-Spender) können helfen, dieses Verhalten umzulenken, und sorgen gleichzeitig für geistige Beschäftigung.</string>
+</resources>

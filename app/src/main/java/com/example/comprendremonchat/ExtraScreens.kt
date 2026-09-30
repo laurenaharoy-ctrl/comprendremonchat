@@ -90,7 +90,7 @@ fun PremiumTopBarWithActions(
                 IconButton(onClick = onBack) {
                     Icon(
                         Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = if (isEnglish()) "Back" else "Retour",
+                        contentDescription = tr("Retour", "Back", "Zurück"),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -112,24 +112,40 @@ data class CategorieSignalement(
     val icon: ImageVector
 )
 
-fun categoriesSignalement(): List<CategorieSignalement> = if (isEnglish()) listOf(
-    CategorieSignalement("bug", "Bug / Technical issue", "The app crashes, a button doesn't work, a screen is frozen…", Icons.Rounded.BugReport),
-    CategorieSignalement("contenu", "Incorrect content", "Information seems wrong, a text is unclear…", Icons.Rounded.HelpOutline),
-    CategorieSignalement("suggestion", "Suggestion", "An idea to improve the app or add a feature…", Icons.Rounded.Lightbulb),
-    CategorieSignalement("autre", "Other", "Anything that doesn't fit the categories above.", Icons.Rounded.MoreHoriz)
-) else listOf(
-    CategorieSignalement("bug", "Bug / Problème technique", "L'appli plante, un bouton ne fonctionne pas, un écran est bloqué…", Icons.Rounded.BugReport),
-    CategorieSignalement("contenu", "Contenu incorrect", "Une information semble erronée, un texte est incompréhensible…", Icons.Rounded.HelpOutline),
-    CategorieSignalement("suggestion", "Suggestion", "Une idée pour améliorer l'appli ou ajouter une fonctionnalité…", Icons.Rounded.Lightbulb),
-    CategorieSignalement("autre", "Autre", "Tout ce qui ne rentre pas dans les catégories ci-dessus.", Icons.Rounded.MoreHoriz)
+fun categoriesSignalement(): List<CategorieSignalement> = trList(
+    listOf(
+        CategorieSignalement("bug", "Bug / Problème technique", "L'appli plante, un bouton ne fonctionne pas, un écran est bloqué…", Icons.Rounded.BugReport),
+        CategorieSignalement("contenu", "Contenu incorrect", "Une information semble erronée, un texte est incompréhensible…", Icons.Rounded.HelpOutline),
+        CategorieSignalement("suggestion", "Suggestion", "Une idée pour améliorer l'appli ou ajouter une fonctionnalité…", Icons.Rounded.Lightbulb),
+        CategorieSignalement("autre", "Autre", "Tout ce qui ne rentre pas dans les catégories ci-dessus.", Icons.Rounded.MoreHoriz)
+    ),
+    listOf(
+        CategorieSignalement("bug", "Bug / Technical issue", "The app crashes, a button doesn't work, a screen is frozen…", Icons.Rounded.BugReport),
+        CategorieSignalement("contenu", "Incorrect content", "Information seems wrong, a text is unclear…", Icons.Rounded.HelpOutline),
+        CategorieSignalement("suggestion", "Suggestion", "An idea to improve the app or add a feature…", Icons.Rounded.Lightbulb),
+        CategorieSignalement("autre", "Other", "Anything that doesn't fit the categories above.", Icons.Rounded.MoreHoriz)
+    ),
+    listOf(
+        CategorieSignalement("bug", "Fehler / Technisches Problem", "Die App stürzt ab, eine Schaltfläche funktioniert nicht, ein Bildschirm hängt…", Icons.Rounded.BugReport),
+        CategorieSignalement("contenu", "Fehlerhafter Inhalt", "Eine Information scheint falsch, ein Text ist unverständlich…", Icons.Rounded.HelpOutline),
+        CategorieSignalement("suggestion", "Vorschlag", "Eine Idee, um die App zu verbessern oder eine Funktion hinzuzufügen…", Icons.Rounded.Lightbulb),
+        CategorieSignalement("autre", "Sonstiges", "Alles, was in keine der obigen Kategorien passt.", Icons.Rounded.MoreHoriz)
+    )
 )
 
-fun ecransDisponibles(): List<String> = if (isEnglish()) listOf(
-    "Home", "Onboarding", "Questionnaire", "Report",
-    "Behavioral dictionary", "Nutrition", "History", "General / Other"
-) else listOf(
-    "Accueil", "Onboarding", "Questionnaire", "Résultat",
-    "Dictionnaire comportemental", "Alimentation", "Historique", "Général / Autre"
+fun ecransDisponibles(): List<String> = trList(
+    listOf(
+        "Accueil", "Onboarding", "Questionnaire", "Résultat",
+        "Dictionnaire comportemental", "Alimentation", "Historique", "Général / Autre"
+    ),
+    listOf(
+        "Home", "Onboarding", "Questionnaire", "Report",
+        "Behavioral dictionary", "Nutrition", "History", "General / Other"
+    ),
+    listOf(
+        "Startseite", "Einführung", "Fragebogen", "Ergebnis",
+        "Verhaltenslexikon", "Ernährung", "Verlauf", "Allgemein / Sonstiges"
+    )
 )
 
 @Composable
@@ -143,7 +159,7 @@ fun FeedbackScreen(
     val ecrans = ecransDisponibles()
 
     var categorieSelectionnee by remember { mutableStateOf<CategorieSignalement?>(null) }
-    var ecranSelectionne by remember { mutableStateOf(ecranActuel.ifBlank { if (isEnglish()) "General / Other" else "Général / Autre" }) }
+    var ecranSelectionne by remember { mutableStateOf(ecranActuel.ifBlank { tr("Général / Autre", "General / Other", "Allgemein / Sonstiges") }) }
     var message by remember { mutableStateOf("") }
     var envoye by remember { mutableStateOf(false) }
 
@@ -167,36 +183,34 @@ fun FeedbackScreen(
                     }
                     Spacer(modifier = Modifier.height(14.dp))
                     Text(
-                        if (isEnglish()) "Thank you for your feedback!" else "Merci pour votre retour !",
+                        tr("Merci pour votre retour !", "Thank you for your feedback!", "Danke für Ihre Rückmeldung!"),
                         style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        if (isEnglish()) "Your message has been sent. It will help improve the app."
-                        else "Votre message a bien été transmis. Il contribuera à améliorer l'application.",
+                        tr("Votre message a bien été transmis. Il contribuera à améliorer l'application.", "Your message has been sent. It will help improve the app.", "Ihre Nachricht wurde gesendet. Sie hilft, die App zu verbessern."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    PrimaryGlowButton(text = if (isEnglish()) "Back" else "Retour", onClick = onRetour)
+                    PrimaryGlowButton(text = tr("Retour", "Back", "Zurück"), onClick = onRetour)
                 }
             } else {
                 PremiumCard(centered = true) {
-                    EditorialKicker(if (isEnglish()) "Report" else "Signalement", centered = true)
+                    EditorialKicker(tr("Signalement", "Report", "Meldung"), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        if (isEnglish()) "Something wrong?" else "Quelque chose ne va pas ?",
+                        tr("Quelque chose ne va pas ?", "Something wrong?", "Stimmt etwas nicht?"),
                         style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        if (isEnglish()) "Your feedback is valuable. Describe the issue or suggestion."
-                        else "Votre retour est précieux. Décrivez le problème ou la suggestion.",
+                        tr("Votre retour est précieux. Décrivez le problème ou la suggestion.", "Your feedback is valuable. Describe the issue or suggestion.", "Ihre Rückmeldung ist wertvoll. Beschreiben Sie das Problem oder Ihren Vorschlag."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 PremiumCard {
-                    EditorialKicker(if (isEnglish()) "Report type" else "Type de signalement")
+                    EditorialKicker(tr("Type de signalement", "Report type", "Art der Meldung"))
                     Spacer(modifier = Modifier.height(12.dp))
                     categories.forEach { categorie ->
                         val selected = categorieSelectionnee?.id == categorie.id
@@ -233,7 +247,7 @@ fun FeedbackScreen(
                 }
 
                 PremiumCard {
-                    EditorialKicker(if (isEnglish()) "Screen concerned" else "Écran concerné")
+                    EditorialKicker(tr("Écran concerné", "Screen concerned", "Betroffener Bildschirm"))
                     Spacer(modifier = Modifier.height(12.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         ecrans.chunked(2).forEach { row ->
@@ -261,11 +275,10 @@ fun FeedbackScreen(
                 }
 
                 PremiumCard {
-                    EditorialKicker(if (isEnglish()) "Description" else "Description")
+                    EditorialKicker(tr("Description", "Description", "Beschreibung"))
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        if (isEnglish()) "Describe the issue or your suggestion in as much detail as possible."
-                        else "Décrivez le problème ou votre suggestion avec le plus de détails possible.",
+                        tr("Décrivez le problème ou votre suggestion avec le plus de détails possible.", "Describe the issue or your suggestion in as much detail as possible.", "Beschreiben Sie das Problem oder Ihren Vorschlag so genau wie möglich."),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -274,8 +287,7 @@ fun FeedbackScreen(
                         modifier = Modifier.fillMaxWidth().height(140.dp),
                         placeholder = {
                             Text(
-                                if (isEnglish()) "E.g.: On the result screen, the Export PDF button doesn't work…"
-                                else "Ex. : Sur l'écran résultat, le bouton Export PDF ne fonctionne pas…"
+                                tr("Ex. : Sur l'écran résultat, le bouton PDF ne fonctionne pas…", "E.g.: On the result screen, the PDF button doesn't work…", "z. B.: Auf dem Ergebnisbildschirm funktioniert die Schaltfläche PDF nicht…")
                             )
                         },
                         shape = RoundedCornerShape(16.dp), maxLines = 8,
@@ -289,15 +301,14 @@ fun FeedbackScreen(
                     if (message.trim().isNotEmpty() && message.trim().length < 10) {
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            if (isEnglish()) "Add a few more details to help us understand."
-                            else "Ajoutez quelques détails pour nous aider à comprendre.",
+                            tr("Ajoutez quelques détails pour nous aider à comprendre.", "Add a few more details to help us understand.", "Fügen Sie ein paar Details hinzu, damit wir es besser verstehen."),
                             style = MaterialTheme.typography.bodySmall, color = PremiumPalette.PrioriteModere
                         )
                     }
                 }
 
                 PrimaryGlowButton(
-                    text = if (isEnglish()) "Send report" else "Envoyer le signalement",
+                    text = tr("Envoyer le signalement", "Send report", "Meldung senden"),
                     onClick = {
                         if (peutEnvoyer) {
                             onEnvoyer(categorieSelectionnee!!.label, ecranSelectionne, message.trim())
@@ -309,11 +320,10 @@ fun FeedbackScreen(
                 )
 
                 PremiumCard(centered = true) {
-                    EditorialKicker(if (isEnglish()) "Privacy" else "Confidentialité", centered = true)
+                    EditorialKicker(tr("Confidentialité", "Privacy", "Datenschutz"), centered = true)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        if (isEnglish()) "Your report is sent directly by email. No personal data is collected automatically."
-                        else "Votre signalement est envoyé par email directement. Aucune donnée personnelle n'est collectée automatiquement.",
+                        tr("Votre signalement est envoyé par email directement. Aucune donnée personnelle n'est collectée automatiquement.", "Your report is sent directly by email. No personal data is collected automatically.", "Ihre Meldung wird direkt per E-Mail gesendet. Es werden keine personenbezogenen Daten automatisch erhoben."),
                         style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -339,14 +349,14 @@ fun HistoriqueScreen(
     if (showConfirmSupprimerTout) {
         AlertDialog(
             onDismissRequest = { showConfirmSupprimerTout = false },
-            title = { Text(if (isEnglish()) "Delete all history?" else "Supprimer tout l'historique ?") },
-            text = { Text(if (isEnglish()) "This action is irreversible. All saved reports will be permanently deleted." else "Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.") },
+            title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?")) },
+            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action is irreversible. All saved reports will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
             confirmButton = {
                 Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(if (isEnglish()) "Delete all" else "Supprimer tout", color = Color.White) }
+                ) { Text(tr("Supprimer tout", "Delete all", "Alles löschen"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(if (isEnglish()) "Cancel" else "Annuler") } }
+            dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
         )
     }
 
@@ -361,16 +371,15 @@ fun HistoriqueScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    if (isEnglish()) "Report history" else "Historique des bilans",
+                    tr("Historique des bilans", "Report history", "Verlauf"),
                     style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     if (bilans.isEmpty()) {
-                        if (isEnglish()) "No saved reports yet." else "Aucun bilan sauvegardé pour l'instant."
+                        tr("Aucun bilan sauvegardé pour l'instant.", "No saved reports yet.", "Noch keine gespeicherte Einschätzung.")
                     } else {
-                        if (isEnglish()) "${bilans.size} saved report${if (bilans.size > 1) "s" else ""}"
-                        else "${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}"
+                        trList("${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}", "${bilans.size} saved report${if (bilans.size > 1) "s" else ""}", "${bilans.size} gespeicherte Einschätzung${if (bilans.size > 1) "en" else ""}")
                     },
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -381,8 +390,7 @@ fun HistoriqueScreen(
                     Icon(Icons.Rounded.Pets, contentDescription = null, tint = PremiumPalette.Accent, modifier = Modifier.size(40.dp))
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        if (isEnglish()) "Completed reports will appear here automatically after each questionnaire."
-                        else "Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.",
+                        tr("Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.", "Completed reports will appear here automatically after each questionnaire.", "Ihre Einschätzungen erscheinen hier automatisch nach jedem abgeschlossenen Fragebogen."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -403,7 +411,7 @@ fun HistoriqueScreen(
                     Icon(Icons.Rounded.DeleteSweep, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        if (isEnglish()) "Delete all history" else "Supprimer tout l'historique",
+                        tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen"),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -420,14 +428,14 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(if (isEnglish()) "Delete this report?" else "Supprimer ce bilan ?") },
-            text = { Text(if (isEnglish()) "The report for ${bilan.nomChien} from ${bilan.date} will be permanently deleted." else "Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.") },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this report?", "Diese Einschätzung löschen?")) },
+            text = { Text(tr("Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.", "The report for ${bilan.nomChien} from ${bilan.date} will be permanently deleted.", "Die Einschätzung von ${bilan.nomChien} vom ${bilan.date} wird endgültig gelöscht.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(if (isEnglish()) "Delete" else "Supprimer", color = Color.White) }
+                ) { Text(tr("Supprimer", "Delete", "Löschen"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(if (isEnglish()) "Cancel" else "Annuler") } }
+            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
         )
     }
 
@@ -455,7 +463,7 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (bilan.aDejaMordu) Icon(Icons.Rounded.Warning, contentDescription = null, tint = PremiumPalette.PrioriteUrgente, modifier = Modifier.size(18.dp))
                     IconButton(onClick = { showConfirm = true }, modifier = Modifier.size(34.dp)) {
-                        Icon(Icons.Rounded.Delete, contentDescription = if (isEnglish()) "Delete" else "Supprimer", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Rounded.Delete, contentDescription = tr("Supprimer", "Delete", "Löschen"), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
                     }
                 }
             }
@@ -476,21 +484,28 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
 
 @Composable
 fun QuatreAxesMini(peur: Int, attachement: Int, impulsivite: Int, reactivite: Int) {
-    val axes = if (isEnglish()) listOf(
-        "Sensitivity" to peur, "Attachment" to attachement,
-        "Impulsivity" to impulsivite, "Reactivity" to reactivite
-    ) else listOf(
-        "Sensibilité" to peur, "Attachement" to attachement,
-        "Impulsivité" to impulsivite, "Réactivité" to reactivite
+    val axes = trList(
+        listOf(
+            "Sécurité" to peur, "Lien" to attachement,
+            "Instincts" to impulsivite, "Cohabitation" to reactivite
+        ),
+        listOf(
+            "Security" to peur, "Bond" to attachement,
+            "Instincts" to impulsivite, "Cohabitation" to reactivite
+        ),
+        listOf(
+            "Sicherheit" to peur, "Bindung" to attachement,
+            "Instinkte" to impulsivite, "Zusammenleben" to reactivite
+        )
     )
     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
         axes.forEach { (label, score) ->
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.width(72.dp))
+                Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.width(96.dp))
                 Box(modifier = Modifier.weight(1f).height(5.dp).clip(RoundedCornerShape(999.dp)).background(if (isSystemInDarkTheme()) Color(0xFF342923) else Color(0xFFE9DED5))) {
                     Box(modifier = Modifier.fillMaxWidth((score / 100f).coerceIn(0f, 1f)).height(5.dp).clip(RoundedCornerShape(999.dp)).background(PremiumPalette.PrimarySoft))
                 }
-                Text(QuestionnaireEngine.libelleNiveauAxe(QuestionnaireEngine.calculerNiveauAxe(score)), style = MaterialTheme.typography.labelSmall, color = PremiumPalette.PrimarySoft, modifier = Modifier.width(76.dp), textAlign = TextAlign.End)
+                Text(QuestionnaireEngine.libelleNiveauAxe(QuestionnaireEngine.calculerNiveauAxe(score)), style = MaterialTheme.typography.labelSmall, color = PremiumPalette.PrimarySoft, modifier = Modifier.width(96.dp), textAlign = TextAlign.End)
             }
         }
     }
@@ -507,14 +522,14 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(if (isEnglish()) "Delete this report?" else "Supprimer ce bilan ?") },
-            text = { Text(if (isEnglish()) "This action is irreversible." else "Cette action est irréversible.") },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this report?", "Diese Einschätzung löschen?")) },
+            text = { Text(tr("Cette action est irréversible.", "This action is irreversible.", "Diese Aktion kann nicht rückgängig gemacht werden.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(if (isEnglish()) "Delete" else "Supprimer", color = Color.White) }
+                ) { Text(tr("Supprimer", "Delete", "Löschen"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(if (isEnglish()) "Cancel" else "Annuler") } }
+            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
         )
     }
 
@@ -530,7 +545,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             if (bilan.aDejaMordu) AlerteMorsureCard(bilan.nomChien)
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "Saved report" else "Bilan sauvegardé", centered = true)
+                EditorialKicker(tr("Bilan sauvegardé", "Saved report", "Gespeicherte Einschätzung"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.nomChien, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(6.dp))
@@ -540,7 +555,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "Summary" else "Synthèse", centered = true)
+                EditorialKicker(tr("Synthèse", "Summary", "Zusammenfassung"), centered = true)
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)) {
                     val couleur = when (priorite) {
@@ -550,7 +565,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                         PrioriteAction.URGENTE -> PremiumPalette.PrioriteUrgente
                     }
                     Box(modifier = Modifier.clip(RoundedCornerShape(999.dp)).background(couleur.copy(alpha = 0.12f)).padding(horizontal = 14.dp, vertical = 8.dp)) {
-                        Text("${if (isEnglish()) "Priority: " else "Priorité : "}${textePrioriteAction(priorite)}", color = couleur, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelLarge)
+                        Text("${tr("Priorité : ", "Priority: ", "Priorität: ")}${textePrioriteAction(priorite)}", color = couleur, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelLarge)
                     }
                     Box(modifier = Modifier.clip(RoundedCornerShape(999.dp)).background(if (isSystemInDarkTheme()) Color(0xFF342923) else Color(0xFFF0E5DC)).padding(horizontal = 14.dp, vertical = 8.dp)) {
                         Text(texteNiveauSituation(situation), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -559,29 +574,28 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "Profile map" else "Carte du profil", centered = true)
+                EditorialKicker(tr("Carte du profil", "Profile map", "Profilkarte"), centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
                 QuatreAxesMini(peur = bilan.peur, attachement = bilan.attachement, impulsivite = bilan.impulsivite, reactivite = bilan.reactivite)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "Main reading" else "Lecture principale", centered = true)
+                EditorialKicker(tr("Lecture principale", "Main reading", "Hauptlesart"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.hypothesePrincipale, textAlign = TextAlign.Center, style = MaterialTheme.typography.bodyLarge)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "First concrete step" else "Première piste concrète", centered = true)
+                EditorialKicker(tr("Première piste concrète", "First concrete step", "Ein erster konkreter Ansatz"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.conseilPrincipal, textAlign = TextAlign.Center)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(if (isEnglish()) "Note" else "Rappel", centered = true)
+                EditorialKicker(tr("Rappel", "Note", "Zur Erinnerung"), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    if (isEnglish()) "This report is an indicative record. Your cat's situation may have changed since."
-                    else "Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.",
+                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This report is an indicative record. Your cat's situation may have changed since.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -599,7 +613,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                 Icon(Icons.Rounded.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    if (isEnglish()) "Delete this report" else "Supprimer ce bilan",
+                    tr("Supprimer ce bilan", "Delete this report", "Diese Einschätzung löschen"),
                     fontWeight = FontWeight.SemiBold
                 )
             }

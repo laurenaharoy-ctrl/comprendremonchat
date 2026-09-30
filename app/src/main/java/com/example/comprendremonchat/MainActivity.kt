@@ -227,10 +227,10 @@ Envoyé depuis l'application Comprendre mon chat
             putExtra(Intent.EXTRA_TEXT, corps)
         }
         try {
-            context.startActivity(Intent.createChooser(intent, "Envoyer le signalement"))
+            context.startActivity(Intent.createChooser(intent, tr("Envoyer le signalement", "Send report", "Meldung senden")))
         } catch (e: Exception) {
             scope.launch {
-                snackbarHostState.showSnackbar("Aucune application email trouvée sur cet appareil.")
+                snackbarHostState.showSnackbar(tr("Aucune application email trouvée sur cet appareil.", "No email app found on this device.", "Auf diesem Gerät wurde keine E-Mail-App gefunden."))
             }
         }
     }
@@ -254,6 +254,7 @@ Envoyé depuis l'application Comprendre mon chat
         }
     }
 
+
     AppBackground {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -262,19 +263,19 @@ Envoyé depuis l'application Comprendre mon chat
                 val titreEcran = when (screen) {
                     AppScreen.Accueil -> ""
                     AppScreen.Onboarding -> ""
-                    AppScreen.Questionnaire -> if (isEnglish()) "Questionnaire" else "Questionnaire"
-                    AppScreen.Chargement -> if (isEnglish()) "Analysis" else "Analyse"
-                    AppScreen.Resultat -> if (isEnglish()) "Report" else "Résultat"
-                    AppScreen.Dictionnaire -> if (isEnglish()) "Behavioral dictionary" else "Dictionnaire comportemental"
+                    AppScreen.Questionnaire -> tr("Questionnaire", "Questionnaire", "Fragebogen")
+                    AppScreen.Chargement -> tr("Analyse", "Analysis", "Analyse")
+                    AppScreen.Resultat -> tr("Résultat", "Report", "Ergebnis")
+                    AppScreen.Dictionnaire -> tr("Dictionnaire comportemental", "Behavioral dictionary", "Verhaltenslexikon")
                     is AppScreen.DictionnaireDetail -> {
                         val ficheId = (screen as AppScreen.DictionnaireDetail).ficheId
                         context.getString(R.string.kicker_fiche_comportementale)
                     }
-                    AppScreen.Alimentation -> if (isEnglish()) "Nutrition" else "Alimentation"
-                    AppScreen.Feedback -> if (isEnglish()) "Report an issue" else "Signalement"
-                    AppScreen.Historique -> if (isEnglish()) "Report history" else "Historique des bilans"
-                    is AppScreen.HistoriqueDetail -> if (isEnglish()) "Report detail" else "Détail du bilan"
-                    AppScreen.Parametres -> if (isEnglish()) "Settings" else "Paramètres"
+                    AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung")
+                    AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung")
+                    AppScreen.Historique -> tr("Historique des bilans", "Report history", "Verlauf")
+                    is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Report detail", "Details der Einschätzung")
+                    AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen")
                 }
 
                 val onBack: (() -> Unit)? = if (screen != AppScreen.Accueil && screen != AppScreen.Chargement) {
@@ -308,7 +309,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 }) {
                                     Icon(
                                         Icons.Rounded.History,
-                                        contentDescription = "Historique des bilans",
+                                        contentDescription = tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
                                         tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                     )
                                 }
@@ -316,7 +317,7 @@ Envoyé depuis l'application Comprendre mon chat
                             IconButton(onClick = { screen = AppScreen.Parametres }) {
                                 Icon(
                                     Icons.Rounded.Settings,
-                                    contentDescription = "Paramètres",
+                                    contentDescription = tr("Paramètres", "Settings", "Einstellungen"),
                                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                 )
                             }
@@ -329,7 +330,7 @@ Envoyé depuis l'application Comprendre mon chat
                             }) {
                                 Icon(
                                     Icons.Rounded.Feedback,
-                                    contentDescription = "Signaler un problème",
+                                    contentDescription = tr("Signaler un problème", "Report an issue", "Ein Problem melden"),
                                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                 )
                             }
@@ -434,11 +435,11 @@ Envoyé depuis l'application Comprendre mon chat
                                 type = "text/plain"
                                 putExtra(Intent.EXTRA_TEXT, textePartage)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Partager"))
+                            context.startActivity(Intent.createChooser(intent, tr("Partager", "Share", "Teilen")))
                         },
                         onCopy = {
                             clipboard.setText(AnnotatedString(textePartage))
-                            scope.launch { snackbarHostState.showSnackbar("Copié") }
+                            scope.launch { snackbarHostState.showSnackbar(tr("Copié", "Copied", "Kopiert")) }
                         },
                         onExportPdf = {
                             val file = PdfExporter.exporterBilanPdf(
@@ -454,7 +455,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, "Partager PDF"))
+                            context.startActivity(Intent.createChooser(intent, tr("Partager le PDF", "Share PDF", "PDF teilen")))
                         },
                         onRecommencer = {
                             reponsesTexte.clear()
@@ -568,15 +569,16 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
 
 fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): String {
     val nom = nomChatAffiche(nomChat)
-    val titrePartage = if (isEnglish()) "Emotional report for $nom" else "Bilan émotionnel pour $nom"
-    val hypotheseLabel = if (isEnglish()) "Hypothesis:" else "Hypothèse :"
-    val prioriteLabel = if (isEnglish()) "Priority:" else "Priorité :"
-    val scoresLabel = if (isEnglish()) "Scores:" else "Scores :"
-    val securiteLabel = if (isEnglish()) "Emotional security" else "Sécurité émotionnelle"
-    val lienLabel = if (isEnglish()) "Human bond" else "Lien humain"
-    val instinctsLabel = if (isEnglish()) "Instincts" else "Instincts"
-    val cohabLabel = if (isEnglish()) "Cohabitation" else "Cohabitation"
-    val avertissement = if (isEnglish()) "⚠️ Indicative report" else "⚠️ Bilan indicatif"
+    val titrePartage = tr("Bilan émotionnel pour $nom", "Emotional report for $nom", "Emotionale Einschätzung für $nom")
+    val hypotheseLabel = tr("Hypothèse :", "Hypothesis:", "Hypothese:")
+    val prioriteLabel = tr("Priorité :", "Priority:", "Priorität:")
+    val scoresLabel = tr("Scores :", "Scores:", "Werte:")
+    val securiteLabel = tr("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit")
+    val lienLabel = tr("Lien humain", "Human bond", "Bindung zum Menschen")
+    val instinctsLabel = tr("Instincts", "Instincts", "Instinkte")
+    val cohabLabel = tr("Cohabitation", "Cohabitation", "Zusammenleben")
+    val avertissement = tr("⚠️ Bilan indicatif", "⚠️ Indicative report", "⚠️ Unverbindliche Einschätzung")
+    val sep = tr(" : ", ": ", ": ")
 
-    return "$titrePartage\n\n$hypotheseLabel\n${analyse.hypothesePrincipale}\n\n$prioriteLabel\n${textePrioriteAction(analyse.prioriteAction)}\n\n${analyse.syntheseAvancee}\n\n$scoresLabel\n$securiteLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}\n$lienLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}\n$instinctsLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}\n$cohabLabel : ${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}\n\n$avertissement"
+    return "$titrePartage\n\n$hypotheseLabel\n${analyse.hypothesePrincipale}\n\n$prioriteLabel\n${textePrioriteAction(analyse.prioriteAction)}\n\n${analyse.syntheseAvancee}\n\n$scoresLabel\n$securiteLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}\n$lienLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}\n$instinctsLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}\n$cohabLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}\n\n$avertissement"
 }

@@ -740,7 +740,7 @@ fun ResultatScreen(
                 PrimaryGlowButton(
                     text = stringResource(R.string.btn_voir_livres),
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (isEnglish()) "https://understanding-my-cat.carrd.co" else "https://comprendre-mon-chat.carrd.co"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tr("https://comprendre-mon-chat.carrd.co", "https://understanding-my-cat.carrd.co", "https://understanding-my-cat.carrd.co")))
                         context.startActivity(intent)
                     },
                     leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null, tint = Color.White) }
@@ -867,7 +867,7 @@ fun ConsultationCard() {
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = if (isEnglish()) "Follow us on Facebook" else "Nous suivre sur Facebook",
+                text = tr("Nous suivre sur Facebook", "Follow us on Facebook", "Folgen Sie uns auf Facebook"),
                 color = Color(0xFF1877F2),
                 style = MaterialTheme.typography.bodyMedium,
                 textDecoration = TextDecoration.Underline,

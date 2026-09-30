@@ -48,17 +48,18 @@ object PdfExporter {
     private const val FOOTER_H = 60f
     private val CONTENT_BOTTOM = PAGE_H - MARGIN - FOOTER_H - 10f
 
-    private fun t(fr: String, en: String) = if (isEnglish()) en else fr
-    private fun appName() = t("Comprendre mon chat", "Understanding My Cat")
+    private fun t(fr: String, en: String, de: String) = tr(fr, en, de)
+    private fun appName() = t("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen")
     private fun totalPagesActuel(): Int = if (showConsultation()) 5 else 4
 
     fun exporterBilanPdf(context: Context, nomChat: String, analyse: ResultatAnalyse): File {
         val document = PdfDocument()
         val nom = nomChatAffiche(nomChat)
-        val date = if (isEnglish())
-            SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(Date())
-        else
-            SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH).format(Date())
+        val date = when (appLang()) {
+            AppLang.EN -> SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(Date())
+            AppLang.DE -> SimpleDateFormat("dd. MMMM yyyy", Locale.GERMAN).format(Date())
+            else -> SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH).format(Date())
+        }
         val couleurPriorite = couleurPourPriorite(analyse.prioriteAction)
         val libellePriorite = libellePourPriorite(analyse.prioriteAction)
 
@@ -74,8 +75,8 @@ object PdfExporter {
             .replace("\\s+".toRegex(), "_")
             .replace("[^a-z0-9_]+".toRegex(), "")
 
-        val prefix = t("bilan", "report")
-        val file = File(context.cacheDir, "${prefix}_${nomFichierSafe.ifBlank { t("chat", "cat") }}.pdf")
+        val prefix = t("bilan", "report", "einschaetzung")
+        val file = File(context.cacheDir, "${prefix}_${nomFichierSafe.ifBlank { t("chat", "cat", "katze") }}.pdf")
         FileOutputStream(file).use { document.writeTo(it) }
         document.close()
         return file
@@ -100,7 +101,7 @@ object PdfExporter {
         canvas.drawText(nom, (PAGE_W - nomPaint.measureText(nom)) / 2f, 96f, nomPaint)
 
         val sousTitrePaint = makePaint(12f, COLOR_INK_SOFT, italic = true)
-        val sousTitre = t("Bilan émotionnel", "Emotional report")
+        val sousTitre = t("Bilan émotionnel", "Emotional report", "Emotionale Einschätzung")
         canvas.drawText(sousTitre, (PAGE_W - sousTitrePaint.measureText(sousTitre)) / 2f, 118f, sousTitrePaint)
 
         drawLine(canvas, MARGIN + 40f, 130f, PAGE_W - MARGIN - 40f, 130f, COLOR_BORDER, 0.8f)
@@ -120,17 +121,18 @@ object PdfExporter {
         drawLine(canvas, MARGIN, y, PAGE_W - MARGIN, y, COLOR_BORDER, 0.5f)
         y += 24f
 
-        drawSectionTitle(canvas, y, t("En un coup d\u2019\u0153il", "At a glance"))
+        drawSectionTitle(canvas, y, t("En un coup d\u2019\u0153il", "At a glance", "Auf einen Blick"))
         y += 48f
 
         val gridItems = listOf(
-            t("Axe principal", "Main axis") to libelleAxe(analyse.problemePrincipal),
-            t("Situation", "Situation") to texteNiveauSituation(analyse.niveauSituation),
-            t("Besoin principal", "Main need") to besoinPrincipal(analyse.problemePrincipal)
+            t("Axe principal", "Main axis", "Hauptachse") to libelleAxe(analyse.problemePrincipal),
+            t("Situation", "Situation", "Situation") to texteNiveauSituation(analyse.niveauSituation),
+            t("Besoin principal", "Main need", "Hauptbedürfnis") to besoinPrincipal(analyse.problemePrincipal)
                 .removePrefix("Besoin principal : ")
                 .removePrefix("Main need: ")
+                .removePrefix("Hauptbedürfnis: ")
                 .removeSuffix("."),
-            t("Aide à envisager", "Support to consider") to aideAEnvisager(analyse)
+            t("Aide à envisager", "Support to consider", "Mögliche Unterstützung") to aideAEnvisager(analyse)
         )
         y = drawInfoGrid(canvas, y, gridItems)
         y += 20f
@@ -150,17 +152,17 @@ object PdfExporter {
         val canvas = page.canvas
         var y = MARGIN
 
-        drawPageHeader(canvas, t("Profil de $nom", "Profile of $nom"))
+        drawPageHeader(canvas, t("Profil de $nom", "Profile of $nom", "Profil von $nom"))
         y += 48f
 
-        drawSectionTitle(canvas, y, t("Les 4 dimensions", "The 4 dimensions"))
+        drawSectionTitle(canvas, y, t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen"))
         y += 48f
 
         val axes = listOf(
-            Triple(t("Sécurité émotionnelle", "Emotional security"), analyse.niveauPeur, analyse.peur),
-            Triple(t("Lien humain", "Human bond"), analyse.niveauAttachement, analyse.attachement),
-            Triple(t("Instincts", "Instincts"), analyse.niveauImpulsivite, analyse.impulsivite),
-            Triple(t("Cohabitation", "Cohabitation"), analyse.niveauReactivite, analyse.reactivite)
+            Triple(t("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit"), analyse.niveauPeur, analyse.peur),
+            Triple(t("Lien humain", "Human bond", "Bindung zum Menschen"), analyse.niveauAttachement, analyse.attachement),
+            Triple(t("Instincts", "Instincts", "Instinkte"), analyse.niveauImpulsivite, analyse.impulsivite),
+            Triple(t("Cohabitation", "Cohabitation", "Zusammenleben"), analyse.niveauReactivite, analyse.reactivite)
         )
         axes.forEach { (label, niveau, score) ->
             y = drawAxeBar(canvas, y, label, niveau, score)
@@ -169,7 +171,7 @@ object PdfExporter {
         y += 14f
 
         if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Hypoth\u00e8se de lecture", "Main hypothesis"))
+            drawSectionTitle(canvas, y, t("Hypoth\u00e8se de lecture", "Main hypothesis", "Lesehypothese"))
             y += 48f
             val hypotheseH = measureStaticTextHeight(analyse.hypothesePrincipale, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
             if (y + hypotheseH < CONTENT_BOTTOM) {
@@ -180,7 +182,7 @@ object PdfExporter {
         }
 
         if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Ce qui se passe probablement", "What is probably happening"))
+            drawSectionTitle(canvas, y, t("Ce qui se passe probablement", "What is probably happening", "Was wahrscheinlich geschieht"))
             y += 48f
             val explicationH = measureStaticTextHeight(analyse.explicationPrincipale, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
             if (y + explicationH < CONTENT_BOTTOM) {
@@ -190,10 +192,7 @@ object PdfExporter {
         }
 
         if (analyse.marquageHabitudePostSterilisation && y < CONTENT_BOTTOM - 40f) {
-            val texteHabitude = t(
-                "Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.",
-                "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the gesture remains ingrained — this type of habitual marking is often longer to correct than stress-related marking."
-            )
+            val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the gesture remains ingrained — this type of habitual marking is often longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.")
             val habitudeH = measureStaticTextHeight(texteHabitude, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true)) + 32f
             if (y + habitudeH < CONTENT_BOTTOM) {
                 drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + habitudeH, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, 14f)
@@ -210,10 +209,10 @@ object PdfExporter {
         val canvas = page.canvas
         var y = MARGIN
 
-        drawPageHeader(canvas, t("Plan d\u2019action pour $nom", "Action plan for $nom"))
+        drawPageHeader(canvas, t("Plan d\u2019action pour $nom", "Action plan for $nom", "Aktionsplan für $nom"))
         y += 48f
 
-        drawSectionTitle(canvas, y, t("Premier levier utile", "First useful lever"))
+        drawSectionTitle(canvas, y, t("Premier levier utile", "First useful lever", "Erster hilfreicher Hebel"))
         y += 48f
 
         val levierH = measureStaticTextHeight(analyse.conseilPrincipal, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
@@ -224,23 +223,23 @@ object PdfExporter {
         }
 
         if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Les prochains jours", "The next few days"))
+            drawSectionTitle(canvas, y, t("Les prochains jours", "The next few days", "Die nächsten Tage"))
             y += 48f
 
             if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 faire", "To do"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
+                canvas.drawText(t("\u00c0 faire", "To do", "Zu tun"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
                 y += 20f
                 analyse.planAction.aFaire.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
                 y += 12f
             }
             if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 \u00e9viter", "To avoid"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
+                canvas.drawText(t("\u00c0 \u00e9viter", "To avoid", "Zu vermeiden"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
                 y += 20f
                 analyse.planAction.aEviter.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
                 y += 12f
             }
             if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 observer", "To observe"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
+                canvas.drawText(t("\u00c0 observer", "To observe", "Zu beobachten"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
                 y += 20f
                 analyse.planAction.aObserver.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
                 y += 18f
@@ -248,13 +247,7 @@ object PdfExporter {
         }
 
         if (analyse.aDejaMordu && y < CONTENT_BOTTOM - 40f) {
-            val morsuText = if (analyse.cibleAgressionAnimal) t(
-                "Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.",
-                "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely."
-            ) else t(
-                "Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.",
-                "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation."
-            )
+            val morsuText = if (analyse.cibleAgressionAnimal) t("Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.", "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely.", "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Eine Begleitung durch eine Fachperson für Katzenverhalten wird empfohlen, um das Zusammenleben schrittweise und sicher neu aufzubauen.") else t("Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.", "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation.", "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet. Eine verhaltensmedizinische tierärztliche Begleitung wird empfohlen, um die Situation zu beurteilen.")
             val morsuH = measureStaticTextHeight(morsuText, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_MORSURE_TEXTE, bold = true)) + 32f
             if (y + morsuH < CONTENT_BOTTOM) {
                 drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + morsuH, COLOR_MORSURE_BG, COLOR_MORSURE_TEXTE, 14f)
@@ -271,21 +264,29 @@ object PdfExporter {
         val canvas = page.canvas
         var y = MARGIN
 
-        drawPageHeader(canvas, t("\u00c0 retenir", "Key takeaways"))
+        drawPageHeader(canvas, t("\u00c0 retenir", "Key takeaways", "Das Wichtigste"))
         y += 48f
 
-        val recapText = if (isEnglish()) buildString {
-            append("$nom primarily presents a ${analyse.profil.profilType.lowercase(Locale.ENGLISH)} profile.\n\n")
-            append("Situation: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.ENGLISH)}.\n\n")
-            append("Main axis: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.ENGLISH)}.\n\n")
-            append(besoinPrincipal(analyse.problemePrincipal))
-        } else buildString {
-            append("$nom pr\u00e9sente surtout un profil ${analyse.profil.profilType.lowercase(Locale.FRENCH)}.\n\n")
-            append("Situation\u00a0: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.FRENCH)}.\n\n")
-            append("Axe principal\u00a0: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.FRENCH)}.\n\n")
-            append(besoinPrincipal(analyse.problemePrincipal))
+        val recapText = when (appLang()) {
+            AppLang.DE -> buildString {
+                append("$nom zeigt vor allem ein Profil „${analyse.profil.profilType}“.\n\n")
+                append("Situation: ${texteNiveauSituation(analyse.niveauSituation)}.\n\n")
+                append("Hauptachse: ${libelleAxe(analyse.problemePrincipal)}.\n\n")
+                append(besoinPrincipal(analyse.problemePrincipal))
+            }
+            AppLang.EN -> buildString {
+                append("$nom primarily presents a ${analyse.profil.profilType.lowercase(Locale.ENGLISH)} profile.\n\n")
+                append("Situation: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.ENGLISH)}.\n\n")
+                append("Main axis: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.ENGLISH)}.\n\n")
+                append(besoinPrincipal(analyse.problemePrincipal))
+            }
+            else -> buildString {
+                append("$nom pr\u00e9sente surtout un profil ${analyse.profil.profilType.lowercase(Locale.FRENCH)}.\n\n")
+                append("Situation\u00a0: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.FRENCH)}.\n\n")
+                append("Axe principal\u00a0: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.FRENCH)}.\n\n")
+                append(besoinPrincipal(analyse.problemePrincipal))
+            }
         }
-
         val recapH = measureStaticTextHeight(recapText, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK)) + 48f
         drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + recapH, COLOR_WARM_BG, COLOR_BORDER, 16f)
         drawRoundRect(canvas, MARGIN, y, MARGIN + 5f, y + recapH, 16f, couleurPriorite)
@@ -293,12 +294,9 @@ object PdfExporter {
         y += recapH + 32f
 
         if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Conclusion", "Conclusion"))
+            drawSectionTitle(canvas, y, t("Conclusion", "Conclusion", "Fazit"))
             y += 48f
-            val conclusion = if (isEnglish())
-                "The goal is not to label $nom, but to better understand what is happening and move forward in a more adapted way."
-            else
-                "L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e."
+            val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more adapted way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
             val conclusionH = measureStaticTextHeight(conclusion, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
             if (y + conclusionH < CONTENT_BOTTOM) {
                 drawStaticText(canvas, conclusion, MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
@@ -309,10 +307,7 @@ object PdfExporter {
         if (y < CONTENT_BOTTOM - 40f) {
             drawLine(canvas, MARGIN, y, PAGE_W - MARGIN, y, COLOR_BORDER, 0.5f)
             y += 16f
-            val disclaimer = if (isEnglish())
-                "This report is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation."
-            else
-                "Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation."
+            val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This report is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
             val disclaimerH = measureStaticTextHeight(disclaimer, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
             if (y + disclaimerH < CONTENT_BOTTOM) {
                 drawStaticText(canvas, disclaimer, MARGIN, y, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
@@ -468,13 +463,10 @@ object PdfExporter {
     private fun dessineFooter(canvas: Canvas, pageNum: Int) {
         val footerY = PAGE_H - MARGIN - 14f
         drawLine(canvas, MARGIN, footerY - 10f, PAGE_W - MARGIN, footerY - 10f, COLOR_BORDER, 0.5f)
-        val footerText = t(
-            "${appName()}  \u2022  Bilan émotionnel indicatif",
-            "${appName()}  \u2022  Indicative emotional report"
-        )
+        val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional report", "${appName()}  •  Unverbindliche emotionale Einschätzung")
         canvas.drawText(footerText, MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
         val total = totalPagesActuel()
-        val pageLabel = t("Page $pageNum / $total", "Page $pageNum / $total")
+        val pageLabel = t("Page $pageNum / $total", "Page $pageNum / $total", "Seite $pageNum / $total")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), footerY, pagePaint)
     }
@@ -489,18 +481,15 @@ object PdfExporter {
         canvas.drawBitmap(qrBitmap, null, Rect(qrLeft, qrTop, qrLeft + qrSize, qrTop + qrSize), null)
         val tx = MARGIN + 14f
         canvas.drawText(
-            t("Document g\u00e9n\u00e9r\u00e9 automatiquement", "Automatically generated document"),
+            t("Document g\u00e9n\u00e9r\u00e9 automatiquement", "Automatically generated document", "Automatisch erstelltes Dokument"),
             tx, footerTop + 22f, makePaint(9f, COLOR_INK_SOFT)
         )
         canvas.drawText(
-            t(
-                "Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.",
-                "Track your cat's progress with the app."
-            ),
+            t("Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.", "Track your cat's progress with the app.", "Verfolgen Sie die Entwicklung Ihrer Katze mit der App."),
             tx, footerTop + 40f, makePaint(8.5f, COLOR_INK_SOFT)
         )
         val total = totalPagesActuel()
-        val pageLabel = t("Page 4 / $total", "Page 4 / $total")
+        val pageLabel = t("Page 4 / $total", "Page 4 / $total", "Seite 4 / $total")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), PAGE_H - MARGIN - 4f, pagePaint)
     }
@@ -564,18 +553,18 @@ object PdfExporter {
     }
 
     private fun libellePourPriorite(p: PrioriteAction) = when (p) {
-        PrioriteAction.FAIBLE -> t("Priorit\u00e9 faible", "Low priority")
-        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "To monitor")
-        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Increased vigilance")
-        PrioriteAction.URGENTE -> t("Action rapide", "Prompt action")
+        PrioriteAction.FAIBLE -> t("Priorit\u00e9 faible", "Low priority", "Geringe Priorität")
+        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "To monitor", "Zu beobachten")
+        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Increased vigilance", "Erhöhte Aufmerksamkeit")
+        PrioriteAction.URGENTE -> t("Action rapide", "Prompt action", "Rasches Handeln")
     }
 
     private fun aideAEnvisager(analyse: ResultatAnalyse) = when {
-        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist")
-        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "Professional promptly")
-        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist")
-        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist")
-        else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed")
+        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
+        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "Professional promptly", "Rasch eine Fachperson")
+        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
+        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
+        else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed", "Tierarzt bei Bedarf")
     }
 
     private fun generateQrCode(text: String, size: Int): Bitmap {

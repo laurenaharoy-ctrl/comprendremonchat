@@ -39,10 +39,11 @@ object HistoriqueManager {
     suspend fun sauvegarderBilan(context: Context, nomChat: String, analyse: ResultatAnalyse) {
         val bilan = BilanSauvegarde(
             id = UUID.randomUUID().toString(),
-            date = if (isEnglish())
-                SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.ENGLISH).format(Date())
-            else
-                SimpleDateFormat("dd MMMM yyyy 'à' HH'h'mm", Locale.FRENCH).format(Date()),
+            date = when (appLang()) {
+                AppLang.EN -> SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.ENGLISH).format(Date())
+                AppLang.DE -> SimpleDateFormat("dd. MMMM yyyy 'um' HH:mm", Locale.GERMAN).format(Date())
+                else -> SimpleDateFormat("dd MMMM yyyy 'à' HH'h'mm", Locale.FRENCH).format(Date())
+            },
             dateTimestamp = System.currentTimeMillis(),
             nomChien = nomChatAffiche(nomChat),
             profilType = analyse.profil.profilType,

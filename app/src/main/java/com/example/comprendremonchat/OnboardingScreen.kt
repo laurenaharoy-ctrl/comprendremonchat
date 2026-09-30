@@ -81,64 +81,98 @@ enum class IllustrationType {
     BILAN_COMPLET
 }
 
-fun onboardingSlides(): List<OnboardingSlide> = if (isEnglish()) listOf(
-    OnboardingSlide(
-        kicker = "Welcome",
-        titre = "Understanding My Cat",
-        description = "This app helps you decode your cat's behaviors and get concrete, personalized guidance tailored to their unique profile.",
-        illustrationType = IllustrationType.CHAT_LOGO
-    ),
-    OnboardingSlide(
-        kicker = "How it works",
-        titre = "One questionnaire, four dimensions",
-        description = "In just a few minutes, you explore the four axes that shape your cat's everyday behavior.",
-        illustrationType = IllustrationType.QUATRE_AXES,
-        features = listOf(
-            Icons.Rounded.Psychology to "Emotional sensitivity",
-            Icons.Rounded.Favorite to "Attachment needs",
-            Icons.Rounded.Spa to "Excitement management",
-            Icons.Rounded.Analytics to "Reactivity to the environment"
+fun onboardingSlides(): List<OnboardingSlide> = trList(
+    listOf(
+        OnboardingSlide(
+            kicker = "Bienvenue",
+            titre = "Comprendre mon chat",
+            description = "Cette application vous aide à décoder les comportements de votre chat et à obtenir des pistes concrètes adaptées à son profil unique.",
+            illustrationType = IllustrationType.CHAT_LOGO
+        ),
+        OnboardingSlide(
+            kicker = "Comment ça marche",
+            titre = "Un questionnaire, quatre dimensions",
+            description = "En quelques minutes, vous explorez les quatre axes qui façonnent le comportement de votre chat au quotidien.",
+            illustrationType = IllustrationType.QUATRE_AXES,
+            features = listOf(
+                Icons.Rounded.Psychology to "Sécurité émotionnelle",
+                Icons.Rounded.Favorite to "Lien humain",
+                Icons.Rounded.Spa to "Expression des instincts",
+                Icons.Rounded.Analytics to "Cohabitation"
+            )
+        ),
+        OnboardingSlide(
+            kicker = "Ce que vous obtenez",
+            titre = "Un bilan personnalisé complet",
+            description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
+            illustrationType = IllustrationType.BILAN_COMPLET,
+            features = listOf(
+                Icons.Rounded.CheckCircle to "Bilan émotionnel",
+                Icons.Rounded.PictureAsPdf to "Export PDF 4 pages",
+                Icons.Rounded.History to "Historique des bilans"
+            )
         )
     ),
-    OnboardingSlide(
-        kicker = "What you get",
-        titre = "A complete personalized report",
-        description = "At the end of the questionnaire, you receive a detailed report with practical advice, an action plan, and a PDF to share with your vet.",
-        illustrationType = IllustrationType.BILAN_COMPLET,
-        features = listOf(
-            Icons.Rounded.CheckCircle to "Emotional assessment",
-            Icons.Rounded.PictureAsPdf to "4-page PDF export",
-            Icons.Rounded.History to "Report history"
+    listOf(
+        OnboardingSlide(
+            kicker = "Welcome",
+            titre = "Understanding My Cat",
+            description = "This app helps you decode your cat's behaviors and get concrete, personalized guidance tailored to their unique profile.",
+            illustrationType = IllustrationType.CHAT_LOGO
+        ),
+        OnboardingSlide(
+            kicker = "How it works",
+            titre = "One questionnaire, four dimensions",
+            description = "In just a few minutes, you explore the four axes that shape your cat's everyday behavior.",
+            illustrationType = IllustrationType.QUATRE_AXES,
+            features = listOf(
+                Icons.Rounded.Psychology to "Emotional security",
+                Icons.Rounded.Favorite to "Human bond",
+                Icons.Rounded.Spa to "Expression of instincts",
+                Icons.Rounded.Analytics to "Cohabitation"
+            )
+        ),
+        OnboardingSlide(
+            kicker = "What you get",
+            titre = "A complete personalized report",
+            description = "At the end of the questionnaire, you receive a detailed report with practical advice, an action plan, and a PDF to share with your vet.",
+            illustrationType = IllustrationType.BILAN_COMPLET,
+            features = listOf(
+                Icons.Rounded.CheckCircle to "Emotional assessment",
+                Icons.Rounded.PictureAsPdf to "4-page PDF export",
+                Icons.Rounded.History to "Report history"
+            )
         )
-    )
-) else listOf(
-    OnboardingSlide(
-        kicker = "Bienvenue",
-        titre = "Comprendre mon chat",
-        description = "Cette application vous aide à décoder les comportements de votre chat et à obtenir des pistes concrètes adaptées à son profil unique.",
-        illustrationType = IllustrationType.CHAT_LOGO
     ),
-    OnboardingSlide(
-        kicker = "Comment ça marche",
-        titre = "Un questionnaire, quatre dimensions",
-        description = "En quelques minutes, vous explorez les quatre axes qui façonnent le comportement de votre chat au quotidien.",
-        illustrationType = IllustrationType.QUATRE_AXES,
-        features = listOf(
-            Icons.Rounded.Psychology to "Sensibilité émotionnelle",
-            Icons.Rounded.Favorite to "Besoin d'attachement",
-            Icons.Rounded.Spa to "Gestion de l'excitation",
-            Icons.Rounded.Analytics to "Réactivité à l'environnement"
-        )
-    ),
-    OnboardingSlide(
-        kicker = "Ce que vous obtenez",
-        titre = "Un bilan personnalisé complet",
-        description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
-        illustrationType = IllustrationType.BILAN_COMPLET,
-        features = listOf(
-            Icons.Rounded.CheckCircle to "Bilan émotionnel",
-            Icons.Rounded.PictureAsPdf to "Export PDF 4 pages",
-            Icons.Rounded.History to "Historique des bilans"
+    listOf(
+        OnboardingSlide(
+            kicker = "Willkommen",
+            titre = "Meine Katze verstehen",
+            description = "Diese App hilft Ihnen, das Verhalten Ihrer Katze zu entschlüsseln und konkrete Ansätze zu erhalten, die zu ihrem einzigartigen Profil passen.",
+            illustrationType = IllustrationType.CHAT_LOGO
+        ),
+        OnboardingSlide(
+            kicker = "So funktioniert’s",
+            titre = "Ein Fragebogen, vier Dimensionen",
+            description = "In wenigen Minuten erkunden Sie die vier Achsen, die das Verhalten Ihrer Katze im Alltag prägen.",
+            illustrationType = IllustrationType.QUATRE_AXES,
+            features = listOf(
+                Icons.Rounded.Psychology to "Emotionale Sicherheit",
+                Icons.Rounded.Favorite to "Bindung zum Menschen",
+                Icons.Rounded.Spa to "Ausdruck der Instinkte",
+                Icons.Rounded.Analytics to "Zusammenleben und Revier"
+            )
+        ),
+        OnboardingSlide(
+            kicker = "Was Sie erhalten",
+            titre = "Eine vollständige, persönliche Einschätzung",
+            description = "Am Ende des Fragebogens erhalten Sie eine ausführliche Einschätzung mit konkreten Tipps, einem Aktionsplan und einem PDF, das Sie mit Ihrem Tierarzt teilen können.",
+            illustrationType = IllustrationType.BILAN_COMPLET,
+            features = listOf(
+                Icons.Rounded.CheckCircle to "Emotionale Einschätzung",
+                Icons.Rounded.PictureAsPdf to "4-seitiger PDF-Export",
+                Icons.Rounded.History to "Verlauf der Einschätzungen"
+            )
         )
     )
 )
@@ -159,7 +193,7 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
             ) {
                 TextButton(onClick = onTerminer) {
                     Text(
-                        if (isEnglish()) "Skip" else "Passer",
+                        tr("Passer", "Skip", "Überspringen"),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -193,9 +227,9 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
                 val estDernierSlide = pagerState.currentPage == slides.lastIndex
                 PrimaryGlowButton(
                     text = if (estDernierSlide) {
-                        if (isEnglish()) "Get started" else "Commencer"
+                        tr("Commencer", "Get started", "Los geht’s")
                     } else {
-                        if (isEnglish()) "Next" else "Suivant"
+                        tr("Suivant", "Next", "Weiter")
                     },
                     onClick = {
                         if (estDernierSlide) onTerminer()
@@ -234,7 +268,7 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
             when (slide.illustrationType) {
                 IllustrationType.CHAT_LOGO -> Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = if (isEnglish()) "Understanding My Cat logo" else "Logo Comprendre mon chat",
+                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen"),
                     modifier = Modifier.fillMaxSize().padding(16.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -383,7 +417,7 @@ fun AccueilIllustrationCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                if (isEnglish()) "Understanding My Cat" else "Comprendre mon chat",
+                tr("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen"),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.ExtraBold, color = PremiumPalette.Primary,
                 textAlign = TextAlign.Center
@@ -395,14 +429,14 @@ fun AccueilIllustrationCard() {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = if (isEnglish()) "Understanding My Cat logo" else "Logo Comprendre mon chat",
+                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen"),
                     modifier = Modifier.size(160.dp).clip(RoundedCornerShape(28.dp)),
                     contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                if (isEnglish()) "Welcome" else "Bienvenue",
+                tr("Bienvenue", "Welcome", "Willkommen"),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
