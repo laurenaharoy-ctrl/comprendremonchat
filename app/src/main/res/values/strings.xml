@@ -53,7 +53,7 @@
     <string name="texte_livre">Si vous souhaitez aller plus loin</string>
     <string name="btn_voir_livres">Voir mes livres</string>
     <string name="btn_partager">Partager</string>
-    <string name="btn_export_pdf">Export PDF</string>
+    <string name="btn_export_pdf">PDF</string>
     <string name="btn_copier_resume">Copier le résumé</string>
     <string name="btn_recommencer">Recommencer depuis le début</string>
 

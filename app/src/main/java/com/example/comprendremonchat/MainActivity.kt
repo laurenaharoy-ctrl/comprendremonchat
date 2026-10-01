@@ -563,6 +563,7 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
         "senior_vocalise_nocturne" -> reponsesChoix["age"] == 3
         "a_deja_griffe_mordu" -> reponsesChoix["agressivite_caresses"] != 0
         "cible_agression" -> reponsesChoix["a_deja_griffe_mordu"] == 1
+        "lieu_residence" -> showConsultation()
         else -> true
     }
 }

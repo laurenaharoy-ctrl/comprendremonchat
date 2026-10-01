@@ -127,7 +127,7 @@ object PdfExporter {
         val gridItems = listOf(
             t("Axe principal", "Main axis", "Hauptachse") to libelleAxe(analyse.problemePrincipal),
             t("Situation", "Situation", "Situation") to texteNiveauSituation(analyse.niveauSituation),
-            t("Besoin principal", "Main need", "Hauptbedürfnis") to besoinPrincipal(analyse.problemePrincipal)
+            t("Besoin principal", "Main need", "Hauptbedürfnis") to besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse))
                 .removePrefix("Besoin principal : ")
                 .removePrefix("Main need: ")
                 .removePrefix("Hauptbedürfnis: ")
@@ -272,19 +272,19 @@ object PdfExporter {
                 append("$nom zeigt vor allem ein Profil „${analyse.profil.profilType}“.\n\n")
                 append("Situation: ${texteNiveauSituation(analyse.niveauSituation)}.\n\n")
                 append("Hauptachse: ${libelleAxe(analyse.problemePrincipal)}.\n\n")
-                append(besoinPrincipal(analyse.problemePrincipal))
+                append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             AppLang.EN -> buildString {
                 append("$nom primarily presents a ${analyse.profil.profilType.lowercase(Locale.ENGLISH)} profile.\n\n")
                 append("Situation: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.ENGLISH)}.\n\n")
                 append("Main axis: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.ENGLISH)}.\n\n")
-                append(besoinPrincipal(analyse.problemePrincipal))
+                append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             else -> buildString {
                 append("$nom pr\u00e9sente surtout un profil ${analyse.profil.profilType.lowercase(Locale.FRENCH)}.\n\n")
                 append("Situation\u00a0: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.FRENCH)}.\n\n")
                 append("Axe principal\u00a0: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.FRENCH)}.\n\n")
-                append(besoinPrincipal(analyse.problemePrincipal))
+                append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
         }
         val recapH = measureStaticTextHeight(recapText, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK)) + 48f
@@ -333,8 +333,8 @@ object PdfExporter {
         val description = strConsultationDescription()
         val disclaimer = strConsultationDisclaimer()
         val prix = strConsultationPrix()
-        val bouton = strConsultationBouton()
-        val url = CONSULTATION_BOOKING_URL
+        val bouton = strConsultationAppel()
+        val url = strConsultationTelephonePdf()
 
         val innerW = (CONTENT_W - 40f).toInt()
         val paintTitre = makePaint(16f, COLOR_PRIMARY, bold = true)

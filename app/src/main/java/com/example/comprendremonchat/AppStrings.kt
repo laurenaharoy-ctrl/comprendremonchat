@@ -145,7 +145,7 @@ fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Str
         return tr(
             "Un chat globalement à l'aise, avec quelques points à observer.",
             "A generally comfortable cat, with a few points to watch.",
-            "Eine insgesamt ausgeglichene Katze, mit einigen Punkten zur Beobachtung."
+            "Eine insgesamt ausgeglichene Katze, bei der einige Punkte Aufmerksamkeit verdienen."
         )
     }
     return when (appLang()) {
@@ -175,56 +175,74 @@ fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Str
         }
     }
 }
-fun intentionChatTraduit(axe: Axe): String = when (appLang()) {
-    AppLang.EN -> {
-        when (axe) {
-            Axe.SECURITE -> "Its reactions reflect an attempt to protect itself from what it perceives as threatening."
-            Axe.LIEN -> "Its behavior reflects a need for connection or difficulty managing closeness."
-            Axe.INSTINCTS -> "Its behaviors are often the expression of natural instincts that haven't found an appropriate outlet."
-            Axe.COHABITATION -> "Its reactions are often an attempt to manage a social situation that overwhelms it."
-        }
+fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String {
+    if (niveau == NiveauAxe.PEU_MARQUE) {
+        return tr(
+            "Rien n'indique de difficulté marquée : son comportement semble globalement adapté à son environnement.",
+            "Nothing points to a marked difficulty: its behavior seems well adapted to its environment overall.",
+            "Nichts deutet auf eine ausgeprägte Schwierigkeit hin: Ihr Verhalten scheint insgesamt gut an ihre Umgebung angepasst."
+        )
     }
-    AppLang.DE -> {
-        when (axe) {
-            Axe.SECURITE -> "Ihre Reaktionen zeigen den Versuch, sich vor dem zu schützen, was sie als bedrohlich wahrnimmt."
-            Axe.LIEN -> "Ihr Verhalten spiegelt ein Bedürfnis nach Verbindung oder im Gegenteil eine Schwierigkeit im Umgang mit Nähe wider."
-            Axe.INSTINCTS -> "Ihre Verhaltensweisen sind oft Ausdruck natürlicher Instinkte, die kein passendes Ventil gefunden haben."
-            Axe.COHABITATION -> "Ihre Reaktionen sind oft ein Versuch, mit einer sozialen Situation umzugehen, die sie überfordert."
+    return when (appLang()) {
+        AppLang.EN -> {
+            when (axe) {
+                Axe.SECURITE -> "Its reactions reflect an attempt to protect itself from what it perceives as threatening."
+                Axe.LIEN -> "Its behavior reflects a need for connection or difficulty managing closeness."
+                Axe.INSTINCTS -> "Its behaviors are often the expression of natural instincts that haven't found an appropriate outlet."
+                Axe.COHABITATION -> "Its reactions are often an attempt to manage a social situation that overwhelms it."
+            }
         }
-    }
-    else -> {
-        when (axe) {
-            Axe.SECURITE -> "Ses réactions traduisent une tentative de se protéger face à ce qu'il perçoit comme menaçant."
-            Axe.LIEN -> "Son comportement reflète un besoin de connexion ou au contraire une difficulté à gérer la proximité."
-            Axe.INSTINCTS -> "Ses comportements sont souvent l'expression d'instincts naturels qui n'ont pas trouvé de débouché adapté."
-            Axe.COHABITATION -> "Ses réactions sont souvent une tentative de gérer une situation sociale qui le dépasse."
+        AppLang.DE -> {
+            when (axe) {
+                Axe.SECURITE -> "Ihre Reaktionen zeigen den Versuch, sich vor dem zu schützen, was sie als bedrohlich wahrnimmt."
+                Axe.LIEN -> "Ihr Verhalten spiegelt ein Bedürfnis nach Verbindung oder im Gegenteil eine Schwierigkeit im Umgang mit Nähe wider."
+                Axe.INSTINCTS -> "Ihre Verhaltensweisen sind oft Ausdruck natürlicher Instinkte, die kein passendes Ventil gefunden haben."
+                Axe.COHABITATION -> "Ihre Reaktionen sind oft ein Versuch, mit einer sozialen Situation umzugehen, die sie überfordert."
+            }
+        }
+        else -> {
+            when (axe) {
+                Axe.SECURITE -> "Ses réactions traduisent une tentative de se protéger face à ce qu'il perçoit comme menaçant."
+                Axe.LIEN -> "Son comportement reflète un besoin de connexion ou au contraire une difficulté à gérer la proximité."
+                Axe.INSTINCTS -> "Ses comportements sont souvent l'expression d'instincts naturels qui n'ont pas trouvé de débouché adapté."
+                Axe.COHABITATION -> "Ses réactions sont souvent une tentative de gérer une situation sociale qui le dépasse."
+            }
         }
     }
 }
 
-fun besoinPrincipalTraduit(axe: Axe): String = when (appLang()) {
-    AppLang.EN -> {
-        when (axe) {
-            Axe.SECURITE -> "Main need: predictability, available refuges and respect for its thresholds."
-            Axe.LIEN -> "Main need: finding the right balance between reassuring presence and autonomy."
-            Axe.INSTINCTS -> "Main need: environmental enrichment and channeled expression of its instincts."
-            Axe.COHABITATION -> "Main need: space and resource management to reduce tensions."
-        }
+fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String {
+    if (niveau == NiveauAxe.PEU_MARQUE) {
+        return tr(
+            "Besoin principal : préserver un cadre stable et un environnement enrichi.",
+            "Main need: maintaining a stable framework and an enriched environment.",
+            "Hauptbedürfnis: einen stabilen Rahmen und eine bereicherte Umgebung bewahren."
+        )
     }
-    AppLang.DE -> {
-        when (axe) {
-            Axe.SECURITE -> "Hauptbedürfnis: Vorhersehbarkeit, verfügbare Rückzugsorte und Respekt ihrer Grenzen."
-            Axe.LIEN -> "Hauptbedürfnis: das richtige Gleichgewicht zwischen beruhigender Nähe und Selbstständigkeit finden."
-            Axe.INSTINCTS -> "Hauptbedürfnis: eine bereicherte Umgebung und gelenktes Ausleben ihrer Instinkte."
-            Axe.COHABITATION -> "Hauptbedürfnis: ein Umgang mit Raum und Ressourcen, der Spannungen verringert."
+    return when (appLang()) {
+        AppLang.EN -> {
+            when (axe) {
+                Axe.SECURITE -> "Main need: predictability, available refuges and respect for its thresholds."
+                Axe.LIEN -> "Main need: finding the right balance between reassuring presence and autonomy."
+                Axe.INSTINCTS -> "Main need: environmental enrichment and channeled expression of its instincts."
+                Axe.COHABITATION -> "Main need: space and resource management to reduce tensions."
+            }
         }
-    }
-    else -> {
-        when (axe) {
-            Axe.SECURITE -> "Besoin principal : prévisibilité, refuges disponibles et respect de ses seuils."
-            Axe.LIEN -> "Besoin principal : trouver le juste équilibre entre présence rassurante et autonomie."
-            Axe.INSTINCTS -> "Besoin principal : enrichissement environnemental et expression canalisée de ses instincts."
-            Axe.COHABITATION -> "Besoin principal : gestion de l'espace et des ressources pour réduire les tensions."
+        AppLang.DE -> {
+            when (axe) {
+                Axe.SECURITE -> "Hauptbedürfnis: Vorhersehbarkeit, verfügbare Rückzugsorte und Respekt ihrer Grenzen."
+                Axe.LIEN -> "Hauptbedürfnis: das richtige Gleichgewicht zwischen beruhigender Nähe und Selbstständigkeit finden."
+                Axe.INSTINCTS -> "Hauptbedürfnis: eine bereicherte Umgebung und gelenktes Ausleben ihrer Instinkte."
+                Axe.COHABITATION -> "Hauptbedürfnis: ein Umgang mit Raum und Ressourcen, der Spannungen verringert."
+            }
+        }
+        else -> {
+            when (axe) {
+                Axe.SECURITE -> "Besoin principal : prévisibilité, refuges disponibles et respect de ses seuils."
+                Axe.LIEN -> "Besoin principal : trouver le juste équilibre entre présence rassurante et autonomie."
+                Axe.INSTINCTS -> "Besoin principal : enrichissement environnemental et expression canalisée de ses instincts."
+                Axe.COHABITATION -> "Besoin principal : gestion de l'espace et des ressources pour réduire les tensions."
+            }
         }
     }
 }
@@ -983,7 +1001,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression of instincts"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
                 "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
-                "a_un_probleme" -> "Going further"
+                "a_un_probleme", "lieu_residence" -> "Going further"
                 else -> "Current context"
             }
         }
@@ -999,7 +1017,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Ausdruck der Instinkte"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
                 "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Zusammenleben und Revier"
-                "a_un_probleme" -> "Weiterführendes"
+                "a_un_probleme", "lieu_residence" -> "Weiterführendes"
                 else -> "Aktuelle Situation"
             }
         }
@@ -1015,7 +1033,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression des instincts"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
                 "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
-                "a_un_probleme" -> "Pour aller plus loin"
+                "a_un_probleme", "lieu_residence" -> "Pour aller plus loin"
                 else -> "Contexte actuel"
             }
         }
@@ -1071,6 +1089,7 @@ fun aideQuestionTraduit(questionId: String): String? {
                 "senior_desorientation" -> "Par exemple, il semble perdu près de sa gamelle, de sa litière ou d'une porte familière."
                 "senior_vocalise_nocturne" -> "Il s'agit de miaulements forts et insistants, sans déclencheur évident."
                 "proprete_type" -> "Cette précision aide à savoir s'il faut d'abord vérifier une cause médicale."
+                "lieu_residence" -> "Pour vous proposer une consultation adaptée."
                 "cible_agression" -> "Cela permet de distinguer un enjeu de sécurité envers des personnes d'une difficulté de sociabilisation avec d'autres animaux."
                 else -> null
             }
@@ -1475,7 +1494,6 @@ fun questionsApplicationTraduites(): List<Question> {
     )
 }
 
-// ═══════════════════════════════════════════════════════════
 // CONSULTATION PERSONNALISÉE (FR uniquement)
 // ═══════════════════════════════════════════════════════════
 
@@ -1489,6 +1507,12 @@ const val CGV_URL = "https://laurenaharoy-ctrl.github.io/comprendremonchat/cgv.h
 
 const val WEBSITE_URL = "https://comportementaliste91.fr"
 
+const val TELEPHONE_NATIONAL = "06 20 65 78 88"
+
+const val TELEPHONE_INTERNATIONAL = "+33 6 20 65 78 88"
+
+const val TELEPHONE_URI = "tel:+33620657888"
+
 fun strConsultationFormule30() = "Consultation conseil — 30 min — 35 €"
 
 fun strConsultationFormule60() = "Consultation comportementale — 1 heure — 50 €"
@@ -1501,10 +1525,18 @@ fun strConsultationTitre() = "Besoin d'aide pour interpréter ce bilan ?"
 
 fun strConsultationSousTitre() = "Consultation personnalisée du bilan émotionnel de votre chat"
 
-fun strConsultationDescription() = "Vous avez reçu le bilan émotionnel de votre animal et vous souhaitez mieux comprendre ses résultats ?\n\nJe vous propose deux formats de consultation personnalisée en visio, selon vos besoins : un échange conseil de 30 minutes pour une première orientation, ou une consultation comportementale d'1 heure pour construire un plan d'accompagnement plus approfondi.\n\nPensez à m'envoyer votre bilan PDF par email avant notre rendez-vous, via le bouton Partager de l'application, à l'adresse laurena.haroy@gmail.com."
-
+fun strConsultationDescription() = "Vous avez reçu le bilan émotionnel de votre animal et vous souhaitez mieux comprendre ses résultats ?\n\nJe vous propose deux formats de consultation personnalisée, selon vos besoins : un échange conseil de 30 minutes pour une première orientation, ou une consultation comportementale d'1 heure pour construire un plan d'accompagnement plus approfondi.\n\nPour prendre rendez-vous, appelez-moi directement : nous ferons connaissance et choisirons ensemble la formule la plus adaptée."
 fun strConsultationDisclaimer() = "Cette consultation ne remplace pas une consultation vétérinaire et ne constitue pas un accompagnement comportemental complet à elle seule.\n\nEn cas de changement brutal de comportement, douleur, malpropreté soudaine, agressivité inhabituelle ou symptôme physique, consultez d'abord un vétérinaire."
 
-fun strConsultationPrix() = "35 € / 30 minutes"
+fun strConsultationPrix() = "35 € / 30 min  •  50 € / 1 h"
 
-fun strConsultationBouton() = "Réserver ma consultation"
+fun strConsultationBouton(lieu: Int? = null) = "Appeler le " + if (lieu == 2) TELEPHONE_INTERNATIONAL else TELEPHONE_NATIONAL
+
+fun strConsultationAppel() = "Pour prendre rendez-vous, appelez-moi"
+
+fun strConsultationTelephonePdf() = "$TELEPHONE_NATIONAL  (depuis l'étranger : $TELEPHONE_INTERNATIONAL)"
+
+fun strConsultationModalite(lieu: Int?) = when (lieu) {
+    0 -> "Consultation en visio ou en présentiel (Essonne)"
+    else -> "Consultation en visio"
+}

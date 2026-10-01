@@ -76,7 +76,8 @@ data class ResultatAnalyse(
     val originesPossibles: String = "",
     val marquageHabitudePostSterilisation: Boolean = false,
     val suspicionDeclinCognitif: Boolean = false,
-    val cibleAgressionAnimal: Boolean = false
+    val cibleAgressionAnimal: Boolean = false,
+    val lieuResidence: Int? = null
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -98,9 +99,16 @@ fun textePrioriteAction(priorite: PrioriteAction): String = textePrioriteActionT
 fun resumeEmotionnel(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String =
     resumeEmotionnelTraduit(axe, niveau)
 
-fun intentionChat(axe: Axe): String = intentionChatTraduit(axe)
+fun intentionChat(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String = intentionChatTraduit(axe, niveau)
 
-fun besoinPrincipal(axe: Axe): String = besoinPrincipalTraduit(axe)
+fun besoinPrincipal(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String = besoinPrincipalTraduit(axe, niveau)
+
+fun niveauAxePrincipal(analyse: ResultatAnalyse): NiveauAxe = when (analyse.problemePrincipal) {
+    Axe.SECURITE -> analyse.niveauPeur
+    Axe.LIEN -> analyse.niveauAttachement
+    Axe.INSTINCTS -> analyse.niveauImpulsivite
+    Axe.COHABITATION -> analyse.niveauReactivite
+}
 
 fun phraseFin(nomChat: String): String = phraseFinTraduit(nomChat)
 
@@ -319,7 +327,7 @@ object QuestionnaireEngine {
 
         return when {
             signalCritique -> NiveauSituation.SENSIBLE
-            maxAxe <= 29 && contexte.scoreContexte < 10 -> NiveauSituation.STABLE
+            maxAxe <= 29 && contexte.scoreContexte < 5 -> NiveauSituation.STABLE
             reponsesChoix["evolution_probleme"] == 2 && reponsesChoix["intensite_probleme"] == 3 -> NiveauSituation.SENSIBLE
             contexte.scoreContexte >= 10 -> NiveauSituation.SENSIBLE
             contexte.scoreContexte >= 5 -> NiveauSituation.A_TRAVAILLER
@@ -381,7 +389,7 @@ object QuestionnaireEngine {
         return when {
             signalCritique && reponsesChoix["cible_agression"] == 1 -> PrioriteAction.ELEVEE
             signalCritique -> PrioriteAction.URGENTE
-            maxAxe <= 29 && contexte.scoreContexte < 10 -> PrioriteAction.FAIBLE
+            maxAxe <= 29 && contexte.scoreContexte < 5 -> PrioriteAction.FAIBLE
             contexte.scoreContexte >= 10 -> PrioriteAction.ELEVEE
             maxAxe >= 75 -> PrioriteAction.ELEVEE
             contexte.scoreContexte >= 5 -> PrioriteAction.MODEREE
@@ -662,7 +670,8 @@ object QuestionnaireEngine {
             marquageHabitudePostSterilisation = reponsesChoix["marquage_habitude_post_sterilisation"] == 0,
             suspicionDeclinCognitif = reponsesChoix["age"] == 3 &&
                     (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2),
-            cibleAgressionAnimal = reponsesChoix["cible_agression"] == 1
+            cibleAgressionAnimal = reponsesChoix["cible_agression"] == 1,
+            lieuResidence = reponsesChoix["lieu_residence"]
         )
     }
 
@@ -1129,6 +1138,12 @@ fun questionsApplication(): List<Question> {
                     "Yes, a notable change", "Yes, something that really concerns me"),
                 listOf("Nein, nichts Besonderes", "Vielleicht – ich bin mir nicht sicher",
                     "Ja, eine deutliche Veränderung", "Ja, etwas, das mich wirklich beunruhigt")
-            ))
+            )),
+
+        QuestionChoix("lieu_residence",
+            tr("Où habitez-vous ?", "Where do you live?", "Wo wohnen Sie?"),
+            trList(listOf("Dans l'Essonne (91)", "Ailleurs en France", "Dans un autre pays francophone (Belgique, Suisse, Luxembourg…)"),
+                listOf("In Essonne (91)", "Elsewhere in France", "In another French-speaking country (Belgium, Switzerland, Luxembourg…)"),
+                listOf("Im Département Essonne (91)", "Anderswo in Frankreich", "In einem anderen französischsprachigen Land (Belgien, Schweiz, Luxemburg …)")))
     )
 }

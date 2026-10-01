@@ -649,19 +649,11 @@ fun ResultatScreen(
                 Text(analyse.profil.phraseHumaine, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(14.dp))
                 Text(
-                    resumeEmotionnel(
-                        analyse.problemePrincipal,
-                        when (analyse.problemePrincipal) {
-                            Axe.SECURITE -> analyse.niveauPeur
-                            Axe.LIEN -> analyse.niveauAttachement
-                            Axe.INSTINCTS -> analyse.niveauImpulsivite
-                            Axe.COHABITATION -> analyse.niveauReactivite
-                        }
-                    ), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, color = PremiumPalette.Primary)
+                        resumeEmotionnel(analyse.problemePrincipal, niveauAxePrincipal(analyse)), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, color = PremiumPalette.Primary)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(intentionChat(analyse.problemePrincipal), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
+                Text(intentionChat(analyse.problemePrincipal, niveauAxePrincipal(analyse)), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(besoinPrincipal(analyse.problemePrincipal), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             PremiumCard(centered = true) {
@@ -756,7 +748,7 @@ fun ResultatScreen(
                 )
             }
 
-            ConsultationCard()
+            ConsultationCard(analyse.lieuResidence)
 
             ActionButtonsGrid(onShare = onShare, onCopy = onCopy, onExportPdf = onExportPdf, onRecommencer = onRecommencer)
 
@@ -778,7 +770,7 @@ fun ResultatScreen(
 // ═══════════════════════════════════════════════════════════
 
 @Composable
-fun ConsultationCard() {
+fun ConsultationCard(lieuResidence: Int? = null) {
     if (!showConsultation()) return
     val context = LocalContext.current
     val backgroundBrush = if (isSystemInDarkTheme())
@@ -823,28 +815,30 @@ fun ConsultationCard() {
                 strConsultationFormule30(),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            PrimaryGlowButton(
-                text = strConsultationBouton(),
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(CONSULTATION_BOOKING_URL))
-                    context.startActivity(intent)
-                }
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 strConsultationFormule60(),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                strConsultationModalite(lieuResidence),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                color = PremiumPalette.Primary
             )
             Spacer(modifier = Modifier.height(10.dp))
             PrimaryGlowButton(
-                text = strConsultationBouton(),
+                text = strConsultationBouton(lieuResidence),
                 onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(CONSULTATION_BOOKING_URL_1H))
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse(TELEPHONE_URI))
                     context.startActivity(intent)
                 }
             )
