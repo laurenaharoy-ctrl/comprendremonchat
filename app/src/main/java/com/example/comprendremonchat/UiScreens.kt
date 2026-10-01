@@ -648,7 +648,16 @@ fun ResultatScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(analyse.profil.phraseHumaine, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(14.dp))
-                Text(resumeEmotionnel(analyse.problemePrincipal), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, color = PremiumPalette.Primary)
+                Text(
+                    resumeEmotionnel(
+                        analyse.problemePrincipal,
+                        when (analyse.problemePrincipal) {
+                            Axe.SECURITE -> analyse.niveauPeur
+                            Axe.LIEN -> analyse.niveauAttachement
+                            Axe.INSTINCTS -> analyse.niveauImpulsivite
+                            Axe.COHABITATION -> analyse.niveauReactivite
+                        }
+                    ), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, color = PremiumPalette.Primary)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(intentionChat(analyse.problemePrincipal), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
                 Spacer(modifier = Modifier.height(6.dp))

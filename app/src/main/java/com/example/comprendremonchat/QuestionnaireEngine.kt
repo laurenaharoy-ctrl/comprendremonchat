@@ -95,7 +95,8 @@ fun texteVigilance(vigilance: NiveauVigilance, nomChat: String): String =
 
 fun textePrioriteAction(priorite: PrioriteAction): String = textePrioriteActionTraduit(priorite)
 
-fun resumeEmotionnel(axe: Axe): String = resumeEmotionnelTraduit(axe)
+fun resumeEmotionnel(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String =
+    resumeEmotionnelTraduit(axe, niveau)
 
 fun intentionChat(axe: Axe): String = intentionChatTraduit(axe)
 
@@ -313,9 +314,12 @@ object QuestionnaireEngine {
     fun calculerNiveauSituation(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse,
                                 securite: Int, lien: Int, instincts: Int, cohabitation: Int): NiveauSituation {
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
+        val signalCritique = contexte.physique >= 4 ||
+                reponsesChoix["a_deja_griffe_mordu"] == 1
+
         return when {
-            contexte.physique >= 4 -> NiveauSituation.SENSIBLE
-            reponsesChoix["a_deja_griffe_mordu"] == 1 -> NiveauSituation.SENSIBLE
+            signalCritique -> NiveauSituation.SENSIBLE
+            maxAxe <= 29 && contexte.scoreContexte < 10 -> NiveauSituation.STABLE
             reponsesChoix["evolution_probleme"] == 2 && reponsesChoix["intensite_probleme"] == 3 -> NiveauSituation.SENSIBLE
             contexte.scoreContexte >= 10 -> NiveauSituation.SENSIBLE
             contexte.scoreContexte >= 5 -> NiveauSituation.A_TRAVAILLER
@@ -327,8 +331,8 @@ object QuestionnaireEngine {
     fun genererMessageSituation(niveauSituation: NiveauSituation, nomChat: String): String =
         genererMessageSituationTraduit(niveauSituation, nomChat)
 
-    fun genererRaisonSituation(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse): String =
-        genererRaisonSituationTraduit(reponsesChoix, contexte)
+    fun genererRaisonSituation(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse, niveauSituation: NiveauSituation): String =
+        genererRaisonSituationTraduit(reponsesChoix, contexte, niveauSituation)
 
     fun genererConseilsPratiquesPersonnalises(nomChat: String, reponsesChoix: Map<String, Int>,
                                               securite: Int, lien: Int, instincts: Int, cohabitation: Int): List<String> =
@@ -371,10 +375,13 @@ object QuestionnaireEngine {
     fun determinerPrioriteAction(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse,
                                  securite: Int, lien: Int, instincts: Int, cohabitation: Int): PrioriteAction {
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
+        val signalCritique = contexte.physique >= 4 ||
+                reponsesChoix["a_deja_griffe_mordu"] == 1
+
         return when {
-            reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteAction.ELEVEE
-            reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteAction.URGENTE
-            contexte.physique >= 4 -> PrioriteAction.URGENTE
+            signalCritique && reponsesChoix["cible_agression"] == 1 -> PrioriteAction.ELEVEE
+            signalCritique -> PrioriteAction.URGENTE
+            maxAxe <= 29 && contexte.scoreContexte < 10 -> PrioriteAction.FAIBLE
             contexte.scoreContexte >= 10 -> PrioriteAction.ELEVEE
             maxAxe >= 75 -> PrioriteAction.ELEVEE
             contexte.scoreContexte >= 5 -> PrioriteAction.MODEREE
@@ -643,7 +650,7 @@ object QuestionnaireEngine {
             conseilsPratiques = genererConseilsPratiquesToTraduit(reponsesTexte["nom_chat"].orEmpty(), reponsesChoix, securite, lien, instincts, cohabitation),
             planAction = planAction,
             messageSituation = genererMessageSituationTraduit(niveauSituation, reponsesTexte["nom_chat"].orEmpty()),
-            raisonSituation = genererRaisonSituationTraduit(reponsesChoix, contexte),
+            raisonSituation = genererRaisonSituationTraduit(reponsesChoix, contexte, niveauSituation),
             messageAide = genererMessageAideTraduit(reponsesChoix, contexte, niveauSituation, reponsesTexte["nom_chat"].orEmpty(), securite, lien, instincts, cohabitation),
             apparitionBrutale = reponsesChoix["apparition"] == 1,
             aDejaMordu = reponsesChoix["a_deja_griffe_mordu"] == 1,

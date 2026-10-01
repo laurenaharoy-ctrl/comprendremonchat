@@ -140,33 +140,41 @@ fun textePrioriteActionTraduit(priorite: PrioriteAction): String = when (appLang
     }
 }
 
-fun resumeEmotionnelTraduit(axe: Axe): String = when (appLang()) {
-    AppLang.EN -> {
-        when (axe) {
-            Axe.SECURITE -> "A cat struggling to feel safe in its environment"
-            Axe.LIEN -> "A cat whose relationship with its human is at the heart of its difficulties"
-            Axe.INSTINCTS -> "A cat whose instinctive needs are not sufficiently expressed"
-            Axe.COHABITATION -> "A cat struggling in its relationships with those around it"
-        }
+fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String {
+    if (niveau == NiveauAxe.PEU_MARQUE) {
+        return tr(
+            "Un chat globalement à l'aise, avec quelques points à observer.",
+            "A generally comfortable cat, with a few points to watch.",
+            "Eine insgesamt ausgeglichene Katze, mit einigen Punkten zur Beobachtung."
+        )
     }
-    AppLang.DE -> {
-        when (axe) {
-            Axe.SECURITE -> "Eine Katze, die sich in ihrer Umgebung schwer sicher fühlt"
-            Axe.LIEN -> "Eine Katze, deren Beziehung zu ihrem Menschen im Mittelpunkt ihrer Schwierigkeiten steht"
-            Axe.INSTINCTS -> "Eine Katze, deren instinktive Bedürfnisse nicht ausreichend ausgelebt werden"
-            Axe.COHABITATION -> "Eine Katze mit Schwierigkeiten im Umgang mit ihrem Umfeld"
+    return when (appLang()) {
+        AppLang.EN -> {
+            when (axe) {
+                Axe.SECURITE -> "A cat struggling to feel safe in its environment"
+                Axe.LIEN -> "A cat whose relationship with its human is at the heart of its difficulties"
+                Axe.INSTINCTS -> "A cat whose instinctive needs are not sufficiently expressed"
+                Axe.COHABITATION -> "A cat struggling in its relationships with those around it"
+            }
         }
-    }
-    else -> {
-        when (axe) {
-            Axe.SECURITE -> "Un chat qui peine à se sentir en sécurité dans son environnement"
-            Axe.LIEN -> "Un chat dont la relation avec son humain est au cœur de ses difficultés"
-            Axe.INSTINCTS -> "Un chat dont les besoins instinctifs ne sont pas suffisamment exprimés"
-            Axe.COHABITATION -> "Un chat en difficulté dans ses relations avec son entourage"
+        AppLang.DE -> {
+            when (axe) {
+                Axe.SECURITE -> "Eine Katze, die sich in ihrer Umgebung schwer sicher fühlt"
+                Axe.LIEN -> "Eine Katze, deren Beziehung zu ihrem Menschen im Mittelpunkt ihrer Schwierigkeiten steht"
+                Axe.INSTINCTS -> "Eine Katze, deren instinktive Bedürfnisse nicht ausreichend ausgelebt werden"
+                Axe.COHABITATION -> "Eine Katze mit Schwierigkeiten im Umgang mit ihrem Umfeld"
+            }
+        }
+        else -> {
+            when (axe) {
+                Axe.SECURITE -> "Un chat qui peine à se sentir en sécurité dans son environnement"
+                Axe.LIEN -> "Un chat dont la relation avec son humain est au cœur de ses difficultés"
+                Axe.INSTINCTS -> "Un chat dont les besoins instinctifs ne sont pas suffisamment exprimés"
+                Axe.COHABITATION -> "Un chat en difficulté dans ses relations avec son entourage"
+            }
         }
     }
 }
-
 fun intentionChatTraduit(axe: Axe): String = when (appLang()) {
     AppLang.EN -> {
         when (axe) {
@@ -605,7 +613,18 @@ fun genererMessageSituationTraduit(niveauSituation: NiveauSituation, nomChat: St
     }
 }
 
-fun genererRaisonSituationTraduit(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse): String {
+fun genererRaisonSituationTraduit(
+    reponsesChoix: Map<String, Int>,
+    contexte: ContexteAnalyse,
+    niveauSituation: NiveauSituation
+): String {
+    if (niveauSituation == NiveauSituation.STABLE) {
+        return tr(
+            "Les réponses globales invitent à avancer progressivement.",
+            "The overall answers suggest moving forward progressively.",
+            "Die Antworten insgesamt legen ein schrittweises Vorgehen nahe."
+        )
+    }
     return when (appLang()) {
         AppLang.EN -> {
             when {
@@ -626,9 +645,9 @@ fun genererRaisonSituationTraduit(reponsesChoix: Map<String, Int>, contexte: Con
         else -> {
             when {
                 reponsesChoix["duree_probleme"] == 0 -> "Le caractère très récent du comportement invite à une vigilance particulière."
-                reponsesChoix["evolution_probleme"] == 2 -> "Le fait que cela semble s'aggraver peut indiquer que le problème prend plus de place."
-                contexte.physique >= 4 -> "Des signes physiques ou une gêne possible invitent à consulter un vétérinaire en priorité."
-                else -> "L'ensemble des réponses invite à avancer progressivement."
+                reponsesChoix["evolution_probleme"] == 2 -> "Le fait que cela semble s'aggraver peut indiquer que le problème prend davantage de place."
+                contexte.physique >= 4 -> "Des signes physiques ou un possible inconfort invitent à consulter un vétérinaire en priorité."
+                else -> "Les réponses globales invitent à avancer progressivement."
             }
         }
     }
