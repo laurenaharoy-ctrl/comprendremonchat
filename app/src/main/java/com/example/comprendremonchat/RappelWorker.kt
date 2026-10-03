@@ -30,8 +30,8 @@ class RappelWorker(
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(tr("Il est temps de refaire le bilan !", "Time to redo the assessment!", "Zeit für eine neue Einschätzung!"))
-            .setContentText(tr("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.", "$nomChat may have changed this past month. Do a new emotional report.", "Bei $nomChat kann sich im letzten Monat einiges verändert haben. Machen Sie eine neue emotionale Einschätzung."))
+            .setContentTitle(tr("Il est temps de refaire le bilan !", "Time for a new report!", "Zeit für eine neue Einschätzung!"))
+            .setContentText(tr("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.", "$nomChat may have changed over the past month. Why not do a new emotional report?", "Bei $nomChat kann sich im letzten Monat einiges verändert haben. Machen Sie eine neue emotionale Einschätzung."))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()

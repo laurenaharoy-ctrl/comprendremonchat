@@ -410,7 +410,7 @@ object QuestionnaireEngine {
                 if (reponsesChoix["evolution_probleme"] == 2) raisons += "The behavior seems to be gradually worsening."
                 if (reponsesChoix["intensite_probleme"] == 3) raisons += "The described intensity seems significant and impacts daily life."
                 if (reponsesChoix["generalisation_probleme"] == 2) raisons += "The behavior affects many different situations."
-                if (raisons.isEmpty()) raisons += "The answers suggest a few points of vigilance to monitor."
+                if (raisons.isEmpty()) raisons += "The answers suggest a few points to keep an eye on."
             }
             AppLang.DE -> {
                 if (reponsesChoix["evolution_probleme"] == 2) raisons += "Das Verhalten scheint sich nach und nach zu verschlimmern."
@@ -435,15 +435,15 @@ object QuestionnaireEngine {
         val intro = when (appLang()) {
             AppLang.EN -> {
                 when (priorite) {
-                    PrioriteAction.FAIBLE -> "$nom shows an overall stable functioning."
-                    PrioriteAction.MODEREE -> "$nom presents a difficulty that deserves a gradual approach."
+                    PrioriteAction.FAIBLE -> "$nom seems stable overall."
+                    PrioriteAction.MODEREE -> "$nom shows a difficulty that calls for a gradual approach."
                     PrioriteAction.ELEVEE -> "$nom seems to be struggling in an area requiring active attention."
-                    PrioriteAction.URGENTE -> "$nom presents elements that justify prompt professional attention."
+                    PrioriteAction.URGENTE -> "$nom shows signs that warrant prompt professional attention."
                 }
             }
             AppLang.DE -> {
                 when (priorite) {
-                    PrioriteAction.FAIBLE -> "$nom zeigt eine insgesamt stabile Funktionsweise."
+                    PrioriteAction.FAIBLE -> "$nom zeigt ein insgesamt stabiles Verhalten."
                     PrioriteAction.MODEREE -> "$nom zeigt eine Schwierigkeit, die ein schrittweises Vorgehen verdient."
                     PrioriteAction.ELEVEE -> "$nom scheint in einem Bereich Schwierigkeiten zu haben, der aktive Aufmerksamkeit erfordert."
                     PrioriteAction.URGENTE -> "$nom zeigt Anzeichen, die eine rasche und professionelle Aufmerksamkeit rechtfertigen."
@@ -484,29 +484,29 @@ object QuestionnaireEngine {
                         append("Insufficient early socialisation — few exposures to humans, sounds or varied environments before the age of 7 weeks — is often a factor. ")
                         append("Past negative experiences, even isolated ones, can leave a lasting imprint on how a cat perceives its world. ")
                         if (reponsesChoix["acces_exterieur"] == 2) append("A solely indoor cat may sometimes lack varied stimulation, which weakens its ability to cope with novelty. ")
-                        if (reponsesChoix["age"] == 0) append("Under one year old, the construction of a sense of security is still underway — some sensitivity is normal at this age. ")
-                        if (reponsesChoix["changement_recent"] == 2) append("A recent significant change may have destabilized its reference points and amplified this sense of insecurity. ")
+                        if (reponsesChoix["age"] == 0) append("Under one year old, a sense of security is still developing — some sensitivity is normal at this age. ")
+                        if (reponsesChoix["changement_recent"] == 2) append("A recent major change may have unsettled its usual bearings and heightened this sense of insecurity. ")
                         append("In some cases, a genetic predisposition also plays a role, independently of lived experience.")
                     }
                     Axe.LIEN -> buildString {
                         append("$nom's intense need for closeness can be explained in several ways. ")
-                        append("Weaning too early — before 8 weeks — can durably weaken the construction of emotional autonomy. ")
+                        append("Weaning too early — before 8 weeks — can have a lasting impact on the development of emotional independence. ")
                         append("An environment where the cat has never learned to be alone can also reinforce this need for constant presence. ")
-                        if (reponsesChoix["recherche_proximite"] == 3) append("Permanently following its human can be both a symptom and a factor that maintains this relational dependency. ")
+                        if (reponsesChoix["recherche_proximite"] == 3) append("Constantly following its human can be both a symptom and a factor that maintains this dependency on the relationship. ")
                         if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("In an unneutered cat, some manifestations may also be influenced by hormonal cycles. ")
-                        append("This functioning is not a whim: it reflects a genuine difficulty in finding internal support in the absence of the reassuring figure.")
+                        append("This is not a whim: it reflects a genuine difficulty finding inner security when the reassuring person isn't there.")
                     }
                     Axe.INSTINCTS -> buildString {
                         if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) {
                             append("$nom's urine marking seems to have started during her heat periods, before she was spayed. ")
-                            append("The original hormonal cause is gone, but the behavior has turned into an acquired habit — the gesture remains ingrained even though the initial reason no longer exists. ")
-                            append("This type of habitual marking is often longer to correct than marking purely linked to stress, since a repeated gesture needs to be unlearned rather than simply reducing a source of tension. ")
+                            append("The original hormonal cause is gone, but the behavior has turned into an acquired habit — it remains ingrained even though the initial reason no longer exists. ")
+                            append("This kind of habitual marking often takes longer to correct than marking linked purely to stress, because a repeated behavior has to be unlearned, rather than simply easing a source of tension. ")
                             append("Targeted behavioral support on this specific point is recommended.")
                             return@buildString
                         }
                         append("$nom's instinctive frustration can have several origins. ")
                         append("The cat is a solitary predator whose needs for hunting, exploration and scratching are deeply ingrained — an environment that does not allow them to be expressed inevitably generates frustration. ")
-                        if (reponsesChoix["acces_exterieur"] == 2) append("The absence of access to the outdoors deprives the cat of many natural stimulations that channel these instincts. ")
+                        if (reponsesChoix["acces_exterieur"] == 2) append("Without access to the outdoors, the cat misses out on much of the natural stimulation that channels these instincts. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("A poorly enriched indoor environment worsens this lack of outlet for its natural instincts. ")
                         val raceCat = reponsesChoix["race_categorie"]
                         if (raceCat != null && raceCat <= 1) append("Some breeds like the Bengal or Abyssinian have been selected for a very high energy level, which accentuates this need for stimulation. ")
@@ -517,7 +517,7 @@ object QuestionnaireEngine {
                         append("Cats are territorially sensitive — competition for resources (food, litter box, resting space) is a major source of tension in multi-cat households. ")
                         if (estMaleEntier(reponsesChoix)) append("In an intact male, urine marking and intimidation behaviors are frequent and can fuel conflicts with housemates. ")
                         if (reponsesChoix["changement_recent"] == 2) append("The arrival of a new animal or household member may have disrupted a fragile territorial balance. ")
-                        append("An introduction too rapid between animals, without a gradual familiarization phase, is one of the most frequent causes of lasting tensions. ")
+                        append("Introducing animals to each other too quickly, without a gradual familiarization phase, is one of the most common causes of lasting tension. ")
                         append("In some cases, simply incompatible personalities may also be a factor, independently of human management.")
                     }
                 }
@@ -539,7 +539,7 @@ object QuestionnaireEngine {
                         append("Ein Umfeld, in dem die Katze nie gelernt hat, allein zu bleiben, kann dieses Bedürfnis nach ständiger Anwesenheit ebenfalls verstärken. ")
                         if (reponsesChoix["recherche_proximite"] == 3) append("Ihrem Menschen ständig zu folgen, kann zugleich ein Anzeichen und ein Faktor sein, der diese Abhängigkeit in der Beziehung aufrechterhält. ")
                         if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("Bei einer unkastrierten Katze können manche Verhaltensweisen auch von den Hormonzyklen beeinflusst werden. ")
-                        append("Diese Funktionsweise ist keine Laune: Sie spiegelt eine echte Schwierigkeit wider, inneren Halt zu finden, wenn die beruhigende Bezugsperson fehlt.")
+                        append("Das ist keine Laune: Es spiegelt eine echte Schwierigkeit wider, inneren Halt zu finden, wenn die beruhigende Bezugsperson fehlt.")
                     }
                     Axe.INSTINCTS -> buildString {
                         if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) {
@@ -554,7 +554,7 @@ object QuestionnaireEngine {
                         if (reponsesChoix["acces_exterieur"] == 2) append("Ohne Freigang fehlen der Katze viele natürliche Reize, die diese Instinkte in geordnete Bahnen lenken. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Eine wenig bereicherte Wohnung verstärkt diesen Mangel an Ventilen für ihre natürlichen Instinkte. ")
                         val raceCat = reponsesChoix["race_categorie"]
-                        if (raceCat != null && raceCat <= 1) append("Manche Rassen wie die Bengal oder die Abessinier wurden auf ein sehr hohes Energieniveau gezüchtet, was dieses Bedürfnis nach Beschäftigung noch verstärkt. ")
+                        if (raceCat != null && raceCat <= 1) append("Manche Rassen wie Bengal oder Abessinier wurden auf ein sehr hohes Energieniveau gezüchtet, was dieses Bedürfnis nach Beschäftigung noch verstärkt. ")
                         append("Das ist kein Charakterproblem, sondern ein Grundbedürfnis, das sich ausdrücken will – mangels passender Alternative manchmal auf unerwünschte Weise.")
                     }
                     Axe.COHABITATION -> buildString {
@@ -710,7 +710,7 @@ fun questionsApplication(): List<Question> {
             trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"))),
 
         QuestionChoix("senior_vocalise_nocturne",
-            tr("Depuis quelque temps, votre chat vocalise-t-il ou erre-t-il la nuit sans raison apparente (pas de faim, pas de demande d'attention identifiable) ?", "Has your cat recently been vocalizing or wandering at night without an apparent reason (not hungry, no identifiable demand for attention)?", "Miaut oder wandert Ihre Katze seit einiger Zeit nachts ohne erkennbaren Grund umher (kein Hunger, kein erkennbarer Wunsch nach Aufmerksamkeit)?"),
+            tr("Depuis quelque temps, votre chat vocalise-t-il ou erre-t-il la nuit sans raison apparente (pas de faim, pas de demande d'attention identifiable) ?", "Has your cat recently been vocalizing or wandering at night for no apparent reason (not hungry, not obviously seeking attention)?", "Miaut oder wandert Ihre Katze seit einiger Zeit nachts ohne erkennbaren Grund umher (kein Hunger, kein erkennbarer Wunsch nach Aufmerksamkeit)?"),
             trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"))),
 
         QuestionChoix("sterilise",
@@ -849,9 +849,9 @@ fun questionsApplication(): List<Question> {
                     "Il montre des signes de détresse marqués (agitation intense, vocalises fortes et prolongées)",
                     "Je ne sais pas"),
                 listOf("It seems to manage calmly",
-                    "It may vocalize a little at your departure but settles down",
+                    "It may vocalize a little when you leave but settles down",
                     "It vocalizes or becomes notably agitated",
-                    "It shows marked distress signs (intense agitation, prolonged loud vocalizing)",
+                    "It shows clear signs of distress (intense agitation, prolonged loud vocalizing)",
                     "I don't know"),
                 listOf("Sie scheint ruhig damit zurechtzukommen",
                     "Sie miaut vielleicht ein wenig, wenn Sie gehen, beruhigt sich aber",
@@ -880,7 +880,7 @@ fun questionsApplication(): List<Question> {
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 4), signalAlerte = true),
 
         QuestionChoix("proprete_type",
-            tr("Il s'agit plutôt de :", "It is rather:", "Es handelt sich eher um:"),
+            tr("Il s'agit plutôt de :", "Is it mainly:", "Es handelt sich eher um:"),
             trList(listOf("Urine", "Selles", "Les deux"), listOf("Urine", "Stools", "Both"), listOf("Urin", "Kot", "Beides"))),
 
         QuestionChoix("demande_attention_vocale",
@@ -890,11 +890,11 @@ fun questionsApplication(): List<Question> {
                     "Il vocalise parfois pour demander de l'attention, puis se calme",
                     "Il insiste fortement (miaule, fait des bêtises) pour attirer l'attention",
                     "Il peut devenir agité ou agressif si ignoré"),
-                listOf("It accepts easily, little or no vocal demand",
+                listOf("It accepts it easily, with little or no meowing for attention",
                     "It sometimes vocalizes to ask for attention, then calms down",
                     "It insists strongly (meows, causes trouble) to get attention",
                     "It can become agitated or aggressive if ignored"),
-                listOf("Sie akzeptiert es leicht, wenig oder keine lautstarken Forderungen",
+                listOf("Sie akzeptiert es leicht und fordert kaum oder gar nicht lautstark Aufmerksamkeit",
                     "Sie miaut manchmal, um Aufmerksamkeit zu fordern, und beruhigt sich dann",
                     "Sie bleibt sehr hartnäckig (miaut, stellt etwas an), um Aufmerksamkeit zu bekommen",
                     "Sie kann unruhig oder aggressiv werden, wenn sie ignoriert wird")
@@ -920,7 +920,7 @@ fun questionsApplication(): List<Question> {
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("griffage_surfaces",
-            tr("Votre chat griffe-t-il des surfaces non autorisées (meubles, canapé, moquette) ?", "Does your cat scratch unauthorized surfaces (furniture, sofa, carpet)?", "Kratzt Ihre Katze an nicht erlaubten Flächen (Möbel, Sofa, Teppich)?"),
+            tr("Votre chat griffe-t-il des surfaces non autorisées (meubles, canapé, moquette) ?", "Does your cat scratch surfaces it shouldn't (furniture, sofa, carpet)?", "Kratzt Ihre Katze an nicht erlaubten Flächen (Möbel, Sofa, Teppich)?"),
             trList(
                 listOf("Non ou très rarement — il utilise ses griffoirs",
                     "Parfois les meubles en plus des griffoirs",
@@ -983,7 +983,7 @@ fun questionsApplication(): List<Question> {
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("marquage_urinaire",
-            tr("Votre chat pratique-t-il le marquage urinaire (debout, sur des surfaces verticales) ?", "Does your cat practice urine marking (standing up, on vertical surfaces)?", "Markiert Ihre Katze mit Urin (im Stehen, an senkrechten Flächen)?"),
+            tr("Votre chat pratique-t-il le marquage urinaire (debout, sur des surfaces verticales) ?", "Does your cat urine-mark (standing up, on vertical surfaces)?", "Markiert Ihre Katze mit Urin (im Stehen, an senkrechten Flächen)?"),
             trList(
                 listOf("Non, jamais", "Rarement, dans des situations de stress identifiées",
                     "Oui, de temps en temps", "Oui, fréquemment"),
@@ -1003,14 +1003,14 @@ fun questionsApplication(): List<Question> {
             trList(listOf("Oui, et ça a continué depuis", "Non, c'est apparu après la stérilisation", "Je ne sais pas / je l'ai adoptée déjà stérilisée"), listOf("Yes, and it has continued since", "No, it appeared after spaying", "I don't know / I adopted her already spayed"), listOf("Ja, und es hat seitdem angehalten", "Nein, es ist nach der Kastration aufgetreten", "Ich weiß es nicht / ich habe sie bereits kastriert übernommen"))),
 
         QuestionChoix("relation_autres_chats",
-            tr("Si vous avez plusieurs chats, comment se passent leurs relations ?", "If you have several cats, how are their relations?", "Wenn Sie mehrere Katzen haben, wie ist ihr Verhältnis zueinander?"),
+            tr("Si vous avez plusieurs chats, comment se passent leurs relations ?", "If you have several cats, how do they get along?", "Wenn Sie mehrere Katzen haben, wie ist ihr Verhältnis zueinander?"),
             trList(
                 listOf("Bonne entente générale, voire affection mutuelle",
                     "Coexistence neutre — ils s'ignorent",
                     "Tensions fréquentes mais sans agression physique",
                     "Conflits réguliers avec agressions",
                     "Je n'ai qu'un seul chat"),
-                listOf("Good understanding in general, even mutual affection",
+                listOf("They generally get along well, even showing mutual affection",
                     "Neutral coexistence — they ignore each other",
                     "Frequent tensions but no physical aggression",
                     "Regular conflicts with aggression",
@@ -1097,10 +1097,10 @@ fun questionsApplication(): List<Question> {
 
         QuestionChoix("duree_probleme",
             tr("Depuis combien de temps observez-vous ce comportement ?", "How long have you been observing this behavior?", "Seit wann beobachten Sie dieses Verhalten?"),
-            trList(listOf("Moins d'une semaine", "Entre 1 semaine et 1 mois", "Depuis plusieurs mois", "Depuis toujours ou très longtemps"), listOf("Less than a week", "Between 1 week and 1 month", "For several months", "Since always or for a very long time"), listOf("Weniger als eine Woche", "Zwischen 1 Woche und 1 Monat", "Seit mehreren Monaten", "Schon immer oder seit sehr langer Zeit"))),
+            trList(listOf("Moins d'une semaine", "Entre 1 semaine et 1 mois", "Depuis plusieurs mois", "Depuis toujours ou très longtemps"), listOf("Less than a week", "Between 1 week and 1 month", "For several months", "Always, or for a very long time"), listOf("Weniger als eine Woche", "Zwischen 1 Woche und 1 Monat", "Seit mehreren Monaten", "Schon immer oder seit sehr langer Zeit"))),
 
         QuestionChoix("evolution_probleme",
-            tr("Ce comportement évolue-t-il ?", "Is this behavior evolving?", "Entwickelt sich dieses Verhalten?"),
+            tr("Ce comportement évolue-t-il ?", "How is this behavior changing?", "Wie entwickelt sich dieses Verhalten?"),
             trList(listOf("Il s'améliore", "Il reste stable", "Il s'aggrave"), listOf("It is improving", "It remains stable", "It is getting worse"), listOf("Es wird besser", "Es bleibt stabil", "Es verschlimmert sich"))),
 
         QuestionChoix("frequence_probleme",
@@ -1108,7 +1108,7 @@ fun questionsApplication(): List<Question> {
             trList(listOf("Rarement — quelques fois par mois", "Quelques fois par semaine", "Tous les jours", "Plusieurs fois par jour"), listOf("Rarely — a few times a month", "A few times a week", "Every day", "Several times a day"), listOf("Selten – ein paar Mal im Monat", "Einige Male pro Woche", "Jeden Tag", "Mehrmals täglich"))),
 
         QuestionChoix("intensite_probleme",
-            tr("Quand cela arrive, c'est plutôt :", "When it happens, it is rather:", "Wenn es passiert, ist es eher:"),
+            tr("Quand cela arrive, c'est plutôt :", "When it happens, it is usually:", "Wenn es passiert, ist es eher:"),
             trList(listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable"), listOf("Easily manageable", "Inconvenient but bearable", "Difficult to manage", "Very intense, uncontrollable"), listOf("Leicht zu handhaben", "Störend, aber erträglich", "Schwer zu handhaben", "Sehr intensiv, unkontrollierbar"))),
 
         QuestionChoix("generalisation_probleme",
@@ -1134,7 +1134,7 @@ fun questionsApplication(): List<Question> {
             trList(
                 listOf("Non, rien de particulier", "Peut-être — je ne suis pas certain(e)",
                     "Oui, un changement notable", "Oui, quelque chose qui m'inquiète vraiment"),
-                listOf("No, nothing particular", "Perhaps — I'm not certain",
+                listOf("No, nothing in particular", "Perhaps — I'm not certain",
                     "Yes, a notable change", "Yes, something that really concerns me"),
                 listOf("Nein, nichts Besonderes", "Vielleicht – ich bin mir nicht sicher",
                     "Ja, eine deutliche Veränderung", "Ja, etwas, das mich wirklich beunruhigt")

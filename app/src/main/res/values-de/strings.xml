@@ -24,14 +24,14 @@
     <!-- Results -->
     <string name="kicker_votre_bilan">Ihre Einschätzung</string>
     <string name="titre_bilan_pour">Einschätzung für</string>
-    <string name="kicker_lecture_principale">Hauptlesart</string>
+    <string name="kicker_lecture_principale">Wichtigste Deutung</string>
     <string name="label_priorite">Priorität: </string>
     <string name="kicker_ressent">Was bewegt</string>
     <string name="kicker_coup_oeil">Auf einen Blick</string>
     <string name="kicker_facteurs">Erkannte Faktoren</string>
     <string name="subsection_aggrave">Was die Lage verschlimmern kann</string>
     <string name="subsection_protege">Was hilft</string>
-    <string name="kicker_niveau_situation">Stand der Situation</string>
+    <string name="kicker_niveau_situation">Einschätzung der Lage</string>
     <string name="kicker_inquieter">Muss man sich Sorgen machen?</string>
     <string name="kicker_ce_qui_passe">Was wahrscheinlich geschieht</string>
     <string name="highlight_chip">Der wichtigste Ansatzpunkt</string>
@@ -45,12 +45,12 @@
     <string name="texte_morsure_signale">Es wurde ein Kratzer oder Biss gemeldet – eine Begleitung durch einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten wird empfohlen.</string>
     <string name="kicker_important">Wichtig</string>
     <string name="texte_important_bilan">Diese Einschätzung ist nur ein Anhaltspunkt. Sie ersetzt weder einen Tierarzt noch eine Fachperson für Katzenverhalten.</string>
-    <string name="kicker_aller_plus_loin">Weiter mit</string>
-    <string name="label_fiches_comportementales">Verhaltensblätter</string>
+    <string name="kicker_aller_plus_loin">Weiterführendes für</string>
+    <string name="label_fiches_comportementales">Infoblätter zum Verhalten</string>
     <string name="label_reperes_alimentation">Ernährung auf einen Blick</string>
     <string name="kicker_a_retenir">Das Wichtigste</string>
     <string name="kicker_le_livre">Das Buch</string>
-    <string name="texte_livre">Wenn Sie weitergehen möchten</string>
+    <string name="texte_livre">Wenn Sie tiefer einsteigen möchten</string>
     <string name="btn_voir_livres">Meine Bücher ansehen</string>
     <string name="btn_partager">Teilen</string>
     <string name="btn_export_pdf">PDF</string>
@@ -71,15 +71,15 @@
     <!-- Behavioral dictionary -->
     <string name="kicker_dictionnaire">Verhaltenslexikon</string>
     <string name="titre_dictionnaire">Anhaltspunkte, um die Körpersprache Ihrer Katze besser zu lesen</string>
-    <string name="placeholder_recherche">Ein Blatt suchen …</string>
-    <string name="aucune_fiche">Kein Blatt passt zu \"%1$s\".</string>
-    <string name="texte_important_dictionnaire">Diese Blätter geben Anhaltspunkte, um das Verhalten von Katzen zu lesen. Sie ersetzen nicht den Rat einer Fachperson.</string>
-    <string name="kicker_fiche_comportementale">Verhaltensblatt</string>
+    <string name="placeholder_recherche">Ein Infoblatt suchen …</string>
+    <string name="aucune_fiche">Kein Infoblatt passt zu „%1$s“.</string>
+    <string name="texte_important_dictionnaire">Diese Infoblätter bieten Orientierungshilfen, um das Verhalten von Katzen zu deuten. Sie ersetzen nicht den Rat einer Fachperson.</string>
+    <string name="kicker_fiche_comportementale">Infoblatt zum Verhalten</string>
     <string name="kicker_explication">Erklärung</string>
     <string name="kicker_que_faire">Was tun</string>
     <string name="kicker_a_eviter_fiche">Zu vermeiden</string>
     <string name="texte_rappel_fiche">Ein einzelnes Verhalten reicht nicht immer aus, um Schlüsse zu ziehen. Der Kontext und die gesamte Körpersprache zählen genauso.</string>
-    <string name="fiche_introuvable">Blatt nicht gefunden.</string>
+    <string name="fiche_introuvable">Infoblatt nicht gefunden.</string>
 
     <!-- Nutrition -->
     <string name="kicker_alimentation">Ernährung der Katze</string>
@@ -99,8 +99,8 @@
     <string name="cat_dangereux_desc">Lebensmittel und Pflanzen, die Sie ganz meiden sollten.</string>
     <string name="cat_autorises_titre">In Maßen erlaubte Lebensmittel</string>
     <string name="cat_autorises_desc">Was Sie in Maßen geben dürfen.</string>
-    <string name="cat_ingestion_titre">Was tun beim Verschlucken</string>
-    <string name="cat_ingestion_desc">Die richtigen Reflexe, wenn Ihre Katze etwas verschluckt hat.</string>
+    <string name="cat_ingestion_titre">Was tun, wenn die Katze etwas verschluckt hat</string>
+    <string name="cat_ingestion_desc">Was zu tun ist, wenn Ihre Katze etwas verschluckt hat.</string>
     <string name="cat_digestion_titre">Verdauung / Gras / Erbrechen / Kot</string>
     <string name="cat_digestion_desc">Gras, Erbrechen, Haarballen und Kot.</string>
 
@@ -110,7 +110,7 @@
     <string name="label_version">Version %1$s</string>
     <string name="kicker_tutoriel">Einführung</string>
     <string name="texte_tutoriel">Die Vorstellung der App noch einmal von vorn ansehen.</string>
-    <string name="btn_revoir_intro">Einführung ansehen</string>
+    <string name="btn_revoir_intro">Einführung erneut ansehen</string>
     <string name="kicker_confidentialite">Datenschutz</string>
     <string name="texte_confidentialite">Diese App erhebt keine personenbezogenen Daten. Die Einschätzungen werden nur auf Ihrem Gerät gespeichert. Die Benachrichtigungen sind lokal.</string>
     <string name="btn_politique_confidentialite">Datenschutzerklärung</string>
@@ -172,7 +172,7 @@
     <string name="comp_chatter_titre">Keckern (Zähneklappern)</string>
     <string name="comp_chatter_resume">Eine Reaktion auf eine unerreichbare Beute.</string>
     <string name="comp_chatter_explication">Dieses schnelle Geräusch entsteht, wenn die Katze einen Vogel oder eine Beute beobachtet, die sie nicht fangen kann. Ausdruck von Frust und aktiviertem Jagdtrieb.</string>
-    <string name="comp_chatter_que_faire">Eine Spieleinheit mit der Federangel anbieten, um diesen Instinkt auszuleben.</string>
+    <string name="comp_chatter_que_faire">Eine Spieleinheit mit der Federangel anbieten, damit sie diesen Instinkt ausleben kann.</string>
     <string name="comp_chatter_a_eviter">Sich Sorgen machen – das ist ein normales Verhalten.</string>
 
     <string name="comp_griffage_titre">Kratzen an Flächen</string>
@@ -242,7 +242,7 @@
 
     <string name="alim_ingestion2_titre">Welche Anzeichen sollten nach dem Verschlucken alarmieren?</string>
     <string name="alim_ingestion2_resume">Manche Anzeichen erfordern eine dringende tierärztliche Untersuchung.</string>
-    <string name="alim_ingestion2_contenu">Wiederholtes Erbrechen, starker Durchfall, Mattigkeit, Zittern, Atembeschwerden, übermäßiges Speicheln, Krämpfe oder ungewöhnliches Verhalten sind Warnzeichen. Suchen Sie ohne Verzögerung einen Tierarzt auf.</string>
+    <string name="alim_ingestion2_contenu">Wiederholtes Erbrechen, starker Durchfall, Mattigkeit, Zittern, Atembeschwerden, übermäßiges Speicheln, Krämpfe oder ungewöhnliches Verhalten sind Warnzeichen. Suchen Sie umgehend einen Tierarzt auf.</string>
 
     <string name="alim_digestion1_titre">Warum frisst meine Katze Gras?</string>
     <string name="alim_digestion1_resume">Ein normales Verhalten, bei Übermaß beobachten.</string>

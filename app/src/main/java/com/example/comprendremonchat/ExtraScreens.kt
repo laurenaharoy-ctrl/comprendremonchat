@@ -350,7 +350,7 @@ fun HistoriqueScreen(
         AlertDialog(
             onDismissRequest = { showConfirmSupprimerTout = false },
             title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?")) },
-            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action is irreversible. All saved reports will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
+            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved reports will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
             confirmButton = {
                 Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
@@ -371,7 +371,7 @@ fun HistoriqueScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    tr("Historique des bilans", "Report history", "Verlauf"),
+                    tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen"),
                     style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -523,7 +523,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
         AlertDialog(
             onDismissRequest = { showConfirm = false },
             title = { Text(tr("Supprimer ce bilan ?", "Delete this report?", "Diese Einschätzung löschen?")) },
-            text = { Text(tr("Cette action est irréversible.", "This action is irreversible.", "Diese Aktion kann nicht rückgängig gemacht werden.")) },
+            text = { Text(tr("Cette action est irréversible.", "This action cannot be undone.", "Diese Aktion kann nicht rückgängig gemacht werden.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
@@ -574,13 +574,13 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Carte du profil", "Profile map", "Profilkarte"), centered = true)
+                EditorialKicker(tr("Carte du profil", "Profile card", "Profilkarte"), centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
                 QuatreAxesMini(peur = bilan.peur, attachement = bilan.attachement, impulsivite = bilan.impulsivite, reactivite = bilan.reactivite)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Lecture principale", "Main reading", "Hauptlesart"), centered = true)
+                EditorialKicker(tr("Lecture principale", "Main reading", "Wichtigste Deutung"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.hypothesePrincipale, textAlign = TextAlign.Center, style = MaterialTheme.typography.bodyLarge)
             }
@@ -595,7 +595,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                 EditorialKicker(tr("Rappel", "Note", "Zur Erinnerung"), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This report is an indicative record. Your cat's situation may have changed since.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
+                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This report is an indicative record. Your cat's situation may have changed since then.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )

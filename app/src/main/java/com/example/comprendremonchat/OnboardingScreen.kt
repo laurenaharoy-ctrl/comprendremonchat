@@ -138,7 +138,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
             description = "At the end of the questionnaire, you receive a detailed report with practical advice, an action plan, and a PDF to share with your vet.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
-                Icons.Rounded.CheckCircle to "Emotional assessment",
+                Icons.Rounded.CheckCircle to "Emotional report",
                 Icons.Rounded.PictureAsPdf to "4-page PDF export",
                 Icons.Rounded.History to "Report history"
             )

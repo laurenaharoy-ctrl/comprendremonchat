@@ -273,7 +273,7 @@ Envoyé depuis l'application Comprendre mon chat
                     }
                     AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung")
                     AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung")
-                    AppScreen.Historique -> tr("Historique des bilans", "Report history", "Verlauf")
+                    AppScreen.Historique -> tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen")
                     is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Report detail", "Details der Einschätzung")
                     AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen")
                 }
@@ -309,7 +309,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 }) {
                                     Icon(
                                         Icons.Rounded.History,
-                                        contentDescription = tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
+                                        contentDescription = tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen"),
                                         tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                     )
                                 }
