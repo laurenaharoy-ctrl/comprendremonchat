@@ -159,22 +159,22 @@ val categoriesRacesChatFr = listOf(
 val categoriesRacesChatEn = listOf(
     CategorieRace("europeen", "European / Mixed breed",
         listOf("Great adaptability", "Temperament varies according to individual history"),
-        "Early socialisation history plays a determining role in its emotional balance."),
+        "Early socialization plays a key role in its emotional balance."),
     CategorieRace("maine_coon", "Maine Coon",
         listOf("Marked sociability", "Strong need for stimulation", "Strong attachment to its family"),
-        "A lack of stimulation can generate boredom and compensatory behaviours."),
+        "A lack of stimulation can lead to boredom and compensatory behaviors."),
     CategorieRace("persan", "Persian",
         listOf("Calm and composed temperament", "Sensitivity to changes", "Need for calm"),
-        "Environmental disturbances can easily destabilise it despite its apparent calm."),
+        "Disruptions in its environment can easily unsettle it, despite its apparent calm."),
     CategorieRace("siamois", "Siamese",
-        listOf("Strong vocalisation", "Intense attachment", "Very emotionally expressive"),
-        "Separation anxiety and excessive vocalisation are more frequent in this family."),
+        listOf("Very vocal", "Intense attachment", "Very emotionally expressive"),
+        "Separation anxiety and excessive meowing are more common in this group."),
     CategorieRace("ragdoll", "Ragdoll",
-        listOf("Very high tolerance", "Strong need for human presence", "Non-conflictual"),
+        listOf("Very high tolerance", "Strong need for human presence", "Rarely gets into conflicts"),
         "Be careful not to confuse its tolerance with an absence of needs — it can suffer in silence."),
     CategorieRace("bengal", "Bengal",
         listOf("Very high energy level", "Intense need for stimulation", "Strong personality"),
-        "A lack of physical and mental stimulation can quickly generate problematic behaviours."),
+        "A lack of physical and mental stimulation can quickly lead to problem behaviors."),
     CategorieRace("british", "British Shorthair",
         listOf("Calm and independent temperament", "Good tolerance for solitude", "Not very expressive"),
         "Its apparent calm can mask stress if subtle signals are not detected."),
@@ -185,8 +185,8 @@ val categoriesRacesChatEn = listOf(
         listOf("Gentle and balanced", "Moderate attachment", "Good cohabitation"),
         "Generally balanced, but sensitive to tensions in the household."),
     CategorieRace("autre", "Other breed / unknown",
-        listOf("Individual profile to be observed"),
-        "Individual history and early socialisation are the most determining factors.")
+        listOf("Individual profile — worth observing closely"),
+        "Individual history and early socialization are the most important factors.")
 )
 
 val categoriesRacesChatDe = listOf(
@@ -218,7 +218,7 @@ val categoriesRacesChatDe = listOf(
         listOf("Sanft und ausgeglichen", "Mäßige Bindung", "Gutes Zusammenleben"),
         "Meist ausgeglichen, aber empfindlich gegenüber Spannungen im Haushalt."),
     CategorieRace("autre", "Andere Rasse / unbekannt",
-        listOf("Individuelles Profil, das beobachtet werden sollte"),
+        listOf("Individuelles Profil – genau beobachten"),
         "Die individuelle Geschichte und die frühe Sozialisierung sind die entscheidendsten Faktoren.")
 )
 
@@ -481,7 +481,7 @@ object QuestionnaireEngine {
                 when (axe) {
                     Axe.SECURITE -> buildString {
                         append("$nom's emotional insecurity can have several origins. ")
-                        append("Insufficient early socialisation — few exposures to humans, sounds or varied environments before the age of 7 weeks — is often a factor. ")
+                        append("Insufficient early socialization — little exposure to humans, sounds or varied environments before the age of 7 weeks — is often a factor. ")
                         append("Past negative experiences, even isolated ones, can leave a lasting imprint on how a cat perceives its world. ")
                         if (reponsesChoix["acces_exterieur"] == 2) append("A solely indoor cat may sometimes lack varied stimulation, which weakens its ability to cope with novelty. ")
                         if (reponsesChoix["age"] == 0) append("Under one year old, a sense of security is still developing — some sensitivity is normal at this age. ")
