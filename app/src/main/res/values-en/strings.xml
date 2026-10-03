@@ -137,16 +137,16 @@
     <string name="comp_queue_dressee_resume">A friendly greeting signal.</string>
     <string name="comp_queue_dressee_explication">A vertical tail indicates friendly intent and confidence. A small hook at the tip signals a particularly warm greeting.</string>
     <string name="comp_queue_dressee_que_faire">Respond positively to this invitation to interact.</string>
-    <string name="comp_queue_dressee_a_eviter">Ignoring this sociability signal.</string>
+    <string name="comp_queue_dressee_a_eviter">Ignoring this friendly signal.</string>
 
-    <string name="comp_queue_fouettante_titre">Flicking tail</string>
+    <string name="comp_queue_fouettante_titre">Lashing tail</string>
     <string name="comp_queue_fouettante_resume">A sign of agitation or irritation.</string>
-    <string name="comp_queue_fouettante_explication">Unlike dogs, a cat flicking its tail is irritated or overexcited. It is not a sign of joy.</string>
+    <string name="comp_queue_fouettante_explication">Unlike dogs, a cat lashing its tail is irritated or overexcited. It is not a sign of joy.</string>
     <string name="comp_queue_fouettante_que_faire">Stop interacting and let the cat calm down.</string>
-    <string name="comp_queue_fouettante_a_eviter">Continuing to pet or play with a cat whose tail is flicking.</string>
+    <string name="comp_queue_fouettante_a_eviter">Continuing to pet or play with a cat whose tail is lashing.</string>
 
     <string name="comp_oreilles_arriere_titre">Ears flattened back</string>
-    <string name="comp_oreilles_arriere_resume">Maximum alert signal.</string>
+    <string name="comp_oreilles_arriere_resume">A sign of maximum alert.</string>
     <string name="comp_oreilles_arriere_explication">When ears flatten back, the cat is frightened or ready to react aggressively. Stop all interaction immediately.</string>
     <string name="comp_oreilles_arriere_que_faire">Create distance immediately.</string>
     <string name="comp_oreilles_arriere_a_eviter">Continuing to touch or approach a cat with flattened ears.</string>
@@ -166,7 +166,7 @@
     <string name="comp_frotter_tete_titre">Head rubbing (bunting)</string>
     <string name="comp_frotter_tete_resume">Affectionate marking and a sign of trust.</string>
     <string name="comp_frotter_tete_explication">The cat rubs its muzzle, cheeks or temple to deposit pheromones. It is a sign of trust and affectionate bonding.</string>
-    <string name="comp_frotter_tete_que_faire">Respond positively to this cat-initiated contact.</string>
+    <string name="comp_frotter_tete_que_faire">Respond positively to this contact your cat has initiated.</string>
     <string name="comp_frotter_tete_a_eviter">Pushing away a cat that comes to rub its head.</string>
 
     <string name="comp_chatter_titre">Chattering</string>
@@ -229,7 +229,7 @@
     <string name="alim_autorises1_contenu">Some cooked vegetables such as carrot or zucchini may be tolerated in small amounts. A cat\'s diet must remain primarily meat-based — cats are strict carnivores and cannot synthesize certain essential amino acids such as taurine.</string>
 
     <string name="alim_autorises2_titre">Cat treats: useful or risky?</string>
-    <string name="alim_autorises2_resume">Useful for positive reinforcement, but keep them controlled.</string>
+    <string name="alim_autorises2_resume">Useful for positive reinforcement, in moderation.</string>
     <string name="alim_autorises2_contenu">Treats can be useful during play or training sessions. They should not exceed 10% of the daily ration. Choose treats designed for cats, with minimal additives.</string>
 
     <string name="alim_autorises3_titre">How do I change my cat\'s food?</string>
@@ -245,7 +245,7 @@
     <string name="alim_ingestion2_contenu">Repeated vomiting, severe diarrhea, lethargy, trembling, breathing difficulties, excessive drooling, convulsions or unusual behavior are warning signs. See a vet without delay.</string>
 
     <string name="alim_digestion1_titre">Why does my cat eat grass?</string>
-    <string name="alim_digestion1_resume">Normal behavior, monitor if excessive.</string>
+    <string name="alim_digestion1_resume">Normal behavior, but keep an eye on it if excessive.</string>
     <string name="alim_digestion1_contenu">Grass helps cats eliminate hairballs and can act as a natural purgative. Offer cat grass or a pot of chewing grass — it is beneficial for most indoor cats.</string>
 
     <string name="alim_digestion2_titre">My cat is vomiting — is it serious?</string>
