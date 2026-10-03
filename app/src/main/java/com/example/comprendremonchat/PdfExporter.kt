@@ -152,7 +152,7 @@ object PdfExporter {
         val canvas = page.canvas
         var y = MARGIN
 
-        drawPageHeader(canvas, t("Profil de $nom", "Profile of $nom", "Profil von $nom"))
+        drawPageHeader(canvas, t("Profil de $nom", "$nom's profile", "Profil von $nom"))
         y += 48f
 
         drawSectionTitle(canvas, y, t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen"))
@@ -171,7 +171,7 @@ object PdfExporter {
         y += 14f
 
         if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Hypoth\u00e8se de lecture", "Main hypothesis", "Lesehypothese"))
+            drawSectionTitle(canvas, y, t("Hypoth\u00e8se de lecture", "Main hypothesis", "Deutungshypothese"))
             y += 48f
             val hypotheseH = measureStaticTextHeight(analyse.hypothesePrincipale, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
             if (y + hypotheseH < CONTENT_BOTTOM) {
@@ -192,7 +192,7 @@ object PdfExporter {
         }
 
         if (analyse.marquageHabitudePostSterilisation && y < CONTENT_BOTTOM - 40f) {
-            val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the gesture remains ingrained — this type of habitual marking is often longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.")
+            val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the behavior remains ingrained — this kind of habitual marking often takes longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.")
             val habitudeH = measureStaticTextHeight(texteHabitude, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true)) + 32f
             if (y + habitudeH < CONTENT_BOTTOM) {
                 drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + habitudeH, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, 14f)
@@ -554,14 +554,14 @@ object PdfExporter {
 
     private fun libellePourPriorite(p: PrioriteAction) = when (p) {
         PrioriteAction.FAIBLE -> t("Priorit\u00e9 faible", "Low priority", "Geringe Priorität")
-        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "To monitor", "Zu beobachten")
-        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Increased vigilance", "Erhöhte Aufmerksamkeit")
+        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "Worth monitoring", "Zu beobachten")
+        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Heightened attention", "Erhöhte Aufmerksamkeit")
         PrioriteAction.URGENTE -> t("Action rapide", "Prompt action", "Rasches Handeln")
     }
 
     private fun aideAEnvisager(analyse: ResultatAnalyse) = when {
         analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
-        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "Professional promptly", "Rasch eine Fachperson")
+        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "See a professional soon", "Zeitnah Fachperson hinzuziehen")
         analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
         analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
         else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed", "Tierarzt bei Bedarf")

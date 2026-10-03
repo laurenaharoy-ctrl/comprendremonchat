@@ -153,7 +153,7 @@ fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Str
             when (axe) {
                 Axe.SECURITE -> "A cat struggling to feel safe in its environment"
                 Axe.LIEN -> "A cat whose relationship with its human is at the heart of its difficulties"
-                Axe.INSTINCTS -> "A cat whose instinctive needs are not sufficiently expressed"
+                Axe.INSTINCTS -> "A cat whose instinctive needs don't have enough of an outlet"
                 Axe.COHABITATION -> "A cat struggling in its relationships with those around it"
             }
         }
@@ -187,7 +187,7 @@ fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String
         AppLang.EN -> {
             when (axe) {
                 Axe.SECURITE -> "Its reactions reflect an attempt to protect itself from what it perceives as threatening."
-                Axe.LIEN -> "Its behavior reflects a need for connection or difficulty managing closeness."
+                Axe.LIEN -> "Its behavior reflects a need for connection or, on the contrary, difficulty coping with closeness."
                 Axe.INSTINCTS -> "Its behaviors are often the expression of natural instincts that haven't found an appropriate outlet."
                 Axe.COHABITATION -> "Its reactions are often an attempt to manage a social situation that overwhelms it."
             }
@@ -224,8 +224,8 @@ fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Stri
             when (axe) {
                 Axe.SECURITE -> "Main need: predictability, available refuges and respect for its limits."
                 Axe.LIEN -> "Main need: finding the right balance between reassuring presence and autonomy."
-                Axe.INSTINCTS -> "Main need: environmental enrichment and channeled expression of its instincts."
-                Axe.COHABITATION -> "Main need: space and resource management to reduce tensions."
+                Axe.INSTINCTS -> "Main need: an enriched environment and healthy outlets for its instincts."
+                Axe.COHABITATION -> "Main need: managing space and resources to reduce tension."
             }
         }
         AppLang.DE -> {
@@ -338,7 +338,7 @@ fun phraseHumaineTraduit(nomChat: String, securite: Int, lien: Int, instincts: I
                 maxAxe <= 25 -> "$nom seems to be doing well overall, on a stable and serene footing."
                 maxAxe <= 50 -> "$nom shows some vulnerabilities that deserve attention."
                 maxAxe <= 75 -> "$nom seems to be going through a difficult period in some areas."
-                else -> "$nom is showing significant signals that require particular attention."
+                else -> "$nom is showing significant warning signs that need particular attention."
             }
         }
         AppLang.DE -> {
@@ -406,15 +406,15 @@ fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: In
     if (reponsesChoix["proprete_type"] == 0) return tr("La malpropreté urinaire peut avoir des causes purement médicales (infection urinaire, problèmes rénaux ou vésicaux, calculs) qui produisent exactement les mêmes symptômes qu'un problème comportemental : le chat en vient à éviter le bac parce qu'il associe le geste d'y uriner à une douleur, sans lien avec un stress émotionnel.", "Urinary house-soiling can have purely medical causes (urinary infection, kidney or bladder issues, bladder stones) that produce the exact same symptoms as a behavioral problem: the cat starts avoiding the litter box because it associates the box itself with pain, with no link to emotional stress.", "Harn-Unsauberkeit kann rein medizinische Ursachen haben (Harnwegsinfektion, Nieren- oder Blasenprobleme, Blasensteine), die genau dieselben Symptome hervorrufen wie ein Verhaltensproblem: Die Katze meidet schließlich das Katzenklo, weil sie das Urinieren darin mit Schmerzen verbindet – ohne Zusammenhang mit emotionalem Stress.")
     if (reponsesChoix["proprete_type"] == 2) return tr("Quand l'urine et les selles sont concernées à la fois, les deux aspects n'ont généralement pas la même origine. La partie urinaire peut être purement médicale (infection, calculs, douleur), tandis que l'aspect selles est plus souvent lié au bac lui-même — propreté, taille ou emplacement — ou au stress, une fois la cause médicale écartée.", "When both urine and stools are involved, the two aspects usually don't share the same origin. The urinary part can be purely medical (infection, bladder stones, pain), while the stool aspect is more often linked to the litter box itself — cleanliness, size, or location — or to stress, once a medical cause has been ruled out.", "Wenn Urin und Kot gleichzeitig betroffen sind, haben beide meist nicht dieselbe Ursache. Der Harnanteil kann rein medizinisch sein (Infektion, Blasensteine, Schmerzen), während der Kotabsatz eher mit dem Katzenklo selbst zusammenhängt – Sauberkeit, Größe oder Standort – oder, sobald eine medizinische Ursache ausgeschlossen ist, mit Stress.")
     if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2)) return tr("Chez un chat âgé, la désorientation et les vocalises nocturnes inexpliquées peuvent refléter un vieillissement cérébral normal (déclin cognitif lié à l'âge) plutôt qu'un problème comportemental à corriger — un phénomène assez proche de ce que l'on observe parfois chez l'humain vieillissant.", "In an older cat, disorientation and unexplained night vocalizing can reflect normal brain aging (age-related cognitive decline) rather than a behavioral problem to correct — a phenomenon fairly close to what is sometimes observed in aging humans.", "Bei einer älteren Katze können Orientierungslosigkeit und unerklärliches nächtliches Miauen eher auf ein normales Altern des Gehirns (altersbedingter kognitiver Abbau) hinweisen als auf ein Verhaltensproblem, das korrigiert werden muss – ähnlich wie man es manchmal bei älteren Menschen beobachtet.")
-    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) return tr("Concrètement, cela signifie que ce comportement ne peut plus se résoudre en attendant que les hormones se stabilisent — c'est le geste en lui-même qu'il faut désapprendre, comme n'importe quelle habitude acquise. Cela demande généralement plus de patience et de constance qu'un marquage territorial ou lié au stress, mais reste tout à fait travaillable.", "In practice, this means the behavior can no longer be resolved simply by waiting for hormones to settle — the gesture itself needs to be unlearned, much like any acquired habit. This generally takes more patience and consistency than territorial or stress-related marking, but it is very much possible to work on.", "Konkret bedeutet das, dass sich dieses Verhalten nicht mehr lösen lässt, indem man abwartet, bis sich die Hormone stabilisieren – das Verhalten selbst muss verlernt werden, wie jede erlernte Gewohnheit. Das erfordert meist mehr Geduld und Beständigkeit als eine revier- oder stressbedingte Markierung, lässt sich aber durchaus bearbeiten.")
+    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) return tr("Concrètement, cela signifie que ce comportement ne peut plus se résoudre en attendant que les hormones se stabilisent — c'est le geste en lui-même qu'il faut désapprendre, comme n'importe quelle habitude acquise. Cela demande généralement plus de patience et de constance qu'un marquage territorial ou lié au stress, mais reste tout à fait travaillable.", "In practice, this means the behavior can no longer be resolved simply by waiting for hormones to settle — the behavior itself needs to be unlearned, much like any acquired habit. This generally takes more patience and consistency than territorial or stress-related marking, but it is very much possible to work on.", "Konkret bedeutet das, dass sich dieses Verhalten nicht mehr lösen lässt, indem man abwartet, bis sich die Hormone stabilisieren – das Verhalten selbst muss verlernt werden, wie jede erlernte Gewohnheit. Das erfordert meist mehr Geduld und Beständigkeit als eine revier- oder stressbedingte Markierung, lässt sich aber durchaus bearbeiten.")
     if (maxOf(securite, lien, instincts, cohabitation) <= 25) return tr("Les éléments recueillis ne mettent pas en évidence de difficulté marquée à ce stade.", "The information collected does not highlight any marked difficulty at this stage.", "Die gesammelten Angaben zeigen derzeit keine ausgeprägte Schwierigkeit.")
     return when (appLang()) {
         AppLang.EN -> {
             when (axe) {
                 Axe.SECURITE -> "The answers suggest your cat has difficulty feeling safe. It may perceive its environment as unpredictable or threatening, which keeps it in a constant, exhausting state of alert."
-                Axe.LIEN -> "The bond with you seems to play a central role in your cat's difficulties. Whether too strong (over-attachment) or too fragile, this can generate disruptive behaviors."
-                Axe.INSTINCTS -> "Your cat's instinctive needs — hunting, exploration, scratching — are not finding sufficient appropriate outlets. This frustration can be expressed through undesirable behaviors."
-                Axe.COHABITATION -> "Your cat seems to struggle in its relationships with those around it, whether other animals or certain household members. Space and resource management is likely at play."
+                Axe.LIEN -> "The bond with you seems to play a central role in your cat's difficulties. Whether it is too strong (over-attachment) or too fragile, either can lead to disruptive behavior."
+                Axe.INSTINCTS -> "Your cat's instinctive needs — hunting, exploring, scratching — are not finding enough suitable outlets. This frustration can show up as unwanted behavior."
+                Axe.COHABITATION -> "Your cat seems to struggle in its relationships with those around it, whether other animals or certain household members. How space and resources are managed is probably playing a role."
             }
         }
         AppLang.DE -> {
@@ -444,7 +444,7 @@ fun conseilPrincipalTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, 
                 Axe.SECURITE -> "Enrich the environment with varied refuges and ensure a stable, predictable routine. Security is built through reassuring repetition."
                 Axe.LIEN -> "Gradually work on autonomy with short, emotionally neutral departures, while maintaining moments of contact chosen by the cat."
                 Axe.INSTINCTS -> "Introduce daily interactive play sessions (feather wand, prey toys) and food puzzles to mentally and physically stimulate your cat."
-                Axe.COHABITATION -> "Review resource and space management — each cat must have access to its own resources without having to defend them."
+                Axe.COHABITATION -> "Rethink how resources and space are managed — each cat must have access to its own resources without having to defend them."
             }
         }
         AppLang.DE -> {
@@ -487,23 +487,23 @@ fun genererPlanActionTraduit(axe: Axe, reponsesChoix: Map<String, Int>, nomChat:
                     aFaire += "Leave an item of clothing you have worn to reassure your cat while you're away."
                     aFaire += "Offer activity toys (dispensers, food puzzles)."
                     aEviter += "Very emotional goodbyes that heighten anxiety."
-                    aEviter += "Systematically giving in to attention demands."
+                    aEviter += "Always giving in to demands for attention."
                     aObserver += "Behavior in the minutes following your departure."
                     aObserver += "Ability to settle and relax alone."
                 }
                 Axe.INSTINCTS -> {
-                    aFaire += "Introduce 2 to 3 interactive play sessions per day of 10 to 15 minutes."
+                    aFaire += "Introduce 2 to 3 interactive play sessions of 10 to 15 minutes a day."
                     aFaire += "Rotate toys regularly to maintain interest."
                     aFaire += "Use food puzzles to feed the hunting instinct."
-                    aEviter += "Toys left out permanently that lose their appeal."
+                    aEviter += "Leaving toys out all the time, so they lose their appeal."
                     aEviter += "Interactions that are too short or too predictable."
                     aObserver += "Energy level and interest in play."
                     aObserver += "Behaviors that improve after play sessions."
                 }
                 Axe.COHABITATION -> {
                     aFaire += "Double all resources (food bowls, litter boxes, scratching posts, beds)."
-                    aFaire += "Create reserved areas for each animal with secure access."
-                    aFaire += "Encourage positive interactions in the presence of food or play."
+                    aFaire += "Create a dedicated area for each animal, with safe access."
+                    aFaire += "Encourage positive encounters around food or play."
                     aEviter += "Forcing interactions between animals that are already tense."
                     aEviter += "Situations where they compete for resources."
                     aObserver += "Early warning signs of tension before conflicts."
@@ -530,7 +530,7 @@ fun genererPlanActionTraduit(axe: Axe, reponsesChoix: Map<String, Int>, nomChat:
                     aFaire += "Getragene Kleidungsstücke liegen lassen, um sie in Ihrer Abwesenheit zu beruhigen."
                     aFaire += "Beschäftigungsspielzeug anbieten (Futterspender, Futterpuzzles)."
                     aEviter += "Sehr betonte Abschiedsrituale, die die Angst verstärken."
-                    aEviter += "Aufmerksamkeitsforderungen jedes Mal nachgeben."
+                    aEviter += "Jeder Forderung nach Aufmerksamkeit nachgeben."
                     aObserver += "Das Verhalten in den Minuten nach Ihrem Weggehen."
                     aObserver += "Die Fähigkeit, allein zur Ruhe zu kommen und sich zu entspannen."
                 }
@@ -648,7 +648,7 @@ fun genererRaisonSituationTraduit(
             when {
                 reponsesChoix["duree_probleme"] == 0 -> "The very recent nature of the behavior calls for particular vigilance."
                 reponsesChoix["evolution_probleme"] == 2 -> "The fact that it seems to be worsening may indicate the problem is taking up more space."
-                contexte.physique >= 4 -> "Physical signs or possible discomfort call for consulting a veterinarian as a priority."
+                contexte.physique >= 4 -> "Physical signs or possible discomfort mean that seeing a vet should be the first step."
                 else -> "Overall, the answers suggest moving forward gradually."
             }
         }
@@ -739,7 +739,7 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
         AppLang.EN -> {
             when {
                 reponsesChoix["proprete_type"] == 0 -> "Seek care urgently if you notice emergency signs in $nom: crying in pain while urinating, frequent unsuccessful trips to the litter box, or no urine at all for over 24 hours. These signs can indicate a urinary blockage, which is a veterinary emergency."
-                reponsesChoix["proprete_type"] == 2 -> "Seek care urgently if you notice signs of a urinary blockage in $nom (crying in pain while urinating, unsuccessful trips to the litter box, no urine for over 24 hours). For the stool aspect, a vet visit is also worth it if diarrhea persists, or if you notice blood or unexplained weight loss."
+                reponsesChoix["proprete_type"] == 2 -> "Seek care urgently if you notice signs of a urinary blockage in $nom (crying in pain while urinating, unsuccessful trips to the litter box, no urine for over 24 hours). As for the stools, a vet visit is also worth it if diarrhea persists, or if you notice blood or unexplained weight loss."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Given $nom's age and the signs described, a veterinary check-up is recommended as a priority to rule out or confirm age-related cognitive decline before considering a behavioral approach."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This marking has become a learned habit rather than a hormonal behavior — a feline behaviorist can help $nom unlearn this specific behavior, which often takes longer than addressing stress-related marking."
                 reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or to a living arrangement between the animals that needs a fresh start — a feline behaviorist can help you rebuild a safer, more gradual introduction between them."
@@ -793,10 +793,10 @@ fun detecterHypothesePrincipaleTraduit(reponsesChoix: Map<String, Int>,
         AppLang.EN -> {
             when {
                 reponsesChoix["proprete_type"] == 0 -> "Since this house-soiling involves urine, a medical cause should be ruled out first with a veterinarian."
-                reponsesChoix["proprete_type"] == 2 -> "Since this house-soiling involves both urine and stools, the medical cause for the urinary part should be ruled out first, before considering behavioral work on the stool aspect."
+                reponsesChoix["proprete_type"] == 2 -> "Since this house-soiling involves both urine and stools, the medical cause for the urinary part should be ruled out first, before considering behavioral work on the stool problem."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Some signs (disorientation, unexplained vocalizing at night) may suggest age-related cognitive changes rather than a purely behavioral issue."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This urine marking seems to have started during heat periods, before spaying, and has since become a learned habit rather than a hormonal behavior."
-                contexte.physique >= 4 -> "The reported elements suggest considering a physical or medical component before going further on the behavioral level."
+                contexte.physique >= 4 -> "The signs reported suggest considering a physical or medical cause before going any further with the behavioral side."
                 reponsesChoix["surtoilettage"] == 1 && securite >= 50 -> "Over-grooming combined with emotional insecurity suggests chronic stress expressing itself physically."
                 reponsesChoix["marquage_urinaire"] == 1 -> "Urine marking suggests territorial or hormonal stress, depending on neutering status."
                 securite >= 65 && lien >= 65 -> "Anxious attachment combined with emotional insecurity — your cat is constantly seeking reassurance."
@@ -804,7 +804,7 @@ fun detecterHypothesePrincipaleTraduit(reponsesChoix: Map<String, Int>,
                 lien >= 65 -> "Over-attachment or difficulty coping with separation, causing distress when you're away."
                 instincts >= 65 -> "Natural instincts (hunting, exploring, scratching) that are not channeled enough and are looking for an outlet."
                 cohabitation >= 65 -> "Tensions at home causing daily stress and conflict."
-                else -> "Several factors seem involved without one axis clearly dominating — a holistic approach is recommended."
+                else -> "Several factors seem to be involved, with no single axis clearly dominating — a holistic approach is recommended."
             }
         }
         AppLang.DE -> {
@@ -860,13 +860,13 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
                     "Physical signs have been reported for $nom — the priority is medical.",
                     listOf("Make a veterinary appointment promptly.", "Do not wait for symptoms to worsen."))
                 priorite == PrioriteAction.ELEVEE -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: act without delay",
-                    "The situation justifies prompt action for $nom.",
+                    "The situation calls for prompt action for $nom.",
                     listOf("Ease off in difficult situations.", "Consider support from a feline behaviorist."))
                 priorite == PrioriteAction.MODEREE -> PrioriteImmediate(PrioriteAction.MODEREE, "Immediate priority: move forward gradually",
                     "The situation deserves attention for $nom.",
-                    listOf("Begin gradual work on the environment.", "Observe frequency and intensity of behaviors."))
+                    listOf("Begin gradual work on the environment.", "Observe how often and how intensely the behaviors occur."))
                 else -> PrioriteImmediate(PrioriteAction.FAIBLE, "Immediate priority: keep a calm eye on things",
-                    "Nothing urgent for $nom — continue observing.",
+                    "Nothing urgent for $nom — keep observing.",
                     listOf("Maintain a stable, predictable routine.", "Gradually enrich the environment."))
             }
         }

@@ -474,7 +474,7 @@ object QuestionnaireEngine {
     ): String {
         val nom = nomChatAffiche(nomChat)
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
-        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "$nom seems to be evolving in an overall satisfying balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu entwickeln. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.")
+        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "\$nom seems to be in a good overall balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu entwickeln. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.")
 
         return when (appLang()) {
             AppLang.EN -> {
