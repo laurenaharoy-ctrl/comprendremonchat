@@ -75,7 +75,7 @@ object PdfExporter {
             .replace("\\s+".toRegex(), "_")
             .replace("[^a-z0-9_]+".toRegex(), "")
 
-        val prefix = t("bilan", "report", "einschaetzung")
+        val prefix = t("bilan", "assessment", "einschaetzung")
         val file = File(context.cacheDir, "${prefix}_${nomFichierSafe.ifBlank { t("chat", "cat", "katze") }}.pdf")
         FileOutputStream(file).use { document.writeTo(it) }
         document.close()
@@ -101,7 +101,7 @@ object PdfExporter {
         canvas.drawText(nom, (PAGE_W - nomPaint.measureText(nom)) / 2f, 96f, nomPaint)
 
         val sousTitrePaint = makePaint(12f, COLOR_INK_SOFT, italic = true)
-        val sousTitre = t("Bilan émotionnel", "Emotional report", "Emotionale Einschätzung")
+        val sousTitre = t("Bilan émotionnel", "Emotional assessment", "Emotionale Einschätzung")
         canvas.drawText(sousTitre, (PAGE_W - sousTitrePaint.measureText(sousTitre)) / 2f, 118f, sousTitrePaint)
 
         drawLine(canvas, MARGIN + 40f, 130f, PAGE_W - MARGIN - 40f, 130f, COLOR_BORDER, 0.8f)
@@ -296,7 +296,7 @@ object PdfExporter {
         if (y < CONTENT_BOTTOM - 60f) {
             drawSectionTitle(canvas, y, t("Conclusion", "Conclusion", "Fazit"))
             y += 48f
-            val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more adapted way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
+            val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more suitable way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
             val conclusionH = measureStaticTextHeight(conclusion, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
             if (y + conclusionH < CONTENT_BOTTOM) {
                 drawStaticText(canvas, conclusion, MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
@@ -307,7 +307,7 @@ object PdfExporter {
         if (y < CONTENT_BOTTOM - 40f) {
             drawLine(canvas, MARGIN, y, PAGE_W - MARGIN, y, COLOR_BORDER, 0.5f)
             y += 16f
-            val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This report is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
+            val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This assessment is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
             val disclaimerH = measureStaticTextHeight(disclaimer, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
             if (y + disclaimerH < CONTENT_BOTTOM) {
                 drawStaticText(canvas, disclaimer, MARGIN, y, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
@@ -463,7 +463,7 @@ object PdfExporter {
     private fun dessineFooter(canvas: Canvas, pageNum: Int) {
         val footerY = PAGE_H - MARGIN - 14f
         drawLine(canvas, MARGIN, footerY - 10f, PAGE_W - MARGIN, footerY - 10f, COLOR_BORDER, 0.5f)
-        val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional report", "${appName()}  •  Unverbindliche emotionale Einschätzung")
+        val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional assessment", "${appName()}  •  Unverbindliche emotionale Einschätzung")
         canvas.drawText(footerText, MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
         val total = totalPagesActuel()
         val pageLabel = t("Page $pageNum / $total", "Page $pageNum / $total", "Seite $pageNum / $total")

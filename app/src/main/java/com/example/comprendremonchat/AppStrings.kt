@@ -216,13 +216,13 @@ fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Stri
         return tr(
             "Besoin principal : préserver un cadre stable et un environnement enrichi.",
             "Main need: keeping a stable routine and an enriched environment.",
-            "Hauptbedürfnis: einen stabilen Rahmen und eine bereicherte Umgebung bewahren."
+            "Hauptbedürfnis: einen stabilen Rahmen und eine abwechslungsreich gestaltete Umgebung bewahren."
         )
     }
     return when (appLang()) {
         AppLang.EN -> {
             when (axe) {
-                Axe.SECURITE -> "Main need: predictability, available refuges and respect for its limits."
+                Axe.SECURITE -> "Main need: predictability, accessible hiding places and respect for its limits."
                 Axe.LIEN -> "Main need: finding the right balance between reassuring presence and autonomy."
                 Axe.INSTINCTS -> "Main need: an enriched environment and healthy outlets for its instincts."
                 Axe.COHABITATION -> "Main need: managing space and resources to reduce tension."
@@ -230,9 +230,9 @@ fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Stri
         }
         AppLang.DE -> {
             when (axe) {
-                Axe.SECURITE -> "Hauptbedürfnis: Vorhersehbarkeit, verfügbare Rückzugsorte und Respekt vor ihren Grenzen."
+                Axe.SECURITE -> "Hauptbedürfnis: Vorhersehbarkeit, zugängliche Rückzugsorte und Respekt vor ihren Grenzen."
                 Axe.LIEN -> "Hauptbedürfnis: das richtige Gleichgewicht zwischen beruhigender Nähe und Selbstständigkeit finden."
-                Axe.INSTINCTS -> "Hauptbedürfnis: eine bereicherte Umgebung und gelenktes Ausleben ihrer Instinkte."
+                Axe.INSTINCTS -> "Hauptbedürfnis: eine abwechslungsreich gestaltete Umgebung und gelenktes Ausleben ihrer Instinkte."
                 Axe.COHABITATION -> "Hauptbedürfnis: ein Umgang mit Raum und Ressourcen, der Spannungen verringert."
             }
         }
@@ -251,7 +251,7 @@ fun phraseFinTraduit(nomChat: String): String {
     val nom = nomChatAffiche(nomChat)
     return when (appLang()) {
         AppLang.EN -> {
-            "The goal is not to label $nom, but to understand them better so you can move forward together more serenely."
+            "The goal is not to label $nom, but to understand your cat better so you can move forward together more serenely."
         }
         AppLang.DE -> {
             "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern sie besser zu verstehen, um gemeinsam gelassener voranzukommen."
@@ -647,7 +647,7 @@ fun genererRaisonSituationTraduit(
         AppLang.EN -> {
             when {
                 reponsesChoix["duree_probleme"] == 0 -> "The very recent nature of the behavior calls for particular vigilance."
-                reponsesChoix["evolution_probleme"] == 2 -> "The fact that it seems to be worsening may indicate the problem is taking up more space."
+                reponsesChoix["evolution_probleme"] == 2 -> "The fact that it seems to be worsening may indicate the problem is gaining ground."
                 contexte.physique >= 4 -> "Physical signs or possible discomfort mean that seeing a vet should be the first step."
                 else -> "Overall, the answers suggest moving forward gradually."
             }
@@ -1044,7 +1044,7 @@ fun aideQuestionTraduit(questionId: String): String? {
     return when (appLang()) {
         AppLang.EN -> {
             when (questionId) {
-                "race_categorie" -> "Choose the family that most resembles your cat."
+                "race_categorie" -> "Choose the group that best matches your cat."
                 "sterilise" -> "Neutering influences certain behaviors such as marking or territorial tensions."
                 "surtoilettage" -> "Over-grooming shows up as thinning fur or bald patches."
                 "reaction_absence" -> "Think about what you observe on your return or what your neighbors report."

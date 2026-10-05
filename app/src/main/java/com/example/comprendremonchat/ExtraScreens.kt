@@ -139,7 +139,7 @@ fun ecransDisponibles(): List<String> = trList(
         "Dictionnaire comportemental", "Alimentation", "Historique", "Général / Autre"
     ),
     listOf(
-        "Home", "Onboarding", "Questionnaire", "Report",
+        "Home", "Onboarding", "Questionnaire", "Results",
         "Behavioral dictionary", "Nutrition", "History", "General / Other"
     ),
     listOf(
@@ -350,7 +350,7 @@ fun HistoriqueScreen(
         AlertDialog(
             onDismissRequest = { showConfirmSupprimerTout = false },
             title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?")) },
-            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved reports will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
+            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved assessments will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
             confirmButton = {
                 Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
@@ -371,15 +371,15 @@ fun HistoriqueScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen"),
+                    tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
                     style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     if (bilans.isEmpty()) {
-                        tr("Aucun bilan sauvegardé pour l'instant.", "No saved reports yet.", "Noch keine gespeicherte Einschätzung.")
+                        tr("Aucun bilan sauvegardé pour l'instant.", "No saved assessments yet.", "Noch keine gespeicherte Einschätzung.")
                     } else {
-                        trList("${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}", "${bilans.size} saved report${if (bilans.size > 1) "s" else ""}", "${bilans.size} gespeicherte Einschätzung${if (bilans.size > 1) "en" else ""}")
+                        trList("${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}", "${bilans.size} saved assessment${if (bilans.size > 1) "s" else ""}", "${bilans.size} gespeicherte Einschätzung${if (bilans.size > 1) "en" else ""}")
                     },
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -390,7 +390,7 @@ fun HistoriqueScreen(
                     Icon(Icons.Rounded.Pets, contentDescription = null, tint = PremiumPalette.Accent, modifier = Modifier.size(40.dp))
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        tr("Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.", "Completed reports will appear here automatically after each questionnaire.", "Ihre Einschätzungen erscheinen hier automatisch nach jedem abgeschlossenen Fragebogen."),
+                        tr("Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.", "Completed assessments will appear here automatically after each questionnaire.", "Ihre Einschätzungen erscheinen hier automatisch nach jedem abgeschlossenen Fragebogen."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -428,8 +428,8 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(tr("Supprimer ce bilan ?", "Delete this report?", "Diese Einschätzung löschen?")) },
-            text = { Text(tr("Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.", "The report for ${bilan.nomChien} from ${bilan.date} will be permanently deleted.", "Die Einschätzung von ${bilan.nomChien} vom ${bilan.date} wird endgültig gelöscht.")) },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?")) },
+            text = { Text(tr("Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.", "The assessment for ${bilan.nomChien} on ${bilan.date} will be permanently deleted.", "Die Einschätzung von ${bilan.nomChien} vom ${bilan.date} wird endgültig gelöscht.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
@@ -522,7 +522,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(tr("Supprimer ce bilan ?", "Delete this report?", "Diese Einschätzung löschen?")) },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?")) },
             text = { Text(tr("Cette action est irréversible.", "This action cannot be undone.", "Diese Aktion kann nicht rückgängig gemacht werden.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
@@ -545,7 +545,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             if (bilan.aDejaMordu) AlerteMorsureCard(bilan.nomChien)
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Bilan sauvegardé", "Saved report", "Gespeicherte Einschätzung"), centered = true)
+                EditorialKicker(tr("Bilan sauvegardé", "Saved assessment", "Gespeicherte Einschätzung"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.nomChien, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(6.dp))
@@ -595,7 +595,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                 EditorialKicker(tr("Rappel", "Note", "Zur Erinnerung"), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This report is an indicative record. Your cat's situation may have changed since then.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
+                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This assessment is an indicative record. Your cat's situation may have changed since then.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -613,7 +613,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                 Icon(Icons.Rounded.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    tr("Supprimer ce bilan", "Delete this report", "Diese Einschätzung löschen"),
+                    tr("Supprimer ce bilan", "Delete this assessment", "Diese Einschätzung löschen"),
                     fontWeight = FontWeight.SemiBold
                 )
             }

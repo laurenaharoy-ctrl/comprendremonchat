@@ -196,13 +196,13 @@
     <string name="comp_destruction_titre">Zerstörung in Abwesenheit des Halters</string>
     <string name="comp_destruction_resume">Oft verbunden mit Stress oder Langeweile.</string>
     <string name="comp_destruction_explication">Eine Katze, die zerstört, wenn sie allein ist, handelt nicht aus Rache. Es ist ein Zeichen von Not oder Langeweile.</string>
-    <string name="comp_destruction_que_faire">Die Umgebung bereichern: wechselndes Spielzeug, zugängliche Fenster, Verstecke.</string>
+    <string name="comp_destruction_que_faire">Die Umgebung abwechslungsreicher gestalten: wechselndes Spielzeug, zugängliche Fenster, Verstecke.</string>
     <string name="comp_destruction_a_eviter">Im Nachhinein bestrafen – die Katze verbindet die Strafe nicht mit ihrem früheren Verhalten.</string>
 
     <string name="comp_vocalisation_titre">Übermäßiges Miauen</string>
     <string name="comp_vocalisation_resume">Je nach Kontext mehrere mögliche Ursachen.</string>
     <string name="comp_vocalisation_explication">Übermäßiges Miauen kann Hunger, Langeweile, den Wunsch nach Aufmerksamkeit, Schmerzen oder bei älteren Katzen ein beginnendes kognitives Syndrom anzeigen. Siam- und orientalische Rassen sind von Natur aus gesprächiger.</string>
-    <string name="comp_vocalisation_que_faire">Einen Tierarzt aufsuchen, wenn das Miauen neu, nächtlich und intensiv ist.</string>
+    <string name="comp_vocalisation_que_faire">Einen Tierarzt aufsuchen, wenn das Miauen neu ist oder nachts und intensiv auftritt.</string>
     <string name="comp_vocalisation_a_eviter">Jedes Mal auf lautstarke Forderungen eingehen – das verstärkt das Verhalten.</string>
 
     <string name="comp_coup_de_chaleur_titre">Hitzschlag</string>
@@ -214,7 +214,7 @@
     <!-- Nutrition fact sheets -->
     <string name="alim_dangereux1_titre">Welche Lebensmittel sollte man ganz meiden?</string>
     <string name="alim_dangereux1_resume">Manche Lebensmittel für Menschen können für Katzen gefährlich sein.</string>
-    <string name="alim_dangereux1_contenu">Aus Vorsicht meiden Sie Schokolade, Zwiebeln, Knoblauch, Trauben, Alkohol, gekochte Knochen sowie sehr fettige oder salzige Speisen. Auch Kuhmilch wird von den meisten erwachsenen Katzen schlecht vertragen. Bei Verdacht auf eine Aufnahme und wenn Symptome auftreten, wenden Sie sich rasch an einen Tierarzt.</string>
+    <string name="alim_dangereux1_contenu">Aus Vorsicht meiden Sie Schokolade, Zwiebeln, Knoblauch, Weintrauben (frisch oder getrocknet), Alkohol, gekochte Knochen sowie sehr fettige oder salzige Speisen. Auch Kuhmilch wird von den meisten erwachsenen Katzen schlecht vertragen. Bei Verdacht auf eine Aufnahme und wenn Symptome auftreten, wenden Sie sich rasch an einen Tierarzt.</string>
 
     <string name="alim_dangereux2_titre">Für Katzen giftige Pflanzen</string>
     <string name="alim_dangereux2_resume">Manche alltäglichen Pflanzen sind gefährlich.</string>
@@ -250,7 +250,7 @@
 
     <string name="alim_digestion2_titre">Meine Katze erbricht sich – ist das ernst?</string>
     <string name="alim_digestion2_resume">Das hängt von Häufigkeit und Kontext ab.</string>
-    <string name="alim_digestion2_contenu">Ein einzelnes Erbrechen eines Haarballens ist oft harmlos. Häufiges Erbrechen mit Blut, verbunden mit Mattigkeit oder Futterverweigerung, erfordert einen Tierarztbesuch.</string>
+    <string name="alim_digestion2_contenu">Ein einzelnes Erbrechen eines Haarballens ist oft harmlos. Häufiges Erbrechen, Erbrechen mit Blut oder Erbrechen in Verbindung mit Mattigkeit oder Futterverweigerung erfordert einen Tierarztbesuch.</string>
 
     <string name="alim_digestion3_titre">Haarballen: Wie hilft man seiner Katze?</string>
     <string name="alim_digestion3_resume">Ein häufiges Problem mit einfachen Lösungen.</string>

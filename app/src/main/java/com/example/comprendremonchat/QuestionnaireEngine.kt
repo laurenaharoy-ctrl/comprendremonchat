@@ -181,7 +181,7 @@ val categoriesRacesChatEn = listOf(
     CategorieRace("abyssin", "Abyssinian",
         listOf("Very active and curious", "Need for freedom", "Low tolerance for boredom"),
         "Environmental enrichment is essential — it gets bored quickly and reacts strongly."),
-    CategorieRace("sacre_birmanie", "Sacred Birman",
+    CategorieRace("sacre_birmanie", "Birman",
         listOf("Gentle and balanced", "Moderate attachment", "Good cohabitation"),
         "Generally balanced, but sensitive to tensions in the household."),
     CategorieRace("autre", "Other breed / unknown",
@@ -213,7 +213,7 @@ val categoriesRacesChatDe = listOf(
         "Ihre scheinbare Ruhe kann Stress verbergen, wenn die feinen Signale nicht erkannt werden."),
     CategorieRace("abyssin", "Abessinier",
         listOf("Sehr aktiv und neugierig", "Bedürfnis nach Freiheit", "Verträgt Langeweile schlecht"),
-        "Eine bereicherte Umgebung ist unerlässlich – sie langweilt sich schnell und reagiert stark."),
+        "Eine abwechslungsreich gestaltete Umgebung ist unerlässlich – sie langweilt sich schnell und reagiert stark."),
     CategorieRace("sacre_birmanie", "Heilige Birma",
         listOf("Sanft und ausgeglichen", "Mäßige Bindung", "Gutes Zusammenleben"),
         "Meist ausgeglichen, aber empfindlich gegenüber Spannungen im Haushalt."),
@@ -552,7 +552,7 @@ object QuestionnaireEngine {
                         append("Der instinktive Frust von $nom kann mehrere Ursachen haben. ")
                         append("Die Katze ist ein einzelgängerischer Jäger, dessen Bedürfnisse nach Jagen, Erkunden und Kratzen tief verankert sind – eine Umgebung, die das nicht zulässt, erzeugt unweigerlich Frust. ")
                         if (reponsesChoix["acces_exterieur"] == 2) append("Ohne Freigang fehlen der Katze viele natürliche Reize, die diese Instinkte in geordnete Bahnen lenken. ")
-                        if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Eine wenig bereicherte Wohnung verstärkt diesen Mangel an Ventilen für ihre natürlichen Instinkte. ")
+                        if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Eine wenig abwechslungsreich gestaltete Wohnung verstärkt diesen Mangel an Ventilen für ihre natürlichen Instinkte. ")
                         val raceCat = reponsesChoix["race_categorie"]
                         if (raceCat != null && raceCat <= 1) append("Manche Rassen wie Bengal oder Abessinier wurden auf ein sehr hohes Energieniveau gezüchtet, was dieses Bedürfnis nach Beschäftigung noch verstärkt. ")
                         append("Das ist kein Charakterproblem, sondern ein Grundbedürfnis, das sich ausdrücken will – mangels passender Alternative manchmal auf unerwünschte Weise.")
@@ -696,7 +696,7 @@ fun questionsApplication(): List<Question> {
                 listOf("Européen / Gouttière", "Maine Coon", "Persan", "Siamois", "Ragdoll",
                     "Bengal", "British Shorthair", "Abyssin", "Sacré de Birmanie", "Autre race / inconnu"),
                 listOf("European / Mixed breed", "Maine Coon", "Persian", "Siamese", "Ragdoll",
-                    "Bengal", "British Shorthair", "Abyssinian", "Sacred Birman", "Other breed / unknown"),
+                    "Bengal", "British Shorthair", "Abyssinian", "Birman", "Other breed / unknown"),
                 listOf("Europäisch Kurzhaar / Mischling", "Maine Coon", "Perser", "Siam", "Ragdoll",
                     "Bengal", "Britisch Kurzhaar", "Abessinier", "Heilige Birma", "Andere Rasse / unbekannt")
             )),
@@ -727,10 +727,10 @@ fun questionsApplication(): List<Question> {
                 listOf("Enrichi (griffoirs, hauteurs, jeux variés, fenêtres accessibles)",
                     "Correct mais peut mieux faire", "Peu stimulant",
                     "Je ne sais pas vraiment", "Mon chat a accès à l'extérieur"),
-                listOf("Enriched (scratching posts, heights, varied toys, accessible windows)",
+                listOf("Enriched (scratching posts, high perches, varied toys, accessible windows)",
                     "Decent but could be better", "Not very stimulating",
                     "I'm not really sure", "My cat has access to the outdoors"),
-                listOf("Bereichert (Kratzbäume, erhöhte Plätze, abwechslungsreiches Spielzeug, zugängliche Fenster)",
+                listOf("Abwechslungsreich gestaltet (Kratzbäume, erhöhte Plätze, abwechslungsreiches Spielzeug, zugängliche Fenster)",
                     "Ordentlich, aber ausbaufähig", "Wenig anregend",
                     "Ich weiß es nicht genau", "Meine Katze hat Freigang")
             )),
@@ -1058,7 +1058,7 @@ fun questionsApplication(): List<Question> {
                 listOf("Nein, nie",
                     "Selten – nur wenn Warnsignale übersehen wurden",
                     "Manchmal, unvorhersehbar",
-                    "Oft – körperliche Kontakte sind schwer zu handhaben")
+                    "Oft – körperliche Kontakte sind schwer zu bewältigen")
             ),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
 
@@ -1109,7 +1109,7 @@ fun questionsApplication(): List<Question> {
 
         QuestionChoix("intensite_probleme",
             tr("Quand cela arrive, c'est plutôt :", "When it happens, it is usually:", "Wenn es passiert, ist es eher:"),
-            trList(listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable"), listOf("Easily manageable", "Inconvenient but bearable", "Difficult to manage", "Very intense, uncontrollable"), listOf("Leicht zu handhaben", "Störend, aber erträglich", "Schwer zu handhaben", "Sehr intensiv, unkontrollierbar"))),
+            trList(listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable"), listOf("Easily manageable", "Inconvenient but bearable", "Difficult to manage", "Very intense, uncontrollable"), listOf("Gut zu bewältigen", "Störend, aber erträglich", "Schwer zu bewältigen", "Sehr intensiv, unkontrollierbar"))),
 
         QuestionChoix("generalisation_probleme",
             tr("Ce comportement se produit :", "This behavior occurs:", "Dieses Verhalten tritt auf:"),

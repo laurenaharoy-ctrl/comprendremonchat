@@ -117,7 +117,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         OnboardingSlide(
             kicker = "Welcome",
             titre = "Understanding My Cat",
-            description = "This app helps you decode your cat's behaviors and get concrete, personalized guidance tailored to their unique profile.",
+            description = "This app helps you decode your cat's behaviors and get concrete, personalized guidance tailored to its unique profile.",
             illustrationType = IllustrationType.CHAT_LOGO
         ),
         OnboardingSlide(
@@ -134,13 +134,13 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "What you get",
-            titre = "A complete personalized report",
-            description = "At the end of the questionnaire, you receive a detailed report with practical advice, an action plan, and a PDF to share with your vet.",
+            titre = "A complete personalized assessment",
+            description = "At the end of the questionnaire, you receive a detailed assessment with practical advice, an action plan, and a PDF to share with your vet.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
-                Icons.Rounded.CheckCircle to "Emotional report",
+                Icons.Rounded.CheckCircle to "Emotional assessment",
                 Icons.Rounded.PictureAsPdf to "4-page PDF export",
-                Icons.Rounded.History to "Report history"
+                Icons.Rounded.History to "Assessment history"
             )
         )
     ),

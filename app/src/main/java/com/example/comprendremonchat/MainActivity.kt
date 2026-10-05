@@ -265,7 +265,7 @@ Envoyé depuis l'application Comprendre mon chat
                     AppScreen.Onboarding -> ""
                     AppScreen.Questionnaire -> tr("Questionnaire", "Questionnaire", "Fragebogen")
                     AppScreen.Chargement -> tr("Analyse", "Analysis", "Analyse")
-                    AppScreen.Resultat -> tr("Résultat", "Report", "Ergebnis")
+                    AppScreen.Resultat -> tr("Résultat", "Results", "Ergebnis")
                     AppScreen.Dictionnaire -> tr("Dictionnaire comportemental", "Behavioral dictionary", "Verhaltenslexikon")
                     is AppScreen.DictionnaireDetail -> {
                         val ficheId = (screen as AppScreen.DictionnaireDetail).ficheId
@@ -273,8 +273,8 @@ Envoyé depuis l'application Comprendre mon chat
                     }
                     AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung")
                     AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung")
-                    AppScreen.Historique -> tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen")
-                    is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Report detail", "Details der Einschätzung")
+                    AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen")
+                    is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung")
                     AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen")
                 }
 
@@ -309,7 +309,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 }) {
                                     Icon(
                                         Icons.Rounded.History,
-                                        contentDescription = tr("Historique des bilans", "Report history", "Verlauf der Einschätzungen"),
+                                        contentDescription = tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
                                         tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                     )
                                 }
@@ -570,7 +570,7 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
 
 fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): String {
     val nom = nomChatAffiche(nomChat)
-    val titrePartage = tr("Bilan émotionnel pour $nom", "Emotional report for $nom", "Emotionale Einschätzung für $nom")
+    val titrePartage = tr("Bilan émotionnel pour $nom", "Emotional assessment for $nom", "Emotionale Einschätzung für $nom")
     val hypotheseLabel = tr("Hypothèse :", "Hypothesis:", "Hypothese:")
     val prioriteLabel = tr("Priorité :", "Priority:", "Priorität:")
     val scoresLabel = tr("Scores :", "Scores:", "Werte:")
@@ -578,7 +578,7 @@ fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): Stri
     val lienLabel = tr("Lien humain", "Human bond", "Bindung zum Menschen")
     val instinctsLabel = tr("Instincts", "Instincts", "Instinkte")
     val cohabLabel = tr("Cohabitation", "Cohabitation", "Zusammenleben")
-    val avertissement = tr("⚠️ Bilan indicatif", "⚠️ Indicative report", "⚠️ Unverbindliche Einschätzung")
+    val avertissement = tr("⚠️ Bilan indicatif", "⚠️ Indicative assessment", "⚠️ Unverbindliche Einschätzung")
     val sep = tr(" : ", ": ", ": ")
 
     return "$titrePartage\n\n$hypotheseLabel\n${analyse.hypothesePrincipale}\n\n$prioriteLabel\n${textePrioriteAction(analyse.prioriteAction)}\n\n${analyse.syntheseAvancee}\n\n$scoresLabel\n$securiteLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}\n$lienLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}\n$instinctsLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}\n$cohabLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}\n\n$avertissement"

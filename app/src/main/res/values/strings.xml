@@ -214,7 +214,7 @@
     <!-- Fiches alimentation — Titres et résumés -->
     <string name="alim_dangereux1_titre">Quels aliments éviter absolument ?</string>
     <string name="alim_dangereux1_resume">Certains aliments humains peuvent être dangereux pour le chat.</string>
-    <string name="alim_dangereux1_contenu">Par prudence, il faut éviter le chocolat, l\'oignon, l\'ail, le raisin, l\'alcool, les os cuits, les aliments très gras ou très salés. Le lait de vache est également mal toléré par la plupart des chats adultes. En cas d\'ingestion suspecte, consultez rapidement si des symptômes apparaissent.</string>
+    <string name="alim_dangereux1_contenu">Par prudence, il faut éviter le chocolat, l\'oignon, l\'ail, le raisin (frais ou sec), l\'alcool, les os cuits, les aliments très gras ou très salés. Le lait de vache est également mal toléré par la plupart des chats adultes. En cas d\'ingestion suspecte, consultez rapidement si des symptômes apparaissent.</string>
 
     <string name="alim_dangereux2_titre">Les plantes toxiques pour le chat</string>
     <string name="alim_dangereux2_resume">Certaines plantes courantes sont dangereuses.</string>

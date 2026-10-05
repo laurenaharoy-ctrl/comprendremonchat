@@ -19,11 +19,11 @@
     <!-- Loading -->
     <string name="chargement_analyse">Analyzing…</string>
     <string name="chargement_profil">Reading your cat\'s profile…</string>
-    <string name="chargement_bilan">Preparing your report…</string>
+    <string name="chargement_bilan">Preparing your assessment…</string>
 
     <!-- Results -->
-    <string name="kicker_votre_bilan">Your report</string>
-    <string name="titre_bilan_pour">Report for</string>
+    <string name="kicker_votre_bilan">Your assessment</string>
+    <string name="titre_bilan_pour">Assessment for</string>
     <string name="kicker_lecture_principale">Main reading</string>
     <string name="label_priorite">Priority: </string>
     <string name="kicker_ressent">How things probably feel for</string>
@@ -44,7 +44,7 @@
     <string name="kicker_demander_aide">When to seek help</string>
     <string name="texte_morsure_signale">A scratch or bite has been reported — support from a veterinary behaviorist or feline behaviorist is recommended.</string>
     <string name="kicker_important">Important</string>
-    <string name="texte_important_bilan">This report is indicative only. It does not replace a veterinarian or feline behaviorist.</string>
+    <string name="texte_important_bilan">This assessment is indicative only. It does not replace a veterinarian or feline behaviorist.</string>
     <string name="kicker_aller_plus_loin">Going further with</string>
     <string name="label_fiches_comportementales">Behavioral fact sheets</string>
     <string name="label_reperes_alimentation">Nutrition guidelines</string>
@@ -112,7 +112,7 @@
     <string name="texte_tutoriel">Replay the app introduction from the start.</string>
     <string name="btn_revoir_intro">View the introduction again</string>
     <string name="kicker_confidentialite">Privacy</string>
-    <string name="texte_confidentialite">This app collects no personal data. Reports are stored only on your device. Notifications are local.</string>
+    <string name="texte_confidentialite">This app collects no personal data. Assessments are stored only on your device. Notifications are local.</string>
     <string name="btn_politique_confidentialite">Privacy policy</string>
     <string name="kicker_a_propos">About</string>
     <string name="texte_a_propos">Designed to help owners better understand their cat and improve its quality of life.</string>
@@ -214,7 +214,7 @@
     <!-- Nutrition fact sheets -->
     <string name="alim_dangereux1_titre">Which foods must be avoided at all costs?</string>
     <string name="alim_dangereux1_resume">Some human foods can be dangerous for cats.</string>
-    <string name="alim_dangereux1_contenu">To be safe, avoid chocolate, onion, garlic, grapes, alcohol, cooked bones, and very fatty or salty foods. Cow\'s milk is also poorly tolerated by most adult cats. If ingestion is suspected and symptoms appear, consult a vet promptly.</string>
+    <string name="alim_dangereux1_contenu">To be safe, avoid chocolate, onion, garlic, grapes (fresh or dried), alcohol, cooked bones, and very fatty or salty foods. Cow\'s milk is also poorly tolerated by most adult cats. If ingestion is suspected and symptoms appear, consult a vet promptly.</string>
 
     <string name="alim_dangereux2_titre">Plants toxic to cats</string>
     <string name="alim_dangereux2_resume">Some common plants are dangerous.</string>

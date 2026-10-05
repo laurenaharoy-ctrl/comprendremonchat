@@ -24,14 +24,14 @@ class RappelWorker(
             tr("Rappels bien-être du chat", "Cat well-being reminders", "Erinnerungen zum Wohlbefinden der Katze"),
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = tr("Rappels mensuels pour refaire le Bilan émotionnel", "Monthly reminders to redo the emotional report", "Monatliche Erinnerungen, die emotionale Einschätzung zu wiederholen")
+            description = tr("Rappels mensuels pour refaire le Bilan émotionnel", "Monthly reminders to redo the emotional assessment", "Monatliche Erinnerungen, die emotionale Einschätzung zu wiederholen")
         }
         notificationManager.createNotificationChannel(channel)
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(tr("Il est temps de refaire le bilan !", "Time for a new report!", "Zeit für eine neue Einschätzung!"))
-            .setContentText(tr("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.", "$nomChat may have changed over the past month. Why not do a new emotional report?", "Bei $nomChat kann sich im letzten Monat einiges verändert haben. Machen Sie eine neue emotionale Einschätzung."))
+            .setContentTitle(tr("Il est temps de refaire le bilan !", "Time for a new assessment!", "Zeit für eine neue Einschätzung!"))
+            .setContentText(tr("$nomChat a peut-être évolué ce dernier mois. Faites un nouveau Bilan émotionnel.", "$nomChat may have changed over the past month. Why not do a new emotional assessment?", "Bei $nomChat kann sich im letzten Monat einiges verändert haben. Machen Sie eine neue emotionale Einschätzung."))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()
