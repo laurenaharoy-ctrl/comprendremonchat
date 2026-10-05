@@ -741,14 +741,14 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["proprete_type"] == 0 -> "Seek care urgently if you notice emergency signs in $nom: crying in pain while urinating, frequent unsuccessful trips to the litter box, or no urine at all for over 24 hours. These signs can indicate a urinary blockage, which is a veterinary emergency."
                 reponsesChoix["proprete_type"] == 2 -> "Seek care urgently if you notice signs of a urinary blockage in $nom (crying in pain while urinating, unsuccessful trips to the litter box, no urine for over 24 hours). As for the stools, a vet visit is also worth it if diarrhea persists, or if you notice blood or unexplained weight loss."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Given $nom's age and the signs described, a veterinary check-up is recommended as a priority to rule out or confirm age-related cognitive decline before considering a behavioral approach."
-                reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This marking has become a learned habit rather than a hormonal behavior — a feline behaviorist can help $nom unlearn this specific behavior, which often takes longer than addressing stress-related marking."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or to a living arrangement between the animals that needs a fresh start — a feline behaviorist can help you rebuild a safer, more gradual introduction between them."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "A scratch or bite toward a person has been reported — support from a veterinary behaviorist or feline behaviorist is recommended for $nom, both for your safety and $nom's well-being."
+                reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This marking has become a learned habit rather than a hormonal behavior — a feline behavior consultant can help $nom unlearn this specific behavior, which often takes longer than addressing stress-related marking."
+                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or to a living arrangement between the animals that needs a fresh start — a feline behavior consultant can help you rebuild a safer, more gradual introduction between them."
+                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "A scratch or bite toward a person has been reported — support from a veterinary behaviorist or feline behavior consultant is recommended for $nom, both for your safety and $nom's well-being."
                 contexte.physique >= 4 -> "Physical signs have been noted — a veterinary consultation is recommended as a priority for $nom before any behavioral approach."
                 reponsesChoix["surtoilettage"] == 1 -> "Over-grooming can have a medical cause — veterinary advice is recommended for $nom before addressing the behavior."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Urine marking in a neutered cat warrants a veterinary check-up for $nom first to rule out a urinary infection."
-                niveauSituation == NiveauSituation.SENSIBLE -> "The situation warrants the attention of a feline behaviorist who can support $nom and guide you concretely."
-                maxOf(securite, lien, instincts, cohabitation) >= 75 -> "The intensity of the observed difficulties suggests that a feline behaviorist could provide valuable help for $nom."
+                niveauSituation == NiveauSituation.SENSIBLE -> "The situation warrants the attention of a feline behavior consultant who can support $nom and guide you concretely."
+                maxOf(securite, lien, instincts, cohabitation) >= 75 -> "The intensity of the observed difficulties suggests that a feline behavior consultant could provide valuable help for $nom."
                 else -> null
             }
         }
@@ -852,16 +852,16 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
             when {
                 reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: rework the introduction with other animals",
                     "Since there has already been a scratch or bite toward another animal, living together needs to be rebuilt calmly for $nom.",
-                    listOf("Temporarily separate the animals in conflict.", "Consider support from a feline behaviorist for a gradual reintroduction."))
+                    listOf("Temporarily separate the animals in conflict.", "Consider support from a feline behavior consultant for a gradual reintroduction."))
                 reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a professional",
                     "Since there has already been a scratch or bite toward a person, the situation should not be minimized for $nom.",
-                    listOf("Avoid identified risk situations.", "Consult a veterinary behaviorist or feline behaviorist."))
+                    listOf("Avoid identified risk situations.", "Consult a veterinary behaviorist or feline behavior consultant."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a veterinarian",
                     "Physical signs have been reported for $nom — the priority is medical.",
                     listOf("Make a veterinary appointment promptly.", "Do not wait for symptoms to worsen."))
                 priorite == PrioriteAction.ELEVEE -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: act without delay",
                     "The situation calls for prompt action for $nom.",
-                    listOf("Ease off in difficult situations.", "Consider support from a feline behaviorist."))
+                    listOf("Ease off in difficult situations.", "Consider support from a feline behavior consultant."))
                 priorite == PrioriteAction.MODEREE -> PrioriteImmediate(PrioriteAction.MODEREE, "Immediate priority: move forward gradually",
                     "The situation deserves attention for $nom.",
                     listOf("Begin gradual work on the environment.", "Observe how often and how intensely the behaviors occur."))

@@ -32,7 +32,7 @@
     <string name="subsection_aggrave">Was die Lage verschlimmern kann</string>
     <string name="subsection_protege">Was hilft</string>
     <string name="kicker_niveau_situation">Einschätzung der Lage</string>
-    <string name="kicker_inquieter">Muss man sich Sorgen machen?</string>
+    <string name="kicker_inquieter">Sollten Sie sich Sorgen machen?</string>
     <string name="kicker_ce_qui_passe">Was wahrscheinlich geschieht</string>
     <string name="highlight_chip">Der wichtigste Ansatzpunkt</string>
     <string name="highlight_footer">Oft beginnt genau hier die Veränderung.</string>
@@ -120,7 +120,7 @@
     <!-- Navigation / TopBar -->
     <string name="nav_retour">Zurück</string>
 
-    <!-- Behavioral fact sheets -->
+    <!-- Behavior guides -->
     <string name="comp_ronronnement_titre">Schnurren</string>
     <string name="comp_ronronnement_resume">Nicht immer ein Zeichen von Wohlbefinden – es kann auch Stress anzeigen.</string>
     <string name="comp_ronronnement_explication">Das Schnurren entsteht durch Schwingungen des Kehlkopfs. Oft zeigt es Wohlbefinden an, aber auch Selbstberuhigung bei Stress oder Schmerzen.</string>
@@ -211,7 +211,7 @@
     <string name="comp_coup_de_chaleur_que_faire">Bringen Sie die Katze sofort an einen kühlen, gut belüfteten Ort, befeuchten Sie Körper und Pfoten mit lauwarmem (niemals eiskaltem) Wasser, bieten Sie Wasser an, ohne zu zwingen, und kontaktieren Sie umgehend einen Tierarzt, auch wenn es ihr besser zu gehen scheint.</string>
     <string name="comp_coup_de_chaleur_a_eviter">Eiskaltes Wasser oder Eisbeutel direkt auf der Haut verwenden, die Katze zwingen, auf einmal viel zu trinken, oder abwarten, ob es vorbeigeht, bevor man einen Tierarzt ruft – bei Katzen zeigen sich die Anzeichen oft spät.</string>
 
-    <!-- Nutrition fact sheets -->
+    <!-- Nutrition guides -->
     <string name="alim_dangereux1_titre">Welche Lebensmittel sollte man ganz meiden?</string>
     <string name="alim_dangereux1_resume">Manche Lebensmittel für Menschen können für Katzen gefährlich sein.</string>
     <string name="alim_dangereux1_contenu">Aus Vorsicht meiden Sie Schokolade, Zwiebeln, Knoblauch, Weintrauben (frisch oder getrocknet), Alkohol, gekochte Knochen sowie sehr fettige oder salzige Speisen. Auch Kuhmilch wird von den meisten erwachsenen Katzen schlecht vertragen. Bei Verdacht auf eine Aufnahme und wenn Symptome auftreten, wenden Sie sich rasch an einen Tierarzt.</string>

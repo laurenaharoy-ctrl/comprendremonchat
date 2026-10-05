@@ -31,10 +31,10 @@
     <string name="kicker_facteurs">Identified factors</string>
     <string name="subsection_aggrave">What may make things worse</string>
     <string name="subsection_protege">What helps</string>
-    <string name="kicker_niveau_situation">Situation level</string>
+    <string name="kicker_niveau_situation">How serious this is</string>
     <string name="kicker_inquieter">Should you be concerned?</string>
     <string name="kicker_ce_qui_passe">What is probably happening</string>
-    <string name="highlight_chip">The main lever</string>
+    <string name="highlight_chip">The main thing to build on</string>
     <string name="highlight_footer">This is often where change begins to take shape.</string>
     <string name="kicker_3_jours">The next 3 days</string>
     <string name="subsection_a_faire">To do</string>
@@ -42,11 +42,11 @@
     <string name="subsection_a_observer">To observe</string>
     <string name="kicker_conseils">Additional advice</string>
     <string name="kicker_demander_aide">When to seek help</string>
-    <string name="texte_morsure_signale">A scratch or bite has been reported — support from a veterinary behaviorist or feline behaviorist is recommended.</string>
+    <string name="texte_morsure_signale">A scratch or bite has been reported — support from a veterinary behaviorist or feline behavior consultant is recommended.</string>
     <string name="kicker_important">Important</string>
-    <string name="texte_important_bilan">This assessment is indicative only. It does not replace a veterinarian or feline behaviorist.</string>
+    <string name="texte_important_bilan">This assessment is indicative only. It does not replace a veterinarian or feline behavior consultant.</string>
     <string name="kicker_aller_plus_loin">Going further with</string>
-    <string name="label_fiches_comportementales">Behavioral fact sheets</string>
+    <string name="label_fiches_comportementales">Behavior guides</string>
     <string name="label_reperes_alimentation">Nutrition guidelines</string>
     <string name="kicker_a_retenir">Key takeaway</string>
     <string name="kicker_le_livre">The book</string>
@@ -60,7 +60,7 @@
     <!-- Bite alert -->
     <string name="alerte_morsure_titre">SCRATCH / BITE REPORTED</string>
     <string name="alerte_morsure_corps">There has already been a scratch or bite involving %1$s. This situation deserves special attention.</string>
-    <string name="alerte_morsure_conseil">Support from a veterinary behaviorist or feline behaviorist is recommended.</string>
+    <string name="alerte_morsure_conseil">Support from a veterinary behaviorist or feline behavior consultant is recommended.</string>
 
     <!-- Breed profile -->
     <string name="kicker_profil_race">Breed profile</string>
@@ -71,10 +71,10 @@
     <!-- Behavioral dictionary -->
     <string name="kicker_dictionnaire">Behavioral dictionary</string>
     <string name="titre_dictionnaire">Pointers for reading your cat\'s body language</string>
-    <string name="placeholder_recherche">Search a fact sheet…</string>
-    <string name="aucune_fiche">No fact sheet matches \"%1$s\".</string>
-    <string name="texte_important_dictionnaire">These fact sheets offer guidance for interpreting feline behavior. They do not replace professional advice.</string>
-    <string name="kicker_fiche_comportementale">Behavioral fact sheet</string>
+    <string name="placeholder_recherche">Search guides…</string>
+    <string name="aucune_fiche">No guide matches \"%1$s\".</string>
+    <string name="texte_important_dictionnaire">These guides offer help interpreting feline behavior. They do not replace professional advice.</string>
+    <string name="kicker_fiche_comportementale">Behavior guide</string>
     <string name="kicker_explication">Explanation</string>
     <string name="kicker_que_faire">What to do</string>
     <string name="kicker_a_eviter_fiche">What to avoid</string>
@@ -120,7 +120,7 @@
     <!-- Navigation / TopBar -->
     <string name="nav_retour">Back</string>
 
-    <!-- Behavioral fact sheets -->
+    <!-- Behavior guides -->
     <string name="comp_ronronnement_titre">Purring</string>
     <string name="comp_ronronnement_resume">Not always a sign of well-being — it can also signal stress.</string>
     <string name="comp_ronronnement_explication">Purring is produced by vibration of the larynx. It often signals well-being, but also self-soothing in cases of stress or pain.</string>
@@ -211,7 +211,7 @@
     <string name="comp_coup_de_chaleur_que_faire">Immediately move the cat to a cool, ventilated area, wet the body and paws with lukewarm water (never ice-cold), offer water without forcing, and contact a vet urgently even if the cat seems to improve.</string>
     <string name="comp_coup_de_chaleur_a_eviter">Using ice-cold water or ice packs directly on the skin, forcing the cat to drink all at once, or waiting to see if it passes before calling a vet — in cats, visible signs often appear late.</string>
 
-    <!-- Nutrition fact sheets -->
+    <!-- Nutrition guides -->
     <string name="alim_dangereux1_titre">Which foods must be avoided at all costs?</string>
     <string name="alim_dangereux1_resume">Some human foods can be dangerous for cats.</string>
     <string name="alim_dangereux1_contenu">To be safe, avoid chocolate, onion, garlic, grapes (fresh or dried), alcohol, cooked bones, and very fatty or salty foods. Cow\'s milk is also poorly tolerated by most adult cats. If ingestion is suspected and symptoms appear, consult a vet promptly.</string>
