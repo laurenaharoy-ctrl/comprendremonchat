@@ -79,7 +79,7 @@
     <string name="kicker_que_faire">What to do</string>
     <string name="kicker_a_eviter_fiche">What to avoid</string>
     <string name="texte_rappel_fiche">An isolated behavior is not always enough to draw conclusions. Context and overall body language matter just as much.</string>
-    <string name="fiche_introuvable">Fact sheet not found.</string>
+    <string name="fiche_introuvable">Guide not found.</string>
 
     <!-- Nutrition -->
     <string name="kicker_alimentation">Cat nutrition</string>

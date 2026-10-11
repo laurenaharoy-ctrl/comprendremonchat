@@ -47,13 +47,13 @@ object PdfExporter {
     private val CONTENT_W = PAGE_W - MARGIN * 2
     private const val FOOTER_H = 60f
     private val CONTENT_BOTTOM = PAGE_H - MARGIN - FOOTER_H - 10f
+    private val QR_FOOTER_TOP = PAGE_H - MARGIN - 90f
+    private val CONTENT_BOTTOM_QR = QR_FOOTER_TOP - 12f
 
     private fun t(fr: String, en: String, de: String) = tr(fr, en, de)
     private fun appName() = t("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen")
-    private fun totalPagesActuel(): Int = if (showConsultation()) 5 else 4
 
     fun exporterBilanPdf(context: Context, nomChat: String, analyse: ResultatAnalyse): File {
-        val document = PdfDocument()
         val nom = nomChatAffiche(nomChat)
         val date = when (appLang()) {
             AppLang.EN -> SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(Date())
@@ -63,13 +63,14 @@ object PdfExporter {
         val couleurPriorite = couleurPourPriorite(analyse.prioriteAction)
         val libellePriorite = libellePourPriorite(analyse.prioriteAction)
 
-        dessinePage1(document, nom, date, analyse, couleurPriorite, libellePriorite)
-        dessinePage2(document, nom, analyse)
-        dessinePage3(document, nom, analyse)
-        dessinePage4(document, nom, analyse, couleurPriorite)
-        if (showConsultation()) {
-            dessinePage5Consultation(document)
-        }
+        // 1er passage : brouillon jetable, uniquement pour compter les pages
+        val brouillon = PdfDocument()
+        val totalPages = dessineTout(brouillon, nom, date, analyse, couleurPriorite, libellePriorite, 0)
+        brouillon.close()
+
+        // 2e passage : le vrai document, avec « Page X / total » correct
+        val document = PdfDocument()
+        dessineTout(document, nom, date, analyse, couleurPriorite, libellePriorite, totalPages)
 
         val nomFichierSafe = nom.lowercase(Locale.getDefault())
             .replace("\\s+".toRegex(), "_")
@@ -82,13 +83,117 @@ object PdfExporter {
         return file
     }
 
-    private fun dessinePage1(
-        document: PdfDocument, nom: String, date: String,
+    private fun dessineTout(
+        document: PdfDocument, nom: String, date: String, analyse: ResultatAnalyse,
+        couleurPriorite: Int, libellePriorite: String, totalPages: Int
+    ): Int {
+        val pager = Pager(document, totalPages)
+        dessineCouverture(pager, nom, date, analyse, couleurPriorite, libellePriorite)
+        dessineProfil(pager, nom, analyse)
+        dessinePlan(pager, nom, analyse)
+        dessineARetenir(pager, nom, analyse, couleurPriorite)
+        if (showConsultation()) {
+            dessineConsultation(pager)
+        }
+        pager.closePage()
+        return pager.pageNum
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // PAGINATION — passe automatiquement à la page suivante
+    // quand un bloc ne tient plus, au lieu de le couper
+    // ════════════════════════════════════════════════════════════
+    private class Pager(val document: PdfDocument, val totalPages: Int) {
+        var pageNum = 0
+        private var page: PdfDocument.Page? = null
+        val canvas: Canvas get() = page!!.canvas
+        var y = MARGIN
+        var bottom = CONTENT_BOTTOM
+        var header: String? = null
+        private var startY = MARGIN
+
+        fun newPage(title: String?) {
+            closePage()
+            pageNum++
+            page = demarrerPage(document, pageNum)
+            header = title
+            y = MARGIN
+            if (title != null) {
+                drawPageHeader(page!!.canvas, title)
+                y += 48f
+            }
+            startY = y
+        }
+
+        /** Renvoie true si une nouvelle page a été ouverte. */
+        fun ensure(height: Float): Boolean {
+            if (y + height > bottom && y > startY) {
+                newPage(header)
+                return true
+            }
+            return false
+        }
+
+        fun closePage(withQr: Boolean = false) {
+            val p = page ?: return
+            if (withQr) dessineFooterAvecQr(p.canvas, pageNum, totalPages)
+            else dessineFooter(p.canvas, pageNum, totalPages)
+            document.finishPage(p)
+            page = null
+        }
+    }
+
+    private fun Pager.sectionTitle(title: String, keepWith: Float = 40f) {
+        ensure(48f + keepWith)
+        drawSectionTitle(canvas, y, title)
+        y += 48f
+    }
+
+    /** Hauteur d'une carte (pour garder un titre avec son contenu). */
+    private fun cardHeight(text: String, paint: TextPaint): Float =
+        measureStaticTextHeight(text, (CONTENT_W - 32f).toInt(), paint) + 32f
+
+    /** Hauteur d'un paragraphe (pour garder un titre avec son contenu). */
+    private fun paragraphHeight(text: String, paint: TextPaint): Float =
+        measureStaticTextHeight(text, CONTENT_W.toInt(), paint)
+
+    private fun Pager.card(text: String, fill: Int, border: Int, paint: TextPaint, spaceAfter: Float = 24f) {
+        val h = cardHeight(text, paint)
+        ensure(h)
+        drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + h, fill, border, 14f)
+        drawStaticText(canvas, text, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), paint)
+        y += h + spaceAfter
+    }
+
+    private fun Pager.paragraph(text: String, paint: TextPaint, spaceAfter: Float = 24f) {
+        if (text.isBlank()) return
+        val h = paragraphHeight(text, paint)
+        ensure(h)
+        drawStaticText(canvas, text, MARGIN, y, CONTENT_W.toInt(), paint)
+        y += h + spaceAfter
+    }
+
+    private fun Pager.label(text: String) {
+        ensure(20f + 30f)
+        canvas.drawText(text, MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
+        y += 20f
+    }
+
+    private fun Pager.bullet(text: String) {
+        val h = makeStaticLayout(text, (CONTENT_W - 18f).toInt(), makePaint(10.5f, COLOR_INK)).height.toFloat()
+        if (ensure(h)) y += 20f
+        y = drawBullet(canvas, y, text)
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // PAGE 1 — Couverture
+    // ════════════════════════════════════════════════════════════
+    private fun dessineCouverture(
+        pager: Pager, nom: String, date: String,
         analyse: ResultatAnalyse, couleurPriorite: Int, libellePriorite: String
     ) {
-        val page = demarrerPage(document, 1)
-        val canvas = page.canvas
-        var y: Float
+        pager.newPage(null)
+        val canvas = pager.canvas
 
         drawRect(canvas, 0f, 0f, PAGE_W.toFloat(), 190f, COLOR_WARM_BG)
         drawLine(canvas, MARGIN, 26f, PAGE_W - MARGIN, 26f, COLOR_ACCENT, 0.8f)
@@ -117,12 +222,13 @@ object PdfExporter {
         drawStaticText(canvas, analyse.profil.phraseHumaine, MARGIN, 170f, CONTENT_W.toInt(),
             makePaint(11f, COLOR_INK, italic = true), Layout.Alignment.ALIGN_CENTER)
 
-        y = 210f
-        drawLine(canvas, MARGIN, y, PAGE_W - MARGIN, y, COLOR_BORDER, 0.5f)
-        y += 24f
+        // Si la couverture déborde, la page suivante reçoit un en-tête
+        pager.header = sousTitre
+        pager.y = 210f
+        drawLine(canvas, MARGIN, pager.y, PAGE_W - MARGIN, pager.y, COLOR_BORDER, 0.5f)
+        pager.y += 24f
 
-        drawSectionTitle(canvas, y, t("En un coup d\u2019\u0153il", "At a glance", "Auf einen Blick"))
-        y += 48f
+        pager.sectionTitle(t("En un coup d\u2019\u0153il", "At a glance", "Auf einen Blick"), keepWith = 200f)
 
         val gridItems = listOf(
             t("Axe principal", "Main axis", "Hauptachse") to libelleAxe(analyse.problemePrincipal),
@@ -134,29 +240,19 @@ object PdfExporter {
                 .removeSuffix("."),
             t("Aide à envisager", "Support to consider", "Mögliche Unterstützung") to aideAEnvisager(analyse)
         )
-        y = drawInfoGrid(canvas, y, gridItems)
-        y += 20f
+        pager.y = drawInfoGrid(pager.canvas, pager.y, gridItems)
+        pager.y += 20f
 
-        val situationH = measureStaticTextHeight(analyse.messageSituation, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
-        if (y + situationH < CONTENT_BOTTOM) {
-            drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + situationH, COLOR_WARM_BG_ALT, COLOR_BORDER, 14f)
-            drawStaticText(canvas, analyse.messageSituation, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK))
-        }
-
-        dessineFooter(canvas, 1)
-        document.finishPage(page)
+        pager.card(analyse.messageSituation, COLOR_WARM_BG_ALT, COLOR_BORDER, makePaint(11f, COLOR_INK))
     }
 
-    private fun dessinePage2(document: PdfDocument, nom: String, analyse: ResultatAnalyse) {
-        val page = demarrerPage(document, 2)
-        val canvas = page.canvas
-        var y = MARGIN
+    // ════════════════════════════════════════════════════════════
+    // PAGE 2 — Profil & Analyse
+    // ════════════════════════════════════════════════════════════
+    private fun dessineProfil(pager: Pager, nom: String, analyse: ResultatAnalyse) {
+        pager.newPage(t("Profil de $nom", "$nom's profile", "Profil von $nom"))
 
-        drawPageHeader(canvas, t("Profil de $nom", "$nom's profile", "Profil von $nom"))
-        y += 48f
-
-        drawSectionTitle(canvas, y, t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen"))
-        y += 48f
+        pager.sectionTitle(t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen"))
 
         val axes = listOf(
             Triple(t("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit"), analyse.niveauPeur, analyse.peur),
@@ -165,107 +261,76 @@ object PdfExporter {
             Triple(t("Cohabitation", "Cohabitation", "Zusammenleben"), analyse.niveauReactivite, analyse.reactivite)
         )
         axes.forEach { (label, niveau, score) ->
-            y = drawAxeBar(canvas, y, label, niveau, score)
-            y += 12f
+            pager.ensure(46f)
+            pager.y = drawAxeBar(pager.canvas, pager.y, label, niveau, score)
+            pager.y += 12f
         }
-        y += 14f
+        pager.y += 14f
 
-        if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Hypoth\u00e8se de lecture", "Main hypothesis", "Deutungshypothese"))
-            y += 48f
-            val hypotheseH = measureStaticTextHeight(analyse.hypothesePrincipale, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
-            if (y + hypotheseH < CONTENT_BOTTOM) {
-                drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + hypotheseH, COLOR_WHITE, COLOR_ACCENT, 14f)
-                drawStaticText(canvas, analyse.hypothesePrincipale, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK))
-                y += hypotheseH + 24f
-            }
-        }
+        val texte11 = makePaint(11f, COLOR_INK)
 
-        if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Ce qui se passe probablement", "What is probably happening", "Was wahrscheinlich geschieht"))
-            y += 48f
-            val explicationH = measureStaticTextHeight(analyse.explicationPrincipale, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
-            if (y + explicationH < CONTENT_BOTTOM) {
-                drawStaticText(canvas, analyse.explicationPrincipale, MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
-                y += explicationH + 24f
-            }
+        pager.sectionTitle(
+            t("Hypoth\u00e8se de lecture", "Main hypothesis", "Deutungshypothese"),
+            keepWith = minOf(cardHeight(analyse.hypothesePrincipale, texte11), 300f)
+        )
+        pager.card(analyse.hypothesePrincipale, COLOR_WHITE, COLOR_ACCENT, texte11)
+
+        if (analyse.explicationPrincipale.isNotBlank()) {
+            pager.sectionTitle(
+                t("Ce qui se passe probablement", "What is probably happening", "Was wahrscheinlich geschieht"),
+                keepWith = minOf(paragraphHeight(analyse.explicationPrincipale, texte11), 300f)
+            )
+            pager.paragraph(analyse.explicationPrincipale, texte11)
         }
 
-        if (analyse.marquageHabitudePostSterilisation && y < CONTENT_BOTTOM - 40f) {
+        if (analyse.marquageHabitudePostSterilisation) {
             val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the behavior remains ingrained — this kind of habitual marking often takes longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.")
-            val habitudeH = measureStaticTextHeight(texteHabitude, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true)) + 32f
-            if (y + habitudeH < CONTENT_BOTTOM) {
-                drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + habitudeH, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, 14f)
-                drawStaticText(canvas, texteHabitude, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true))
-            }
+            pager.card(texteHabitude, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true))
         }
-
-        dessineFooter(canvas, 2)
-        document.finishPage(page)
     }
 
-    private fun dessinePage3(document: PdfDocument, nom: String, analyse: ResultatAnalyse) {
-        val page = demarrerPage(document, 3)
-        val canvas = page.canvas
-        var y = MARGIN
+    // ════════════════════════════════════════════════════════════
+    // PAGE 3 — Plan d'action
+    // ════════════════════════════════════════════════════════════
+    private fun dessinePlan(pager: Pager, nom: String, analyse: ResultatAnalyse) {
+        pager.newPage(t("Plan d\u2019action pour $nom", "Action plan for $nom", "Aktionsplan für $nom"))
 
-        drawPageHeader(canvas, t("Plan d\u2019action pour $nom", "Action plan for $nom", "Aktionsplan für $nom"))
-        y += 48f
+        val texte11 = makePaint(11f, COLOR_INK)
+        pager.sectionTitle(
+            t("Premier levier utile", "First useful lever", "Erster hilfreicher Hebel"),
+            keepWith = minOf(cardHeight(analyse.conseilPrincipal, texte11), 300f)
+        )
+        pager.card(analyse.conseilPrincipal, COLOR_WARM_BG_ALT, COLOR_ACCENT, texte11)
 
-        drawSectionTitle(canvas, y, t("Premier levier utile", "First useful lever", "Erster hilfreicher Hebel"))
-        y += 48f
+        pager.sectionTitle(t("Les prochains jours", "The next few days", "Die nächsten Tage"))
 
-        val levierH = measureStaticTextHeight(analyse.conseilPrincipal, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK)) + 32f
-        if (y + levierH < CONTENT_BOTTOM) {
-            drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + levierH, COLOR_WARM_BG_ALT, COLOR_ACCENT, 14f)
-            drawStaticText(canvas, analyse.conseilPrincipal, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_INK))
-            y += levierH + 24f
-        }
+        pager.label(t("\u00c0 faire", "To do", "Zu tun"))
+        analyse.planAction.aFaire.forEach { pager.bullet(it) }
+        pager.y += 12f
 
-        if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Les prochains jours", "The next few days", "Die nächsten Tage"))
-            y += 48f
+        pager.label(t("\u00c0 \u00e9viter", "To avoid", "Zu vermeiden"))
+        analyse.planAction.aEviter.forEach { pager.bullet(it) }
+        pager.y += 12f
 
-            if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 faire", "To do", "Zu tun"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
-                y += 20f
-                analyse.planAction.aFaire.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
-                y += 12f
-            }
-            if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 \u00e9viter", "To avoid", "Zu vermeiden"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
-                y += 20f
-                analyse.planAction.aEviter.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
-                y += 12f
-            }
-            if (y < CONTENT_BOTTOM - 20f) {
-                canvas.drawText(t("\u00c0 observer", "To observe", "Zu beobachten"), MARGIN, y, makePaint(11f, COLOR_PRIMARY, bold = true))
-                y += 20f
-                analyse.planAction.aObserver.forEach { if (y < CONTENT_BOTTOM - 20f) y = drawBullet(canvas, y, it) }
-                y += 18f
-            }
-        }
+        pager.label(t("\u00c0 observer", "To observe", "Zu beobachten"))
+        analyse.planAction.aObserver.forEach { pager.bullet(it) }
+        pager.y += 18f
 
-        if (analyse.aDejaMordu && y < CONTENT_BOTTOM - 40f) {
+        if (analyse.aDejaMordu) {
             val morsuText = if (analyse.cibleAgressionAnimal) t("Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.", "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely.", "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Eine Begleitung durch eine Fachperson für Katzenverhalten wird empfohlen, um das Zusammenleben schrittweise und sicher neu aufzubauen.") else t("Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.", "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation.", "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet. Eine verhaltensmedizinische tierärztliche Begleitung wird empfohlen, um die Situation zu beurteilen.")
-            val morsuH = measureStaticTextHeight(morsuText, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_MORSURE_TEXTE, bold = true)) + 32f
-            if (y + morsuH < CONTENT_BOTTOM) {
-                drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + morsuH, COLOR_MORSURE_BG, COLOR_MORSURE_TEXTE, 14f)
-                drawStaticText(canvas, morsuText, MARGIN + 16f, y + 16f, (CONTENT_W - 32f).toInt(), makePaint(11f, COLOR_MORSURE_TEXTE, bold = true))
-            }
+            pager.card(
+                morsuText, COLOR_MORSURE_BG, COLOR_MORSURE_TEXTE,
+                makePaint(11f, COLOR_MORSURE_TEXTE, bold = true), spaceAfter = 10f
+            )
         }
-
-        dessineFooter(canvas, 3)
-        document.finishPage(page)
     }
 
-    private fun dessinePage4(document: PdfDocument, nom: String, analyse: ResultatAnalyse, couleurPriorite: Int) {
-        val page = demarrerPage(document, 4)
-        val canvas = page.canvas
-        var y = MARGIN
-
-        drawPageHeader(canvas, t("\u00c0 retenir", "Key takeaways", "Das Wichtigste"))
-        y += 48f
+    // ════════════════════════════════════════════════════════════
+    // PAGE 4 — À retenir (avec pied de page QR code)
+    // ════════════════════════════════════════════════════════════
+    private fun dessineARetenir(pager: Pager, nom: String, analyse: ResultatAnalyse, couleurPriorite: Int) {
+        pager.newPage(t("\u00c0 retenir", "Key takeaways", "Das Wichtigste"))
+        pager.bottom = CONTENT_BOTTOM_QR
 
         val recapText = when (appLang()) {
             AppLang.DE -> buildString {
@@ -288,45 +353,38 @@ object PdfExporter {
             }
         }
         val recapH = measureStaticTextHeight(recapText, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK)) + 48f
-        drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + recapH, COLOR_WARM_BG, COLOR_BORDER, 16f)
-        drawRoundRect(canvas, MARGIN, y, MARGIN + 5f, y + recapH, 16f, couleurPriorite)
-        drawStaticText(canvas, recapText, MARGIN + 24f, y + 24f, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK))
-        y += recapH + 32f
+        pager.ensure(recapH)
+        val canvas = pager.canvas
+        drawCard(canvas, MARGIN, pager.y, PAGE_W - MARGIN, pager.y + recapH, COLOR_WARM_BG, COLOR_BORDER, 16f)
+        drawRoundRect(canvas, MARGIN, pager.y, MARGIN + 5f, pager.y + recapH, 16f, couleurPriorite)
+        drawStaticText(canvas, recapText, MARGIN + 24f, pager.y + 24f, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK))
+        pager.y += recapH + 32f
 
-        if (y < CONTENT_BOTTOM - 60f) {
-            drawSectionTitle(canvas, y, t("Conclusion", "Conclusion", "Fazit"))
-            y += 48f
-            val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more suitable way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
-            val conclusionH = measureStaticTextHeight(conclusion, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
-            if (y + conclusionH < CONTENT_BOTTOM) {
-                drawStaticText(canvas, conclusion, MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_INK))
-                y += conclusionH + 32f
-            }
-        }
+        val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more suitable way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
+        val conclusionPaint = makePaint(11f, COLOR_INK)
+        pager.sectionTitle(t("Conclusion", "Conclusion", "Fazit"), keepWith = minOf(paragraphHeight(conclusion, conclusionPaint), 300f))
+        pager.paragraph(conclusion, conclusionPaint, spaceAfter = 32f)
 
-        if (y < CONTENT_BOTTOM - 40f) {
-            drawLine(canvas, MARGIN, y, PAGE_W - MARGIN, y, COLOR_BORDER, 0.5f)
-            y += 16f
-            val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This assessment is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
-            val disclaimerH = measureStaticTextHeight(disclaimer, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
-            if (y + disclaimerH < CONTENT_BOTTOM) {
-                drawStaticText(canvas, disclaimer, MARGIN, y, CONTENT_W.toInt(), makePaint(9.5f, COLOR_INK_SOFT))
-            }
-        }
+        val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This assessment is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
+        val disclaimerPaint = makePaint(9.5f, COLOR_INK_SOFT)
+        val disclaimerH = measureStaticTextHeight(disclaimer, CONTENT_W.toInt(), disclaimerPaint)
+        pager.ensure(16f + disclaimerH)
+        drawLine(pager.canvas, MARGIN, pager.y, PAGE_W - MARGIN, pager.y, COLOR_BORDER, 0.5f)
+        pager.y += 16f
+        drawStaticText(pager.canvas, disclaimer, MARGIN, pager.y, CONTENT_W.toInt(), disclaimerPaint)
+        pager.y += disclaimerH
 
-        dessineFooterAvecQr(canvas)
-        document.finishPage(page)
+        pager.closePage(withQr = true)
+        pager.bottom = CONTENT_BOTTOM
     }
 
     // ════════════════════════════════════════════════════════════
     // PAGE 5 — Consultation personnalisée (FR uniquement, page dédiée)
     // ════════════════════════════════════════════════════════════
-    private fun dessinePage5Consultation(document: PdfDocument) {
-        val page = demarrerPage(document, 5)
-        val canvas = page.canvas
+    private fun dessineConsultation(pager: Pager) {
+        pager.newPage(strConsultationTitre())
+        val canvas = pager.canvas
         val y = MARGIN + 60f
-
-        drawPageHeader(canvas, strConsultationTitre())
 
         val titre = strConsultationTitre()
         val sousTitre = strConsultationSousTitre()
@@ -383,10 +441,11 @@ object PdfExporter {
         val underlineY = cy + 2f
         canvas.drawLine(cx, underlineY, cx + paintLien.measureText(url), underlineY,
             Paint(Paint.ANTI_ALIAS_FLAG).apply { color = COLOR_LIEN; strokeWidth = 0.8f })
-
-        dessineFooter(canvas, 5)
-        document.finishPage(page)
     }
+
+    // ════════════════════════════════════════════════════════════
+    // HELPERS — Dessin
+    // ════════════════════════════════════════════════════════════
 
     private fun demarrerPage(document: PdfDocument, num: Int): PdfDocument.Page {
         val info = PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, num).create()
@@ -460,19 +519,18 @@ object PdfExporter {
         return y
     }
 
-    private fun dessineFooter(canvas: Canvas, pageNum: Int) {
+    private fun dessineFooter(canvas: Canvas, pageNum: Int, totalPages: Int) {
         val footerY = PAGE_H - MARGIN - 14f
         drawLine(canvas, MARGIN, footerY - 10f, PAGE_W - MARGIN, footerY - 10f, COLOR_BORDER, 0.5f)
         val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional assessment", "${appName()}  •  Unverbindliche emotionale Einschätzung")
         canvas.drawText(footerText, MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
-        val total = totalPagesActuel()
-        val pageLabel = t("Page $pageNum / $total", "Page $pageNum / $total", "Seite $pageNum / $total")
+        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), footerY, pagePaint)
     }
 
-    private fun dessineFooterAvecQr(canvas: Canvas) {
-        val footerTop = PAGE_H - MARGIN - 90f
+    private fun dessineFooterAvecQr(canvas: Canvas, pageNum: Int, totalPages: Int) {
+        val footerTop = QR_FOOTER_TOP
         drawCard(canvas, MARGIN, footerTop, PAGE_W - MARGIN, PAGE_H - MARGIN + 2f, COLOR_WARM_BG, COLOR_BORDER, 14f)
         val qrSize = 62
         val qrBitmap = generateQrCode("https://comprendremonchat.fr", 300)
@@ -488,8 +546,7 @@ object PdfExporter {
             t("Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.", "Track your cat's progress with the app.", "Verfolgen Sie die Entwicklung Ihrer Katze mit der App."),
             tx, footerTop + 40f, makePaint(8.5f, COLOR_INK_SOFT)
         )
-        val total = totalPagesActuel()
-        val pageLabel = t("Page 4 / $total", "Page 4 / $total", "Seite 4 / $total")
+        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), PAGE_H - MARGIN - 4f, pagePaint)
     }
