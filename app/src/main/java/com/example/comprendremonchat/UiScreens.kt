@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -327,7 +328,7 @@ fun PrimaryGlowButton(
 ) {
     Button(
         onClick = onClick, enabled = enabled,
-        modifier = modifier.fillMaxWidth().height(58.dp),
+        modifier = modifier.fillMaxWidth().heightIn(min = 58.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = PremiumPalette.Primary,
@@ -339,7 +340,7 @@ fun PrimaryGlowButton(
         Row(verticalAlignment = Alignment.CenterVertically) {
             leading?.invoke()
             if (leading != null) Spacer(modifier = Modifier.width(8.dp))
-            Text(text)
+            Text(text, textAlign = TextAlign.Center)
         }
     }
 }
