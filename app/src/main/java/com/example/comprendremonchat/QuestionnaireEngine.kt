@@ -556,7 +556,7 @@ object QuestionnaireEngine {
                         if (reponsesChoix["acces_exterieur"] == 2) append("Without access to the outdoors, the cat misses out on much of the natural stimulation that channels these instincts. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("A poorly enriched indoor environment worsens this lack of outlet for its natural instincts. ")
                         val raceCat = reponsesChoix["race_categorie"]
-                        if (raceCat != null && raceCat <= 1) append("Some breeds like the Bengal or Abyssinian have been selected for a very high energy level, which accentuates this need for stimulation. ")
+                        if (raceCat == 5 || raceCat == 7) append("Some breeds like the Bengal or Abyssinian have been selected for a very high energy level, which accentuates this need for stimulation. ")
                         append("This is not a character problem but a fundamental need seeking expression, sometimes in undesirable ways for lack of an appropriate alternative.")
                     }
                     Axe.COHABITATION -> buildString {
@@ -601,7 +601,7 @@ object QuestionnaireEngine {
                         if (reponsesChoix["acces_exterieur"] == 2) append("Ohne Freigang fehlen der Katze viele natürliche Reize, die diese Instinkte in geordnete Bahnen lenken. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Eine wenig abwechslungsreich gestaltete Wohnung verstärkt diesen Mangel an Ventilen für ihre natürlichen Instinkte. ")
                         val raceCat = reponsesChoix["race_categorie"]
-                        if (raceCat != null && raceCat <= 1) append("Manche Rassen wie Bengal oder Abessinier wurden auf ein sehr hohes Energieniveau gezüchtet, was dieses Bedürfnis nach Beschäftigung noch verstärkt. ")
+                        if (raceCat == 5 || raceCat == 7) append("Manche Rassen wie Bengal oder Abessinier wurden auf ein sehr hohes Energieniveau gezüchtet, was dieses Bedürfnis nach Beschäftigung noch verstärkt. ")
                         append("Das ist kein Charakterproblem, sondern ein Grundbedürfnis, das sich ausdrücken will – mangels passender Alternative manchmal auf unerwünschte Weise.")
                     }
                     Axe.COHABITATION -> buildString {
@@ -646,7 +646,7 @@ object QuestionnaireEngine {
                         if (reponsesChoix["acces_exterieur"] == 2) append("Sin acceso al exterior, el gato se pierde muchos de los estímulos naturales que canalizan estos instintos. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Un entorno interior poco enriquecido agrava esta falta de salida para sus instintos naturales. ")
                         val raceCat = reponsesChoix["race_categorie"]
-                        if (raceCat != null && raceCat <= 1) append("Algunas razas, como el bengalí o el abisinio, fueron seleccionadas por un nivel de energía muy alto, lo que acentúa esta necesidad de estimulación. ")
+                        if (raceCat == 5 || raceCat == 7) append("Algunas razas, como el bengalí o el abisinio, fueron seleccionadas por un nivel de energía muy alto, lo que acentúa esta necesidad de estimulación. ")
                         append("No es un problema de carácter, sino una necesidad fundamental que busca expresarse, a veces de forma no deseada por falta de una alternativa adecuada.")
                     }
                     Axe.COHABITATION -> buildString {
@@ -691,7 +691,7 @@ object QuestionnaireEngine {
                         if (reponsesChoix["acces_exterieur"] == 2) append("L'absence d'accès à l'extérieur prive le chat de nombreuses stimulations naturelles qui canalisent ces instincts. ")
                         if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Un environnement intérieur peu enrichi aggrave ce manque de débouché pour ses instincts naturels. ")
                         val raceCat = reponsesChoix["race_categorie"]
-                        if (raceCat != null && raceCat <= 1) append("Certaines races comme le Bengal ou l'Abyssin ont été sélectionnées pour un niveau d'énergie très élevé, ce qui accentue ce besoin de stimulation. ")
+                        if (raceCat == 5 || raceCat == 7) append("Certaines races comme le Bengal ou l'Abyssin ont été sélectionnées pour un niveau d'énergie très élevé, ce qui accentue ce besoin de stimulation. ")
                         append("Ce n'est pas un problème de caractère mais un besoin fondamental qui cherche à s'exprimer, parfois de façon indésirable faute d'alternative adaptée.")
                     }
                     Axe.COHABITATION -> buildString {
