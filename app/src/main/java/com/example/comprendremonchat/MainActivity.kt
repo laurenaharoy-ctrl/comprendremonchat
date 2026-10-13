@@ -229,10 +229,10 @@ Envoyé depuis l'application Comprendre mon chat
             putExtra(Intent.EXTRA_TEXT, corps)
         }
         try {
-            context.startActivity(Intent.createChooser(intent, tr("Envoyer le signalement", "Send report", "Meldung senden")))
+            context.startActivity(Intent.createChooser(intent, tr("Envoyer le signalement", "Send report", "Meldung senden", "Enviar el reporte")))
         } catch (e: Exception) {
             scope.launch {
-                snackbarHostState.showSnackbar(tr("Aucune application email trouvée sur cet appareil.", "No email app found on this device.", "Auf diesem Gerät wurde keine E-Mail-App gefunden."))
+                snackbarHostState.showSnackbar(tr("Aucune application email trouvée sur cet appareil.", "No email app found on this device.", "Auf diesem Gerät wurde keine E-Mail-App gefunden.", "No se encontró ninguna aplicación de correo en este dispositivo."))
             }
         }
     }
@@ -265,19 +265,19 @@ Envoyé depuis l'application Comprendre mon chat
                 val titreEcran = when (screen) {
                     AppScreen.Accueil -> ""
                     AppScreen.Onboarding -> ""
-                    AppScreen.Questionnaire -> tr("Questionnaire", "Questionnaire", "Fragebogen")
-                    AppScreen.Chargement -> tr("Analyse", "Analysis", "Analyse")
-                    AppScreen.Resultat -> tr("Résultat", "Results", "Ergebnis")
-                    AppScreen.Dictionnaire -> tr("Dictionnaire comportemental", "Behavioral dictionary", "Verhaltenslexikon")
+                    AppScreen.Questionnaire -> tr("Questionnaire", "Questionnaire", "Fragebogen", "Cuestionario")
+                    AppScreen.Chargement -> tr("Analyse", "Analysis", "Analyse", "Análisis")
+                    AppScreen.Resultat -> tr("Résultat", "Results", "Ergebnis", "Resultado")
+                    AppScreen.Dictionnaire -> tr("Dictionnaire comportemental", "Behavioral dictionary", "Verhaltenslexikon", "Diccionario de comportamiento")
                     is AppScreen.DictionnaireDetail -> {
                         val ficheId = (screen as AppScreen.DictionnaireDetail).ficheId
                         context.getString(R.string.kicker_fiche_comportementale)
                     }
-                    AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung")
-                    AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung")
-                    AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen")
-                    is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung")
-                    AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen")
+                    AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung", "Alimentación")
+                    AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung", "Reportar un problema")
+                    AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones")
+                    is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung", "Detalle de la evaluación")
+                    AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen", "Ajustes")
                 }
 
                 val onBack: (() -> Unit)? = if (screen != AppScreen.Accueil && screen != AppScreen.Chargement) {
@@ -311,7 +311,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 }) {
                                     Icon(
                                         Icons.Rounded.History,
-                                        contentDescription = tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
+                                        contentDescription = tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones"),
                                         tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                     )
                                 }
@@ -319,7 +319,7 @@ Envoyé depuis l'application Comprendre mon chat
                             IconButton(onClick = { screen = AppScreen.Parametres }) {
                                 Icon(
                                     Icons.Rounded.Settings,
-                                    contentDescription = tr("Paramètres", "Settings", "Einstellungen"),
+                                    contentDescription = tr("Paramètres", "Settings", "Einstellungen", "Ajustes"),
                                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                 )
                             }
@@ -332,7 +332,7 @@ Envoyé depuis l'application Comprendre mon chat
                             }) {
                                 Icon(
                                     Icons.Rounded.Feedback,
-                                    contentDescription = tr("Signaler un problème", "Report an issue", "Ein Problem melden"),
+                                    contentDescription = tr("Signaler un problème", "Report an issue", "Ein Problem melden", "Reportar un problema"),
                                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                                 )
                             }
@@ -437,11 +437,11 @@ Envoyé depuis l'application Comprendre mon chat
                                 type = "text/plain"
                                 putExtra(Intent.EXTRA_TEXT, textePartage)
                             }
-                            context.startActivity(Intent.createChooser(intent, tr("Partager", "Share", "Teilen")))
+                            context.startActivity(Intent.createChooser(intent, tr("Partager", "Share", "Teilen", "Compartir")))
                         },
                         onCopy = {
                             clipboard.setText(AnnotatedString(textePartage))
-                            scope.launch { snackbarHostState.showSnackbar(tr("Copié", "Copied", "Kopiert")) }
+                            scope.launch { snackbarHostState.showSnackbar(tr("Copié", "Copied", "Kopiert", "Copiado")) }
                         },
                         onExportPdf = {
                             val file = PdfExporter.exporterBilanPdf(
@@ -457,7 +457,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 putExtra(Intent.EXTRA_STREAM, uri)
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                            context.startActivity(Intent.createChooser(intent, tr("Partager le PDF", "Share PDF", "PDF teilen")))
+                            context.startActivity(Intent.createChooser(intent, tr("Partager le PDF", "Share PDF", "PDF teilen", "Compartir el PDF")))
                         },
                         onRecommencer = {
                             reponsesTexte.clear()
@@ -572,16 +572,16 @@ fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>
 
 fun construireTextePartageBilan(nomChat: String, analyse: ResultatAnalyse): String {
     val nom = nomChatAffiche(nomChat)
-    val titrePartage = tr("Bilan émotionnel pour $nom", "Emotional assessment for $nom", "Emotionale Einschätzung für $nom")
-    val hypotheseLabel = tr("Hypothèse :", "Hypothesis:", "Hypothese:")
-    val prioriteLabel = tr("Priorité :", "Priority:", "Priorität:")
-    val scoresLabel = tr("Scores :", "Scores:", "Werte:")
-    val securiteLabel = tr("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit")
-    val lienLabel = tr("Lien humain", "Human bond", "Bindung zum Menschen")
-    val instinctsLabel = tr("Instincts", "Instincts", "Instinkte")
-    val cohabLabel = tr("Cohabitation", "Cohabitation", "Zusammenleben")
-    val avertissement = tr("⚠️ Bilan indicatif", "⚠️ Indicative assessment", "⚠️ Unverbindliche Einschätzung")
-    val sep = tr(" : ", ": ", ": ")
+    val titrePartage = tr("Bilan émotionnel pour $nom", "Emotional assessment for $nom", "Emotionale Einschätzung für $nom", "Evaluación emocional de $nom")
+    val hypotheseLabel = tr("Hypothèse :", "Hypothesis:", "Hypothese:", "Hipótesis:")
+    val prioriteLabel = tr("Priorité :", "Priority:", "Priorität:", "Prioridad:")
+    val scoresLabel = tr("Scores :", "Scores:", "Werte:", "Puntuaciones:")
+    val securiteLabel = tr("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit", "Seguridad emocional")
+    val lienLabel = tr("Lien humain", "Human bond", "Bindung zum Menschen", "Vínculo con el humano")
+    val instinctsLabel = tr("Instincts", "Instincts", "Instinkte", "Instintos")
+    val cohabLabel = tr("Cohabitation", "Cohabitation", "Zusammenleben", "Convivencia")
+    val avertissement = tr("⚠️ Bilan indicatif", "⚠️ Indicative assessment", "⚠️ Unverbindliche Einschätzung", "⚠️ Evaluación orientativa")
+    val sep = tr(" : ", ": ", ": ", ": ")
 
     return "$titrePartage\n\n$hypotheseLabel\n${analyse.hypothesePrincipale}\n\n$prioriteLabel\n${textePrioriteAction(analyse.prioriteAction)}\n\n${analyse.syntheseAvancee}\n\n$scoresLabel\n$securiteLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauPeur)}\n$lienLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauAttachement)}\n$instinctsLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauImpulsivite)}\n$cohabLabel$sep${QuestionnaireEngine.libelleNiveauAxe(analyse.niveauReactivite)}\n\n$avertissement"
 }

@@ -42,6 +42,7 @@ object HistoriqueManager {
             date = when (appLang()) {
                 AppLang.EN -> SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.ENGLISH).format(Date())
                 AppLang.DE -> SimpleDateFormat("dd. MMMM yyyy 'um' HH:mm", Locale.GERMAN).format(Date())
+                AppLang.ES -> SimpleDateFormat("d 'de' MMMM 'de' yyyy, HH:mm", Locale("es")).format(Date())
                 else -> SimpleDateFormat("dd MMMM yyyy 'à' HH'h'mm", Locale.FRENCH).format(Date())
             },
             dateTimestamp = System.currentTimeMillis(),

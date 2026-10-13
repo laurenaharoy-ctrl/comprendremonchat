@@ -85,7 +85,7 @@ data class ResultatAnalyse(
 // ═══════════════════════════════════════════════════════════
 
 fun nomChatAffiche(nom: String): String =
-    nom.trim().replaceFirstChar { it.uppercase() }.ifBlank { tr("votre chat", "your cat", "Ihre Katze") }
+    nom.trim().replaceFirstChar { it.uppercase() }.ifBlank { tr("votre chat", "your cat", "Ihre Katze", "tu gato") }
 
 fun libelleAxe(axe: Axe): String = libelleAxeTraduit(axe)
 
@@ -121,7 +121,7 @@ data class CategorieRace(
 // DONNÉES DE RACES — BILINGUES
 // ═══════════════════════════════════════════════════════════
 
-val categoriesRaces get() = trList(categoriesRacesChatFr, categoriesRacesChatEn, categoriesRacesChatDe)
+val categoriesRaces get() = trList(categoriesRacesChatFr, categoriesRacesChatEn, categoriesRacesChatDe, categoriesRacesChatEs)
 
 val categoriesRacesChatFr = listOf(
     CategorieRace("europeen", "Européen / Gouttière",
@@ -220,6 +220,39 @@ val categoriesRacesChatDe = listOf(
     CategorieRace("autre", "Andere Rasse / unbekannt",
         listOf("Individuelles Profil – genau beobachten"),
         "Die individuelle Geschichte und die frühe Sozialisierung sind die entscheidendsten Faktoren.")
+)
+
+val categoriesRacesChatEs = listOf(
+    CategorieRace("europeen", "Europeo / común",
+        listOf("Gran capacidad de adaptación", "Temperamento variable según su historia personal"),
+        "La socialización temprana desempeña un papel decisivo en su equilibrio emocional."),
+    CategorieRace("maine_coon", "Maine coon",
+        listOf("Sociabilidad marcada", "Gran necesidad de estimulación", "Fuerte apego a su familia"),
+        "La falta de estimulación puede provocar aburrimiento y comportamientos compensatorios."),
+    CategorieRace("persan", "Persa",
+        listOf("Temperamento tranquilo y sereno", "Sensibilidad a los cambios", "Necesidad de calma"),
+        "Los cambios en su entorno pueden desestabilizarlo con facilidad, a pesar de su calma aparente."),
+    CategorieRace("siamois", "Siamés",
+        listOf("Muy hablador", "Apego intenso", "Muy expresivo emocionalmente"),
+        "La ansiedad por separación y los maullidos excesivos son más frecuentes en este grupo."),
+    CategorieRace("ragdoll", "Ragdoll",
+        listOf("Tolerancia muy alta", "Gran necesidad de presencia humana", "Poco conflictivo"),
+        "No hay que confundir su tolerancia con una ausencia de necesidades: puede sufrir en silencio."),
+    CategorieRace("bengal", "Bengalí",
+        listOf("Nivel de energía muy alto", "Necesidad intensa de estimulación", "Fuerte personalidad"),
+        "La falta de estimulación física y mental puede provocar rápidamente comportamientos problemáticos."),
+    CategorieRace("british", "British shorthair",
+        listOf("Temperamento tranquilo e independiente", "Buena tolerancia a la soledad", "Poco expresivo"),
+        "Su calma aparente puede ocultar estrés si no se detectan las señales sutiles."),
+    CategorieRace("abyssin", "Abisinio",
+        listOf("Muy activo y curioso", "Necesidad de libertad", "Poca tolerancia al aburrimiento"),
+        "Un entorno enriquecido es imprescindible: se aburre rápido y reacciona con intensidad."),
+    CategorieRace("sacre_birmanie", "Sagrado de Birmania",
+        listOf("Dulce y equilibrado", "Apego moderado", "Buena convivencia"),
+        "En general equilibrado, pero sensible a las tensiones en el hogar."),
+    CategorieRace("autre", "Otra raza / desconocida",
+        listOf("Perfil individual que conviene observar"),
+        "La historia personal y la socialización temprana son los factores más determinantes.")
 )
 
 fun getNuanceAnalyse(race: String): String? =
@@ -418,6 +451,12 @@ object QuestionnaireEngine {
                 if (reponsesChoix["generalisation_probleme"] == 2) raisons += "Das Verhalten betrifft viele verschiedene Situationen."
                 if (raisons.isEmpty()) raisons += "Die Antworten deuten auf einige Punkte hin, die man im Auge behalten sollte."
             }
+            AppLang.ES -> {
+                if (reponsesChoix["evolution_probleme"] == 2) raisons += "El comportamiento parece estar empeorando poco a poco."
+                if (reponsesChoix["intensite_probleme"] == 3) raisons += "La intensidad descrita parece importante y afecta al día a día."
+                if (reponsesChoix["generalisation_probleme"] == 2) raisons += "El comportamiento aparece en muchas situaciones diferentes."
+                if (raisons.isEmpty()) raisons += "Las respuestas sugieren algunos puntos a vigilar."
+            }
             else -> {
                 if (reponsesChoix["evolution_probleme"] == 2) raisons += "Le comportement semble s'aggraver progressivement."
                 if (reponsesChoix["intensite_probleme"] == 3) raisons += "L'intensité décrite paraît importante et impacte le quotidien."
@@ -449,6 +488,14 @@ object QuestionnaireEngine {
                     PrioriteAction.URGENTE -> "$nom zeigt Anzeichen, die eine rasche und professionelle Aufmerksamkeit rechtfertigen."
                 }
             }
+            AppLang.ES -> {
+                when (priorite) {
+                    PrioriteAction.FAIBLE -> "$nom presenta un funcionamiento globalmente estable."
+                    PrioriteAction.MODEREE -> "$nom presenta una dificultad que merece un enfoque progresivo."
+                    PrioriteAction.ELEVEE -> "$nom parece tener dificultades en un aspecto que requiere una atención activa."
+                    PrioriteAction.URGENTE -> "$nom presenta elementos que justifican una atención rápida y profesional."
+                }
+            }
             else -> {
                 when (priorite) {
                     PrioriteAction.FAIBLE -> "$nom présente un fonctionnement globalement stable."
@@ -458,10 +505,10 @@ object QuestionnaireEngine {
                 }
             }
         }
-        val aggrLabel = tr("Éléments majorants", "Aggravating factors", "Verschärfende Faktoren")
-        val protLabel = tr("Éléments favorables", "Protective factors", "Günstige Faktoren")
-        val hypoLabel = tr("Hypothèse", "Hypothesis", "Hypothese")
-        val sep = tr(" : ", ": ", ": ")
+        val aggrLabel = tr("Éléments majorants", "Aggravating factors", "Verschärfende Faktoren", "Factores agravantes")
+        val protLabel = tr("Éléments favorables", "Protective factors", "Günstige Faktoren", "Factores favorables")
+        val hypoLabel = tr("Hypothèse", "Hypothesis", "Hypothese", "Hipótesis")
+        val sep = tr(" : ", ": ", ": ", ": ")
         val aggr = if (aggravants.isNotEmpty()) "$aggrLabel$sep${aggravants.joinToString(", ")}." else ""
         val prot = if (protecteurs.isNotEmpty()) "$protLabel$sep${protecteurs.joinToString(", ")}." else ""
         return listOf(intro, "$hypoLabel$sep$hypothese", aggr, prot).filter { it.isNotBlank() }.joinToString("\n\n")
@@ -474,7 +521,7 @@ object QuestionnaireEngine {
     ): String {
         val nom = nomChatAffiche(nomChat)
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
-        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "$nom seems to be in a good overall balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu befinden. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.")
+        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "$nom seems to be in a good overall balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu befinden. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.", "$nom parece mantener un equilibrio general satisfactorio. Por ahora no destaca ningún origen de comportamiento en particular.")
 
         return when (appLang()) {
             AppLang.EN -> {
@@ -564,6 +611,51 @@ object QuestionnaireEngine {
                         if (reponsesChoix["changement_recent"] == 2) append("Die Ankunft eines neuen Tieres oder eines neuen Familienmitglieds kann ein empfindliches Revier-Gleichgewicht gestört haben. ")
                         append("Eine zu schnelle Zusammenführung der Tiere ohne schrittweise Gewöhnungsphase gehört zu den häufigsten Ursachen anhaltender Spannungen. ")
                         append("In manchen Fällen können auch einfach unvereinbare Persönlichkeiten die Ursache sein, unabhängig vom Umgang des Menschen.")
+                    }
+                }
+            }
+            AppLang.ES -> {
+                when (axe) {
+                    Axe.SECURITE -> buildString {
+                        append("La inseguridad emocional de $nom puede tener varios orígenes. ")
+                        append("Con frecuencia influye una socialización temprana insuficiente: poco contacto con personas, ruidos o entornos variados antes de las 7 semanas de vida. ")
+                        append("Las experiencias negativas pasadas, incluso aisladas, pueden dejar una huella duradera en la forma en que un gato percibe su mundo. ")
+                        if (reponsesChoix["acces_exterieur"] == 2) append("Un gato que vive solo dentro de casa a veces carece de estímulos variados, lo que debilita su capacidad para afrontar lo nuevo. ")
+                        if (reponsesChoix["age"] == 0) append("Antes del año de edad, el sentimiento de seguridad todavía se está construyendo: cierta sensibilidad es normal a esta edad. ")
+                        if (reponsesChoix["changement_recent"] == 2) append("Un cambio importante reciente puede haber alterado sus referencias y aumentado este sentimiento de inseguridad. ")
+                        append("En algunos casos, una predisposición genética también influye, independientemente de lo vivido.")
+                    }
+                    Axe.LIEN -> buildString {
+                        append("La gran necesidad de cercanía de $nom puede explicarse de varias maneras. ")
+                        append("Un destete demasiado temprano, antes de las 8 semanas, puede debilitar de forma duradera la construcción de la autonomía emocional. ")
+                        append("Un entorno en el que el gato nunca ha aprendido a quedarse solo también puede reforzar esta necesidad de presencia constante. ")
+                        if (reponsesChoix["recherche_proximite"] == 3) append("Seguir constantemente a su humano puede ser a la vez un síntoma y un factor que mantiene esta dependencia afectiva. ")
+                        if (estMaleEntier(reponsesChoix) || estFemelleEntiere(reponsesChoix)) append("En un gato sin esterilizar, algunas manifestaciones también pueden estar influidas por los ciclos hormonales. ")
+                        append("No es un capricho: refleja una verdadera dificultad para encontrar seguridad interior cuando falta la persona que lo tranquiliza.")
+                    }
+                    Axe.INSTINCTS -> buildString {
+                        if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) {
+                            append("El marcaje con orina de $nom parece haber empezado durante el celo, antes de su esterilización. ")
+                            append("La causa hormonal original ha desaparecido, pero el comportamiento se ha convertido en un hábito adquirido: el gesto sigue arraigado aunque la razón inicial ya no exista. ")
+                            append("Este tipo de marcaje convertido en hábito suele tardar más en corregirse que un marcaje relacionado solo con el estrés, porque hay que desaprender un gesto repetido en lugar de simplemente reducir una fuente de tensión. ")
+                            append("Se recomienda un acompañamiento de comportamiento centrado en este punto concreto.")
+                            return@buildString
+                        }
+                        append("La frustración instintiva de $nom puede tener varios orígenes. ")
+                        append("El gato es un depredador solitario cuyas necesidades de cazar, explorar y arañar están profundamente arraigadas: un entorno que no le permite expresarlas genera inevitablemente frustración. ")
+                        if (reponsesChoix["acces_exterieur"] == 2) append("Sin acceso al exterior, el gato se pierde muchos de los estímulos naturales que canalizan estos instintos. ")
+                        if (reponsesChoix["vie_interieur"] == 2 || reponsesChoix["vie_interieur"] == 3) append("Un entorno interior poco enriquecido agrava esta falta de salida para sus instintos naturales. ")
+                        val raceCat = reponsesChoix["race_categorie"]
+                        if (raceCat != null && raceCat <= 1) append("Algunas razas, como el bengalí o el abisinio, fueron seleccionadas por un nivel de energía muy alto, lo que acentúa esta necesidad de estimulación. ")
+                        append("No es un problema de carácter, sino una necesidad fundamental que busca expresarse, a veces de forma no deseada por falta de una alternativa adecuada.")
+                    }
+                    Axe.COHABITATION -> buildString {
+                        append("Las dificultades de convivencia de $nom pueden explicarse por varios factores. ")
+                        append("El gato es muy sensible a su territorio: la competencia por los recursos (comida, arenero, lugar de descanso) es una fuente importante de tensión en los hogares con varios gatos. ")
+                        if (estMaleEntier(reponsesChoix)) append("En un macho sin esterilizar, el marcaje con orina y los comportamientos de intimidación son frecuentes y pueden alimentar los conflictos con los otros animales de la casa. ")
+                        if (reponsesChoix["changement_recent"] == 2) append("La llegada de un nuevo animal o de un nuevo miembro de la familia puede haber roto un equilibrio territorial frágil. ")
+                        append("Una presentación demasiado rápida entre animales, sin una fase de familiarización progresiva, es una de las causas más frecuentes de tensiones duraderas. ")
+                        append("En algunos casos, también pueden influir personalidades simplemente incompatibles, independientemente de cómo lo gestionen las personas.")
                     }
                 }
             }
@@ -688,10 +780,10 @@ object QuestionnaireEngine {
 fun questionsApplication(): List<Question> {
     return listOf(
 
-        QuestionTexte("nom_chat", tr("Quel est le prénom de votre chat ?", "What is your cat's name?", "Wie heißt Ihre Katze?")),
+        QuestionTexte("nom_chat", tr("Quel est le prénom de votre chat ?", "What is your cat's name?", "Wie heißt Ihre Katze?", "¿Cómo se llama tu gato?")),
 
         QuestionChoix("race_categorie",
-            tr("À quelle famille de races appartient votre chat ?", "Which breed family does your cat belong to?", "Zu welcher Rassegruppe gehört Ihre Katze?"),
+            tr("À quelle famille de races appartient votre chat ?", "Which breed family does your cat belong to?", "Zu welcher Rassegruppe gehört Ihre Katze?", "¿A qué grupo de razas pertenece tu gato?"),
             trList(
                 listOf("Européen / Gouttière", "Maine Coon", "Persan", "Siamois", "Ragdoll",
                     "Bengal", "British Shorthair", "Abyssin", "Sacré de Birmanie", "Autre race / inconnu"),
@@ -699,30 +791,36 @@ fun questionsApplication(): List<Question> {
                     "Bengal", "British Shorthair", "Abyssinian", "Birman", "Other breed / unknown"),
                 listOf("Europäisch Kurzhaar / Mischling", "Maine Coon", "Perser", "Siam", "Ragdoll",
                     "Bengal", "Britisch Kurzhaar", "Abessinier", "Heilige Birma", "Andere Rasse / unbekannt")
-            )),
+            ,
+                listOf("Europeo / común", "Maine coon", "Persa", "Siamés", "Ragdoll", "Bengalí", "British shorthair", "Abisinio", "Sagrado de Birmania", "Otra raza / desconocida"))),
 
         QuestionChoix("age",
-            tr("Quel âge a votre chat ?", "How old is your cat?", "Wie alt ist Ihre Katze?"),
-            trList(listOf("Moins d'1 an (chaton)", "Entre 1 et 3 ans", "Entre 4 et 8 ans", "9 ans et plus (senior)"), listOf("Under 1 year (kitten)", "Between 1 and 3 years", "Between 4 and 8 years", "9 years and over (senior)"), listOf("Unter 1 Jahr (Kätzchen)", "Zwischen 1 und 3 Jahren", "Zwischen 4 und 8 Jahren", "9 Jahre und älter (Senior)"))),
+            tr("Quel âge a votre chat ?", "How old is your cat?", "Wie alt ist Ihre Katze?", "¿Qué edad tiene tu gato?"),
+            trList(listOf("Moins d'1 an (chaton)", "Entre 1 et 3 ans", "Entre 4 et 8 ans", "9 ans et plus (senior)"), listOf("Under 1 year (kitten)", "Between 1 and 3 years", "Between 4 and 8 years", "9 years and over (senior)"), listOf("Unter 1 Jahr (Kätzchen)", "Zwischen 1 und 3 Jahren", "Zwischen 4 und 8 Jahren", "9 Jahre und älter (Senior)"),
+                listOf("Menos de 1 año (gatito)", "Entre 1 y 3 años", "Entre 4 y 8 años", "9 años o más (sénior)"))),
 
         QuestionChoix("senior_desorientation",
-            tr("Votre chat semble-t-il parfois désorienté ou perdu dans des endroits qu'il connaît bien ?", "Does your cat sometimes seem disoriented or lost in places it knows well?", "Wirkt Ihre Katze manchmal orientierungslos oder verloren an Orten, die sie gut kennt?"),
-            trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"))),
+            tr("Votre chat semble-t-il parfois désorienté ou perdu dans des endroits qu'il connaît bien ?", "Does your cat sometimes seem disoriented or lost in places it knows well?", "Wirkt Ihre Katze manchmal orientierungslos oder verloren an Orten, die sie gut kennt?", "¿Tu gato parece a veces desorientado o perdido en lugares que conoce bien?"),
+            trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"),
+                listOf("No, nunca", "A veces, ocasionalmente", "Sí, con regularidad"))),
 
         QuestionChoix("senior_vocalise_nocturne",
-            tr("Depuis quelque temps, votre chat vocalise-t-il ou erre-t-il la nuit sans raison apparente (pas de faim, pas de demande d'attention identifiable) ?", "Has your cat recently been vocalizing or wandering at night for no apparent reason (not hungry, not obviously seeking attention)?", "Miaut oder wandert Ihre Katze seit einiger Zeit nachts ohne erkennbaren Grund umher (kein Hunger, kein erkennbarer Wunsch nach Aufmerksamkeit)?"),
-            trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"))),
+            tr("Depuis quelque temps, votre chat vocalise-t-il ou erre-t-il la nuit sans raison apparente (pas de faim, pas de demande d'attention identifiable) ?", "Has your cat recently been vocalizing or wandering at night for no apparent reason (not hungry, not obviously seeking attention)?", "Miaut oder wandert Ihre Katze seit einiger Zeit nachts ohne erkennbaren Grund umher (kein Hunger, kein erkennbarer Wunsch nach Aufmerksamkeit)?", "Desde hace un tiempo, ¿tu gato maúlla o deambula por la noche sin motivo aparente (no tiene hambre ni busca claramente atención)?"),
+            trList(listOf("Non, jamais", "Parfois, occasionnellement", "Oui, régulièrement"), listOf("No, never", "Sometimes, occasionally", "Yes, regularly"), listOf("Nein, nie", "Manchmal, gelegentlich", "Ja, regelmäßig"),
+                listOf("No, nunca", "A veces, ocasionalmente", "Sí, con regularidad"))),
 
         QuestionChoix("sterilise",
-            tr("Votre chat est :", "Your cat is:", "Ihre Katze ist:"),
-            trList(listOf("Un mâle stérilisé", "Une femelle stérilisée", "Un mâle entier", "Une femelle entière"), listOf("A neutered male", "A spayed female", "An intact male", "An intact female"), listOf("Ein kastrierter Kater", "Eine kastrierte Katze", "Ein unkastrierter Kater", "Eine unkastrierte Katze"))),
+            tr("Votre chat est :", "Your cat is:", "Ihre Katze ist:", "Tu gato es:"),
+            trList(listOf("Un mâle stérilisé", "Une femelle stérilisée", "Un mâle entier", "Une femelle entière"), listOf("A neutered male", "A spayed female", "An intact male", "An intact female"), listOf("Ein kastrierter Kater", "Eine kastrierte Katze", "Ein unkastrierter Kater", "Eine unkastrierte Katze"),
+                listOf("Un macho esterilizado", "Una hembra esterilizada", "Un macho sin esterilizar", "Una hembra sin esterilizar"))),
 
         QuestionChoix("acces_exterieur",
-            tr("Votre chat a-t-il accès à l'extérieur ?", "Does your cat have access to the outdoors?", "Hat Ihre Katze Freigang?"),
-            trList(listOf("Oui, librement", "Oui, de façon contrôlée (balcon sécurisé, jardin surveillé)", "Non, uniquement en intérieur"), listOf("Yes, freely", "Yes, in a controlled way (secure balcony, supervised garden)", "No, indoors only"), listOf("Ja, frei", "Ja, kontrolliert (gesicherter Balkon, beaufsichtigter Garten)", "Nein, nur in der Wohnung"))),
+            tr("Votre chat a-t-il accès à l'extérieur ?", "Does your cat have access to the outdoors?", "Hat Ihre Katze Freigang?", "¿Tu gato tiene acceso al exterior?"),
+            trList(listOf("Oui, librement", "Oui, de façon contrôlée (balcon sécurisé, jardin surveillé)", "Non, uniquement en intérieur"), listOf("Yes, freely", "Yes, in a controlled way (secure balcony, supervised garden)", "No, indoors only"), listOf("Ja, frei", "Ja, kontrolliert (gesicherter Balkon, beaufsichtigter Garten)", "Nein, nur in der Wohnung"),
+                listOf("Sí, libremente", "Sí, de forma controlada (balcón protegido, jardín vigilado)", "No, solo dentro de casa"))),
 
         QuestionChoix("vie_interieur",
-            tr("Si votre chat est d'intérieur, comment décririez-vous son environnement ?", "If your cat is indoors, how would you describe its environment?", "Wenn Ihre Katze in der Wohnung lebt, wie würden Sie ihre Umgebung beschreiben?"),
+            tr("Si votre chat est d'intérieur, comment décririez-vous son environnement ?", "If your cat is indoors, how would you describe its environment?", "Wenn Ihre Katze in der Wohnung lebt, wie würden Sie ihre Umgebung beschreiben?", "Si tu gato vive dentro de casa, ¿cómo describirías su entorno?"),
             trList(
                 listOf("Enrichi (griffoirs, hauteurs, jeux variés, fenêtres accessibles)",
                     "Correct mais peut mieux faire", "Peu stimulant",
@@ -733,10 +831,11 @@ fun questionsApplication(): List<Question> {
                 listOf("Abwechslungsreich gestaltet (Kratzbäume, erhöhte Plätze, abwechslungsreiches Spielzeug, zugängliche Fenster)",
                     "Ordentlich, aber ausbaufähig", "Wenig anregend",
                     "Ich weiß es nicht genau", "Meine Katze hat Freigang")
-            )),
+            ,
+                listOf("Enriquecido (rascadores, zonas altas, juguetes variados, ventanas accesibles)", "Correcto, pero mejorable", "Poco estimulante", "No lo sé muy bien", "Mi gato tiene acceso al exterior"))),
 
         QuestionChoix("reaction_stress_ponctuel",
-            tr("Face à une situation stressante ponctuelle (bruit fort, transport, vétérinaire...), votre chat :", "Faced with a one-off stressful situation (loud noise, transport, vet visit...), your cat:", "In einer einzelnen Stresssituation (lautes Geräusch, Transport, Tierarzt …) reagiert Ihre Katze so:"),
+            tr("Face à une situation stressante ponctuelle (bruit fort, transport, vétérinaire...), votre chat :", "Faced with a one-off stressful situation (loud noise, transport, vet visit...), your cat:", "In einer einzelnen Stresssituation (lautes Geräusch, Transport, Tierarzt …) reagiert Ihre Katze so:", "Ante una situación estresante puntual (ruido fuerte, transporte, veterinario...), tu gato:"),
             trList(
                 listOf("Il reste calme ou récupère vite",
                     "Il sursaute ou s'agite mais récupère en quelques minutes",
@@ -750,11 +849,12 @@ fun questionsApplication(): List<Question> {
                     "Sie erschrickt oder wird unruhig, erholt sich aber innerhalb weniger Minuten",
                     "Sie versteckt sich und braucht lange, um wiederzukommen",
                     "Sie gerät völlig in Panik und bleibt lange verunsichert")
-            ),
+            ,
+                listOf("Se queda tranquilo o se recupera rápido", "Se sobresalta o se agita, pero se recupera en pocos minutos", "Se esconde y tarda mucho en volver", "Entra en pánico total y se queda alterado mucho tiempo")),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
 
         QuestionChoix("reaction_inconnu",
-            tr("Comment votre chat réagit-il face à une personne inconnue ?", "How does your cat react to a stranger?", "Wie reagiert Ihre Katze auf einen fremden Menschen?"),
+            tr("Comment votre chat réagit-il face à une personne inconnue ?", "How does your cat react to a stranger?", "Wie reagiert Ihre Katze auf einen fremden Menschen?", "¿Cómo reacciona tu gato ante una persona desconocida?"),
             trList(
                 listOf("Il s'approche avec curiosité ou reste indifférent",
                     "Il observe de loin prudemment puis s'approche parfois",
@@ -768,11 +868,12 @@ fun questionsApplication(): List<Question> {
                     "Sie beobachtet vorsichtig aus der Ferne und nähert sich manchmal",
                     "Sie versteckt sich während des ganzen Besuchs",
                     "Sie zeigt Anzeichen von Unruhe oder Aggression")
-            ),
+            ,
+                listOf("Se acerca con curiosidad o se muestra indiferente", "Observa con prudencia desde lejos y a veces se acerca", "Se esconde durante toda la visita", "Muestra señales de agitación o de agresividad")),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4), signalAlerte = true),
 
         QuestionChoix("cache_souvent",
-            tr("À quelle fréquence votre chat se cache-t-il ou s'isole-t-il ?", "How often does your cat hide or isolate itself?", "Wie oft versteckt oder isoliert sich Ihre Katze?"),
+            tr("À quelle fréquence votre chat se cache-t-il ou s'isole-t-il ?", "How often does your cat hide or isolate itself?", "Wie oft versteckt oder isoliert sich Ihre Katze?", "¿Con qué frecuencia se esconde o se aísla tu gato?"),
             trList(
                 listOf("Rarement — il est généralement visible et accessible",
                     "Parfois, notamment quand il y a du monde ou du bruit",
@@ -786,11 +887,12 @@ fun questionsApplication(): List<Question> {
                     "Manchmal, vor allem wenn Menschen da sind oder es laut ist",
                     "Oft, mehrmals am Tag",
                     "Die meiste Zeit – sie ist schwer zu finden")
-            ),
+            ,
+                listOf("Rara vez: suele estar visible y accesible", "A veces, sobre todo cuando hay gente o ruido", "A menudo, varias veces al día", "Casi siempre: cuesta encontrarlo")),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 2, 4)),
 
         QuestionChoix("adaptation_changement",
-            tr("Comment votre chat s'adapte-t-il aux changements (déménagement, nouveau meuble, visiteurs) ?", "How does your cat adapt to changes (move, new furniture, visitors)?", "Wie passt sich Ihre Katze an Veränderungen an (Umzug, neue Möbel, Besuch)?"),
+            tr("Comment votre chat s'adapte-t-il aux changements (déménagement, nouveau meuble, visiteurs) ?", "How does your cat adapt to changes (move, new furniture, visitors)?", "Wie passt sich Ihre Katze an Veränderungen an (Umzug, neue Möbel, Besuch)?", "¿Cómo se adapta tu gato a los cambios (mudanza, mueble nuevo, visitas)?"),
             trList(
                 listOf("Très bien — il s'adapte rapidement",
                     "Correctement — quelques jours de prudence puis ça passe",
@@ -804,11 +906,12 @@ fun questionsApplication(): List<Question> {
                     "Gut – ein paar Tage Vorsicht, dann legt es sich",
                     "Schwer – sie braucht mehrere Wochen, um sich zu erholen",
                     "Sehr schlecht – jede Veränderung löst eine anhaltende Krise aus")
-            ),
+            ,
+                listOf("Muy bien: se adapta rápido", "Bien: unos días de prudencia y se le pasa", "Con dificultad: tarda varias semanas en recuperarse", "Muy mal: cada cambio provoca una crisis duradera")),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3, 4)),
 
         QuestionChoix("surtoilettage",
-            tr("Avez-vous observé un surtoilettage (zones de poils clairsemés, léchages répétitifs excessifs) ?", "Have you noticed over-grooming (sparse fur areas, repeated excessive licking)?", "Haben Sie übermäßige Fellpflege bemerkt (Stellen mit schütterem Fell, wiederholtes übermäßiges Lecken)?"),
+            tr("Avez-vous observé un surtoilettage (zones de poils clairsemés, léchages répétitifs excessifs) ?", "Have you noticed over-grooming (sparse fur areas, repeated excessive licking)?", "Haben Sie übermäßige Fellpflege bemerkt (Stellen mit schütterem Fell, wiederholtes übermäßiges Lecken)?", "¿Has notado un exceso de acicalamiento (zonas con poco pelo, lamidos repetidos y excesivos)?"),
             trList(
                 listOf("Non, son pelage est normal",
                     "Parfois, sans que ça laisse de traces visibles",
@@ -819,11 +922,12 @@ fun questionsApplication(): List<Question> {
                 listOf("Nein, ihr Fell ist normal",
                     "Manchmal, ohne sichtbare Spuren",
                     "Ja, mit leicht schütteren Stellen")
-            ),
+            ,
+                listOf("No, su pelaje es normal", "A veces, sin dejar marcas visibles", "Sí, con zonas con algo menos de pelo")),
             axe = Axe.SECURITE, scoreParOption = listOf(0, 1, 3), signalAlerte = true),
 
         QuestionChoix("recherche_proximite",
-            tr("Votre chat recherche-t-il la proximité physique avec vous (vous suit, dort collé, cherche à être sur vous), le jour comme la nuit ?", "Does your cat seek physical closeness with you (following you around, sleeping close, being on you), day and night?", "Sucht Ihre Katze körperliche Nähe zu Ihnen (folgt Ihnen, schläft eng bei Ihnen, will auf Ihnen liegen), tagsüber wie nachts?"),
+            tr("Votre chat recherche-t-il la proximité physique avec vous (vous suit, dort collé, cherche à être sur vous), le jour comme la nuit ?", "Does your cat seek physical closeness with you (following you around, sleeping close, being on you), day and night?", "Sucht Ihre Katze körperliche Nähe zu Ihnen (folgt Ihnen, schläft eng bei Ihnen, will auf Ihnen liegen), tagsüber wie nachts?", "¿Tu gato busca la cercanía física contigo (te sigue, duerme pegado a ti, quiere estar encima de ti), tanto de día como de noche?"),
             trList(
                 listOf("Non, il est plutôt indépendant, le jour comme la nuit",
                     "Parfois, selon son humeur",
@@ -837,11 +941,12 @@ fun questionsApplication(): List<Question> {
                     "Manchmal, je nach Laune",
                     "Oft – sie bleibt gern in Ihrer Nähe",
                     "Immer – sie weicht Ihnen kaum von der Seite und wird unruhig, wenn sie getrennt ist")
-            ),
+            ,
+                listOf("No, es más bien independiente, de día y de noche", "A veces, según su estado de ánimo", "A menudo: le gusta estar cerca de ti", "Siempre: casi no se separa de ti y se agita si lo separan")),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 1, 3)),
 
         QuestionChoix("reaction_absence",
-            tr("Comment votre chat se comporte-t-il quand vous êtes absent(e) ?", "How does your cat behave when you are away?", "Wie verhält sich Ihre Katze, wenn Sie nicht da sind?"),
+            tr("Comment votre chat se comporte-t-il quand vous êtes absent(e) ?", "How does your cat behave when you are away?", "Wie verhält sich Ihre Katze, wenn Sie nicht da sind?", "¿Cómo se comporta tu gato cuando no estás?"),
             trList(
                 listOf("Il semble gérer sereinement",
                     "Il peut vocaliser un peu à votre départ mais se calme",
@@ -858,11 +963,12 @@ fun questionsApplication(): List<Question> {
                     "Sie miaut oder wird deutlich unruhig",
                     "Sie zeigt deutliche Anzeichen von Not (starke Unruhe, lautes und anhaltendes Miauen)",
                     "Ich weiß es nicht")
-            ),
+            ,
+                listOf("Parece llevarlo con tranquilidad", "Puede maullar un poco cuando te vas, pero se calma", "Maúlla o se agita de forma notable", "Muestra señales claras de angustia (agitación intensa, maullidos fuertes y prolongados)", "No lo sé")),
             axe = Axe.LIEN, scoreParOption = listOf(0, 1, 2, 4, 0), signalAlerte = true),
 
         QuestionChoix("proprete_stress",
-            tr("Votre chat a-t-il déjà fait ses besoins en dehors de sa litière ?", "Has your cat ever relieved itself outside its litter box?", "Hat sich Ihre Katze schon einmal außerhalb ihres Katzenklos gelöst?"),
+            tr("Votre chat a-t-il déjà fait ses besoins en dehors de sa litière ?", "Has your cat ever relieved itself outside its litter box?", "Hat sich Ihre Katze schon einmal außerhalb ihres Katzenklos gelöst?", "¿Tu gato ha hecho alguna vez sus necesidades fuera del arenero?"),
             trList(
                 listOf("Non, jamais",
                     "Très rarement, dans des circonstances exceptionnelles",
@@ -876,15 +982,17 @@ fun questionsApplication(): List<Question> {
                     "Sehr selten, unter außergewöhnlichen Umständen",
                     "Gelegentlich, oft im Zusammenhang mit einem stressigen Ereignis",
                     "Regelmäßig")
-            ),
+            ,
+                listOf("No, nunca", "Muy rara vez, en circunstancias excepcionales", "De vez en cuando, a menudo tras un hecho estresante", "Con regularidad")),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 4), signalAlerte = true),
 
         QuestionChoix("proprete_type",
-            tr("Il s'agit plutôt de :", "Is it mainly:", "Es handelt sich eher um:"),
-            trList(listOf("Urine", "Selles", "Les deux"), listOf("Urine", "Stools", "Both"), listOf("Urin", "Kot", "Beides"))),
+            tr("Il s'agit plutôt de :", "Is it mainly:", "Es handelt sich eher um:", "Se trata más bien de:"),
+            trList(listOf("Urine", "Selles", "Les deux"), listOf("Urine", "Stools", "Both"), listOf("Urin", "Kot", "Beides"),
+                listOf("Orina", "Heces", "Ambas"))),
 
         QuestionChoix("demande_attention_vocale",
-            tr("Votre chat vocalise-t-il de façon insistante pour obtenir votre attention (que vous soyez présent(e) ou après une absence) ?", "Does your cat vocalize insistently to get your attention (whether you are present or after an absence)?", "Miaut Ihre Katze beharrlich, um Ihre Aufmerksamkeit zu bekommen (während Sie da sind oder nach einer Abwesenheit)?"),
+            tr("Votre chat vocalise-t-il de façon insistante pour obtenir votre attention (que vous soyez présent(e) ou après une absence) ?", "Does your cat vocalize insistently to get your attention (whether you are present or after an absence)?", "Miaut Ihre Katze beharrlich, um Ihre Aufmerksamkeit zu bekommen (während Sie da sind oder nach einer Abwesenheit)?", "¿Tu gato maúlla con insistencia para conseguir tu atención (cuando estás presente o después de una ausencia)?"),
             trList(
                 listOf("Non, rarement — il accepte facilement d'attendre",
                     "Il vocalise parfois pour demander de l'attention, puis se calme",
@@ -898,11 +1006,12 @@ fun questionsApplication(): List<Question> {
                     "Sie miaut manchmal, um Aufmerksamkeit zu fordern, und beruhigt sich dann",
                     "Sie bleibt sehr hartnäckig (miaut, stellt etwas an), um Aufmerksamkeit zu bekommen",
                     "Sie kann unruhig oder aggressiv werden, wenn sie ignoriert wird")
-            ),
+            ,
+                listOf("No, rara vez: acepta esperar sin problema", "A veces maúlla para pedir atención y luego se calma", "Insiste mucho (maúlla, hace travesuras) para llamar la atención", "Puede agitarse o volverse agresivo si lo ignoras")),
             axe = Axe.LIEN, scoreParOption = listOf(0, 0, 2, 3)),
 
         QuestionChoix("jeu_chasse",
-            tr("Votre chat joue/chasse-t-il activement (épier, bondir, attraper des jouets ou petits objets) ?", "Does your cat actively play/hunt (stalking, pouncing, catching toys or small objects)?", "Spielt oder jagt Ihre Katze aktiv (Anschleichen, Anspringen, Fangen von Spielzeug oder kleinen Gegenständen)?"),
+            tr("Votre chat joue/chasse-t-il activement (épier, bondir, attraper des jouets ou petits objets) ?", "Does your cat actively play/hunt (stalking, pouncing, catching toys or small objects)?", "Spielt oder jagt Ihre Katze aktiv (Anschleichen, Anspringen, Fangen von Spielzeug oder kleinen Gegenständen)?", "¿Tu gato juega o caza activamente (acecha, salta, atrapa juguetes u objetos pequeños)?"),
             trList(
                 listOf("Oui, avec enthousiasme — il initie lui-même des sessions",
                     "Oui, s'il est sollicité",
@@ -916,11 +1025,12 @@ fun questionsApplication(): List<Question> {
                     "Ja, wenn man sie dazu anregt",
                     "Wenig – sie langweilt sich schnell oder zeigt wenig Interesse",
                     "Nein, kein Interesse und kein solches Verhalten")
-            ),
+            ,
+                listOf("Sí, con entusiasmo: él mismo inicia los juegos", "Sí, si se le anima", "Poco: se aburre rápido o muestra poco interés", "No, ningún interés ni comportamiento de este tipo")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("griffage_surfaces",
-            tr("Votre chat griffe-t-il des surfaces non autorisées (meubles, canapé, moquette) ?", "Does your cat scratch surfaces it shouldn't (furniture, sofa, carpet)?", "Kratzt Ihre Katze an nicht erlaubten Flächen (Möbel, Sofa, Teppich)?"),
+            tr("Votre chat griffe-t-il des surfaces non autorisées (meubles, canapé, moquette) ?", "Does your cat scratch surfaces it shouldn't (furniture, sofa, carpet)?", "Kratzt Ihre Katze an nicht erlaubten Flächen (Möbel, Sofa, Teppich)?", "¿Tu gato araña superficies no permitidas (muebles, sofá, alfombra)?"),
             trList(
                 listOf("Non ou très rarement — il utilise ses griffoirs",
                     "Parfois les meubles en plus des griffoirs",
@@ -934,11 +1044,12 @@ fun questionsApplication(): List<Question> {
                     "Manchmal an Möbeln, zusätzlich zu den Kratzbäumen",
                     "Oft an Möbeln, obwohl Kratzbäume vorhanden sind",
                     "Sie kratzt nur an Möbeln, Kratzbäume interessieren sie nicht")
-            ),
+            ,
+                listOf("No o muy rara vez: usa sus rascadores", "A veces los muebles, además de los rascadores", "A menudo los muebles, aunque tiene rascadores", "Solo araña los muebles, los rascadores no le interesan")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("hyperactivite_nocturne",
-            tr("Votre chat présente-t-il une hyperactivité nocturne (courses, sauts, vocalisations la nuit) ?", "Does your cat show nocturnal hyperactivity (running, jumping, vocalizing at night)?", "Ist Ihre Katze nachts überaktiv (Rennen, Springen, Miauen in der Nacht)?"),
+            tr("Votre chat présente-t-il une hyperactivité nocturne (courses, sauts, vocalisations la nuit) ?", "Does your cat show nocturnal hyperactivity (running, jumping, vocalizing at night)?", "Ist Ihre Katze nachts überaktiv (Rennen, Springen, Miauen in der Nacht)?", "¿Tu gato tiene hiperactividad nocturna (carreras, saltos, maullidos por la noche)?"),
             trList(
                 listOf("Non, il est calme la nuit", "Parfois, occasionnellement",
                     "Souvent — cela perturbe régulièrement votre sommeil", "Toutes les nuits — c'est un problème important"),
@@ -946,11 +1057,12 @@ fun questionsApplication(): List<Question> {
                     "Often — it regularly disrupts your sleep", "Every night — it is a significant problem"),
                 listOf("Nein, sie ist nachts ruhig", "Manchmal, gelegentlich",
                     "Oft – sie stört regelmäßig Ihren Schlaf", "Jede Nacht – das ist ein großes Problem")
-            ),
+            ,
+                listOf("No, está tranquilo por la noche", "A veces, ocasionalmente", "A menudo: altera tu sueño con regularidad", "Todas las noches: es un problema importante")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 3, 4), signalAlerte = true),
 
         QuestionChoix("comportement_alimentaire",
-            tr("Comment décririez-vous le comportement alimentaire de votre chat ?", "How would you describe your cat's eating behavior?", "Wie würden Sie das Fressverhalten Ihrer Katze beschreiben?"),
+            tr("Comment décririez-vous le comportement alimentaire de votre chat ?", "How would you describe your cat's eating behavior?", "Wie würden Sie das Fressverhalten Ihrer Katze beschreiben?", "¿Cómo describirías la conducta alimentaria de tu gato?"),
             trList(
                 listOf("Normal — il mange bien, à son rythme",
                     "Il mange très vite ou réclame souvent",
@@ -964,11 +1076,12 @@ fun questionsApplication(): List<Question> {
                     "Sie frisst sehr schnell oder bettelt oft",
                     "Sie stiehlt Futter oder durchwühlt den Mülleimer",
                     "Sie hat starke Appetitschwankungen (verweigert das Futter oder frisst zwanghaft)")
-            ),
+            ,
+                listOf("Normal: come bien, a su ritmo", "Come muy rápido o pide comida a menudo", "Roba comida o revuelve la basura", "Tiene cambios importantes de apetito (rechaza la comida o come de forma compulsiva)")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("destruction_ennui",
-            tr("Votre chat provoque-t-il des destructions ou dégâts, notamment en votre absence ?", "Does your cat cause destruction or damage, especially in your absence?", "Richtet Ihre Katze Zerstörung oder Schäden an, vor allem in Ihrer Abwesenheit?"),
+            tr("Votre chat provoque-t-il des destructions ou dégâts, notamment en votre absence ?", "Does your cat cause destruction or damage, especially in your absence?", "Richtet Ihre Katze Zerstörung oder Schäden an, vor allem in Ihrer Abwesenheit?", "¿Tu gato causa destrozos o daños, sobre todo cuando no estás?"),
             trList(
                 listOf("Non, jamais", "Rarement, quelques petits incidents",
                     "Parfois — objets renversés, plantes abîmées",
@@ -979,11 +1092,12 @@ fun questionsApplication(): List<Question> {
                 listOf("Nein, nie", "Selten, ein paar kleinere Vorfälle",
                     "Manchmal – umgeworfene Gegenstände, beschädigte Pflanzen",
                     "Oft – die Schäden sind erheblich und regelmäßig")
-            ),
+            ,
+                listOf("No, nunca", "Rara vez, algunos pequeños incidentes", "A veces: objetos tirados, plantas estropeadas", "A menudo: los daños son importantes y frecuentes")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 3)),
 
         QuestionChoix("marquage_urinaire",
-            tr("Votre chat pratique-t-il le marquage urinaire (debout, sur des surfaces verticales) ?", "Does your cat urine-mark (standing up, on vertical surfaces)?", "Markiert Ihre Katze mit Urin (im Stehen, an senkrechten Flächen)?"),
+            tr("Votre chat pratique-t-il le marquage urinaire (debout, sur des surfaces verticales) ?", "Does your cat urine-mark (standing up, on vertical surfaces)?", "Markiert Ihre Katze mit Urin (im Stehen, an senkrechten Flächen)?", "¿Tu gato hace marcaje con orina (de pie, sobre superficies verticales)?"),
             trList(
                 listOf("Non, jamais", "Rarement, dans des situations de stress identifiées",
                     "Oui, de temps en temps", "Oui, fréquemment"),
@@ -991,19 +1105,22 @@ fun questionsApplication(): List<Question> {
                     "Yes, from time to time", "Yes, frequently"),
                 listOf("Nein, nie", "Selten, in erkennbar stressigen Situationen",
                     "Ja, ab und zu", "Ja, häufig")
-            ),
+            ,
+                listOf("No, nunca", "Rara vez, en situaciones de estrés identificadas", "Sí, de vez en cuando", "Sí, con frecuencia")),
             axe = Axe.INSTINCTS, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
 
         QuestionChoix("chaleur_marquage",
-            tr("Ce marquage a-t-il lieu principalement pendant ses chaleurs (périodes où elle réclame, miaule fort, se frotte beaucoup) ?", "Does this marking happen mainly during her heat periods (times when she calls, meows loudly, rubs a lot)?", "Geschieht dieses Markieren vor allem während ihrer Rolligkeit (Phasen, in denen sie ruft, laut miaut, sich viel reibt)?"),
-            trList(listOf("Oui, principalement pendant les chaleurs", "Non, à d'autres moments aussi", "Je ne sais pas"), listOf("Yes, mainly during heat periods", "No, at other times too", "I don't know"), listOf("Ja, vor allem während der Rolligkeit", "Nein, auch zu anderen Zeiten", "Ich weiß es nicht"))),
+            tr("Ce marquage a-t-il lieu principalement pendant ses chaleurs (périodes où elle réclame, miaule fort, se frotte beaucoup) ?", "Does this marking happen mainly during her heat periods (times when she calls, meows loudly, rubs a lot)?", "Geschieht dieses Markieren vor allem während ihrer Rolligkeit (Phasen, in denen sie ruft, laut miaut, sich viel reibt)?", "¿Este marcaje ocurre sobre todo durante el celo (periodos en los que llama, maúlla fuerte y se frota mucho)?"),
+            trList(listOf("Oui, principalement pendant les chaleurs", "Non, à d'autres moments aussi", "Je ne sais pas"), listOf("Yes, mainly during heat periods", "No, at other times too", "I don't know"), listOf("Ja, vor allem während der Rolligkeit", "Nein, auch zu anderen Zeiten", "Ich weiß es nicht"),
+                listOf("Sí, sobre todo durante el celo", "No, también en otros momentos", "No lo sé"))),
 
         QuestionChoix("marquage_habitude_post_sterilisation",
-            tr("Ce marquage a-t-il commencé avant sa stérilisation ?", "Did this marking start before she was spayed?", "Hat dieses Markieren vor ihrer Kastration begonnen?"),
-            trList(listOf("Oui, et ça a continué depuis", "Non, c'est apparu après la stérilisation", "Je ne sais pas / je l'ai adoptée déjà stérilisée"), listOf("Yes, and it has continued since", "No, it appeared after spaying", "I don't know / I adopted her already spayed"), listOf("Ja, und es hat seitdem angehalten", "Nein, es ist nach der Kastration aufgetreten", "Ich weiß es nicht / ich habe sie bereits kastriert übernommen"))),
+            tr("Ce marquage a-t-il commencé avant sa stérilisation ?", "Did this marking start before she was spayed?", "Hat dieses Markieren vor ihrer Kastration begonnen?", "¿Este marcaje empezó antes de su esterilización?"),
+            trList(listOf("Oui, et ça a continué depuis", "Non, c'est apparu après la stérilisation", "Je ne sais pas / je l'ai adoptée déjà stérilisée"), listOf("Yes, and it has continued since", "No, it appeared after spaying", "I don't know / I adopted her already spayed"), listOf("Ja, und es hat seitdem angehalten", "Nein, es ist nach der Kastration aufgetreten", "Ich weiß es nicht / ich habe sie bereits kastriert übernommen"),
+                listOf("Sí, y ha continuado desde entonces", "No, apareció después de la esterilización", "No lo sé / la adopté ya esterilizada"))),
 
         QuestionChoix("relation_autres_chats",
-            tr("Si vous avez plusieurs chats, comment se passent leurs relations ?", "If you have several cats, how do they get along?", "Wenn Sie mehrere Katzen haben, wie ist ihr Verhältnis zueinander?"),
+            tr("Si vous avez plusieurs chats, comment se passent leurs relations ?", "If you have several cats, how do they get along?", "Wenn Sie mehrere Katzen haben, wie ist ihr Verhältnis zueinander?", "Si tienes varios gatos, ¿cómo se llevan entre ellos?"),
             trList(
                 listOf("Bonne entente générale, voire affection mutuelle",
                     "Coexistence neutre — ils s'ignorent",
@@ -1020,11 +1137,12 @@ fun questionsApplication(): List<Question> {
                     "Häufige Spannungen, aber keine körperlichen Angriffe",
                     "Regelmäßige Konflikte mit Angriffen",
                     "Ich habe nur eine Katze")
-            ),
+            ,
+                listOf("Se llevan bien en general, incluso con cariño mutuo", "Conviven de forma neutra: se ignoran", "Tensiones frecuentes, pero sin agresiones físicas", "Conflictos frecuentes con agresiones", "Solo tengo un gato")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 0, 2, 4, 0), signalAlerte = true),
 
         QuestionChoix("relation_enfants",
-            tr("Si des enfants sont présents, comment votre chat réagit-il ?", "If children are present, how does your cat react?", "Wenn Kinder im Haushalt leben, wie reagiert Ihre Katze?"),
+            tr("Si des enfants sont présents, comment votre chat réagit-il ?", "If children are present, how does your cat react?", "Wenn Kinder im Haushalt leben, wie reagiert Ihre Katze?", "Si hay niños en casa, ¿cómo reacciona tu gato?"),
             trList(
                 listOf("Très bien — il interagit ou les tolère sereinement",
                     "Correctement — il garde ses distances mais sans tension",
@@ -1041,11 +1159,12 @@ fun questionsApplication(): List<Question> {
                     "Sie flieht oder zieht sich zurück, wenn Kinder da sind",
                     "Sie kann aggressiv reagieren (Kratzen, Beißen)",
                     "Keine Kinder im Haushalt")
-            ),
+            ,
+                listOf("Muy bien: interactúa con ellos o los tolera con calma", "Bien: guarda las distancias, pero sin tensión", "Huye o se aísla cuando están los niños", "Puede reaccionar de forma agresiva (araña, muerde)", "No hay niños en casa")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 0, 2, 4, 0), signalAlerte = true),
 
         QuestionChoix("agressivite_caresses",
-            tr("Votre chat mord-il ou griffe-t-il pendant les caresses ou les jeux ?", "Does your cat bite or scratch during petting or play?", "Beißt oder kratzt Ihre Katze beim Streicheln oder Spielen?"),
+            tr("Votre chat mord-il ou griffe-t-il pendant les caresses ou les jeux ?", "Does your cat bite or scratch during petting or play?", "Beißt oder kratzt Ihre Katze beim Streicheln oder Spielen?", "¿Tu gato muerde o araña durante las caricias o el juego?"),
             trList(
                 listOf("Non, jamais",
                     "Rarement — seulement quand les signaux d'alerte ont été ignorés",
@@ -1059,21 +1178,24 @@ fun questionsApplication(): List<Question> {
                     "Selten – nur wenn Warnsignale übersehen wurden",
                     "Manchmal, unvorhersehbar",
                     "Oft – körperliche Kontakte sind schwer zu bewältigen")
-            ),
+            ,
+                listOf("No, nunca", "Rara vez: solo cuando se han ignorado las señales de aviso", "A veces, de forma imprevisible", "A menudo: las interacciones físicas son difíciles de manejar")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 1, 2, 4), signalAlerte = true),
 
         QuestionChoix("a_deja_griffe_mordu",
-            tr("Votre chat a-t-il déjà griffé ou mordu quelqu'un (vous, un proche, un enfant) ?", "Has your cat ever scratched or bitten someone (you, a family member, a child)?", "Hat Ihre Katze schon einmal jemanden gekratzt oder gebissen (Sie, ein Familienmitglied, ein Kind)?"),
-            trList(listOf("Non, jamais", "Oui, cela s'est déjà produit"), listOf("No, never", "Yes, it has happened"), listOf("Nein, nie", "Ja, das ist schon vorgekommen")),
+            tr("Votre chat a-t-il déjà griffé ou mordu quelqu'un (vous, un proche, un enfant) ?", "Has your cat ever scratched or bitten someone (you, a family member, a child)?", "Hat Ihre Katze schon einmal jemanden gekratzt oder gebissen (Sie, ein Familienmitglied, ein Kind)?", "¿Tu gato ha arañado o mordido alguna vez a alguien (a ti, a un familiar, a un niño)?"),
+            trList(listOf("Non, jamais", "Oui, cela s'est déjà produit"), listOf("No, never", "Yes, it has happened"), listOf("Nein, nie", "Ja, das ist schon vorgekommen"),
+                listOf("No, nunca", "Sí, ya ha ocurrido")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 4), poids = 2, signalCritique = true),
 
         QuestionChoix("cible_agression",
-            tr("Envers qui cela s'est-il produit ?", "Who was it directed at?", "Gegen wen hat sich das gerichtet?"),
-            trList(listOf("Une personne", "Un autre animal (chat, chien...)", "Les deux"), listOf("A person", "Another animal (cat, dog...)", "Both"), listOf("Einen Menschen", "Ein anderes Tier (Katze, Hund …)", "Beides")),
+            tr("Envers qui cela s'est-il produit ?", "Who was it directed at?", "Gegen wen hat sich das gerichtet?", "¿Hacia quién fue?"),
+            trList(listOf("Une personne", "Un autre animal (chat, chien...)", "Les deux"), listOf("A person", "Another animal (cat, dog...)", "Both"), listOf("Einen Menschen", "Ein anderes Tier (Katze, Hund …)", "Beides"),
+                listOf("Una persona", "Otro animal (gato, perro...)", "Ambos")),
             axe = Axe.COHABITATION),
 
         QuestionChoix("defense_ressources",
-            tr("Votre chat défend-il ses ressources (gamelle, litière, coin de repos) de façon agressive ?", "Does your cat defend its resources (bowl, litter box, resting spot) aggressively?", "Verteidigt Ihre Katze ihre Ressourcen (Napf, Katzenklo, Liegeplatz) aggressiv?"),
+            tr("Votre chat défend-il ses ressources (gamelle, litière, coin de repos) de façon agressive ?", "Does your cat defend its resources (bowl, litter box, resting spot) aggressively?", "Verteidigt Ihre Katze ihre Ressourcen (Napf, Katzenklo, Liegeplatz) aggressiv?", "¿Tu gato defiende sus recursos (comedero, arenero, lugar de descanso) de forma agresiva?"),
             trList(
                 listOf("Non, jamais",
                     "Parfois — il grogne ou siffle si on s'approche",
@@ -1084,39 +1206,47 @@ fun questionsApplication(): List<Question> {
                 listOf("Nein, nie",
                     "Manchmal – sie knurrt oder faucht, wenn man sich nähert",
                     "Ja, häufig – sie mag es nicht, wenn sich jemand ihren Sachen nähert")
-            ),
+            ,
+                listOf("No, nunca", "A veces: gruñe o bufa si alguien se acerca", "Sí, con frecuencia: no le gusta que se acerquen a sus cosas")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 2, 4), signalAlerte = true),
 
         QuestionChoix("a_un_probleme",
-            tr("Y a-t-il un comportement particulier qui vous préoccupe en ce moment ?", "Is there a particular behavior that concerns you right now?", "Gibt es derzeit ein bestimmtes Verhalten, das Sie beschäftigt?"),
-            trList(listOf("Oui, j'aimerais en savoir plus", "Non, tout va bien dans l'ensemble"), listOf("Yes, I would like to know more", "No, everything is fine overall"), listOf("Ja, ich möchte mehr darüber erfahren", "Nein, insgesamt ist alles in Ordnung"))),
+            tr("Y a-t-il un comportement particulier qui vous préoccupe en ce moment ?", "Is there a particular behavior that concerns you right now?", "Gibt es derzeit ein bestimmtes Verhalten, das Sie beschäftigt?", "¿Hay algún comportamiento concreto que te preocupe en este momento?"),
+            trList(listOf("Oui, j'aimerais en savoir plus", "Non, tout va bien dans l'ensemble"), listOf("Yes, I would like to know more", "No, everything is fine overall"), listOf("Ja, ich möchte mehr darüber erfahren", "Nein, insgesamt ist alles in Ordnung"),
+                listOf("Sí, me gustaría saber más", "No, en general todo va bien"))),
 
         QuestionChoix("apparition",
-            tr("Ce comportement est apparu :", "This behavior appeared:", "Dieses Verhalten ist aufgetreten:"),
-            trList(listOf("Progressivement", "Du jour au lendemain, de façon brutale", "Je ne sais pas vraiment"), listOf("Gradually", "Suddenly, from one day to the next", "I'm not really sure"), listOf("Nach und nach", "Plötzlich, von einem Tag auf den anderen", "Ich weiß es nicht genau"))),
+            tr("Ce comportement est apparu :", "This behavior appeared:", "Dieses Verhalten ist aufgetreten:", "Este comportamiento apareció:"),
+            trList(listOf("Progressivement", "Du jour au lendemain, de façon brutale", "Je ne sais pas vraiment"), listOf("Gradually", "Suddenly, from one day to the next", "I'm not really sure"), listOf("Nach und nach", "Plötzlich, von einem Tag auf den anderen", "Ich weiß es nicht genau"),
+                listOf("Poco a poco", "De un día para otro, de golpe", "No lo sé muy bien"))),
 
         QuestionChoix("duree_probleme",
-            tr("Depuis combien de temps observez-vous ce comportement ?", "How long have you been observing this behavior?", "Seit wann beobachten Sie dieses Verhalten?"),
-            trList(listOf("Moins d'une semaine", "Entre 1 semaine et 1 mois", "Depuis plusieurs mois", "Depuis toujours ou très longtemps"), listOf("Less than a week", "Between 1 week and 1 month", "For several months", "Always, or for a very long time"), listOf("Weniger als eine Woche", "Zwischen 1 Woche und 1 Monat", "Seit mehreren Monaten", "Schon immer oder seit sehr langer Zeit"))),
+            tr("Depuis combien de temps observez-vous ce comportement ?", "How long have you been observing this behavior?", "Seit wann beobachten Sie dieses Verhalten?", "¿Desde cuándo observas este comportamiento?"),
+            trList(listOf("Moins d'une semaine", "Entre 1 semaine et 1 mois", "Depuis plusieurs mois", "Depuis toujours ou très longtemps"), listOf("Less than a week", "Between 1 week and 1 month", "For several months", "Always, or for a very long time"), listOf("Weniger als eine Woche", "Zwischen 1 Woche und 1 Monat", "Seit mehreren Monaten", "Schon immer oder seit sehr langer Zeit"),
+                listOf("Menos de una semana", "Entre 1 semana y 1 mes", "Desde hace varios meses", "Desde siempre o desde hace mucho tiempo"))),
 
         QuestionChoix("evolution_probleme",
-            tr("Ce comportement évolue-t-il ?", "How is this behavior changing?", "Wie entwickelt sich dieses Verhalten?"),
-            trList(listOf("Il s'améliore", "Il reste stable", "Il s'aggrave"), listOf("It is improving", "It remains stable", "It is getting worse"), listOf("Es wird besser", "Es bleibt stabil", "Es verschlimmert sich"))),
+            tr("Ce comportement évolue-t-il ?", "How is this behavior changing?", "Wie entwickelt sich dieses Verhalten?", "¿Cómo está evolucionando este comportamiento?"),
+            trList(listOf("Il s'améliore", "Il reste stable", "Il s'aggrave"), listOf("It is improving", "It remains stable", "It is getting worse"), listOf("Es wird besser", "Es bleibt stabil", "Es verschlimmert sich"),
+                listOf("Está mejorando", "Se mantiene estable", "Está empeorando"))),
 
         QuestionChoix("frequence_probleme",
-            tr("À quelle fréquence ce comportement se manifeste-t-il ?", "How often does this behavior occur?", "Wie oft tritt dieses Verhalten auf?"),
-            trList(listOf("Rarement — quelques fois par mois", "Quelques fois par semaine", "Tous les jours", "Plusieurs fois par jour"), listOf("Rarely — a few times a month", "A few times a week", "Every day", "Several times a day"), listOf("Selten – ein paar Mal im Monat", "Einige Male pro Woche", "Jeden Tag", "Mehrmals täglich"))),
+            tr("À quelle fréquence ce comportement se manifeste-t-il ?", "How often does this behavior occur?", "Wie oft tritt dieses Verhalten auf?", "¿Con qué frecuencia aparece este comportamiento?"),
+            trList(listOf("Rarement — quelques fois par mois", "Quelques fois par semaine", "Tous les jours", "Plusieurs fois par jour"), listOf("Rarely — a few times a month", "A few times a week", "Every day", "Several times a day"), listOf("Selten – ein paar Mal im Monat", "Einige Male pro Woche", "Jeden Tag", "Mehrmals täglich"),
+                listOf("Rara vez: algunas veces al mes", "Algunas veces por semana", "Todos los días", "Varias veces al día"))),
 
         QuestionChoix("intensite_probleme",
-            tr("Quand cela arrive, c'est plutôt :", "When it happens, it is usually:", "Wenn es passiert, ist es eher:"),
-            trList(listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable"), listOf("Easily manageable", "Inconvenient but bearable", "Difficult to manage", "Very intense, uncontrollable"), listOf("Gut zu bewältigen", "Störend, aber erträglich", "Schwer zu bewältigen", "Sehr intensiv, unkontrollierbar"))),
+            tr("Quand cela arrive, c'est plutôt :", "When it happens, it is usually:", "Wenn es passiert, ist es eher:", "Cuando ocurre, suele ser:"),
+            trList(listOf("Gérable facilement", "Gênant mais supportable", "Difficile à gérer", "Très intense, incontrôlable"), listOf("Easily manageable", "Inconvenient but bearable", "Difficult to manage", "Very intense, uncontrollable"), listOf("Gut zu bewältigen", "Störend, aber erträglich", "Schwer zu bewältigen", "Sehr intensiv, unkontrollierbar"),
+                listOf("Fácil de manejar", "Molesto, pero soportable", "Difícil de manejar", "Muy intenso, incontrolable"))),
 
         QuestionChoix("generalisation_probleme",
-            tr("Ce comportement se produit :", "This behavior occurs:", "Dieses Verhalten tritt auf:"),
-            trList(listOf("Dans une situation très précise", "Dans plusieurs situations différentes", "Dans la plupart des situations quotidiennes"), listOf("In one very specific situation", "In several different situations", "In most everyday situations"), listOf("In einer ganz bestimmten Situation", "In mehreren verschiedenen Situationen", "In den meisten Alltagssituationen"))),
+            tr("Ce comportement se produit :", "This behavior occurs:", "Dieses Verhalten tritt auf:", "Este comportamiento ocurre:"),
+            trList(listOf("Dans une situation très précise", "Dans plusieurs situations différentes", "Dans la plupart des situations quotidiennes"), listOf("In one very specific situation", "In several different situations", "In most everyday situations"), listOf("In einer ganz bestimmten Situation", "In mehreren verschiedenen Situationen", "In den meisten Alltagssituationen"),
+                listOf("En una situación muy concreta", "En varias situaciones diferentes", "En la mayoría de las situaciones cotidianas"))),
 
         QuestionChoix("changement_recent",
-            tr("Y a-t-il eu un changement important récemment dans la vie de votre chat ?", "Has there been a significant change in your cat's life recently?", "Gab es kürzlich eine wichtige Veränderung im Leben Ihrer Katze?"),
+            tr("Y a-t-il eu un changement important récemment dans la vie de votre chat ?", "Has there been a significant change in your cat's life recently?", "Gab es kürzlich eine wichtige Veränderung im Leben Ihrer Katze?", "¿Ha habido recientemente algún cambio importante en la vida de tu gato?"),
             trList(
                 listOf("Aucun changement notable",
                     "Un changement léger (nouveau meuble, nouvelle routine)",
@@ -1127,10 +1257,11 @@ fun questionsApplication(): List<Question> {
                 listOf("Keine nennenswerte Veränderung",
                     "Eine kleine Veränderung (neue Möbel, neuer Tagesablauf)",
                     "Eine große Veränderung (Umzug, neues Tier, Geburt, Trennung)")
-            )),
+            ,
+                listOf("Ningún cambio notable", "Un cambio leve (mueble nuevo, nueva rutina)", "Un cambio importante (mudanza, nuevo animal, nacimiento, separación)"))),
 
         QuestionChoix("signe_physique",
-            tr("Avez-vous observé des changements physiques chez votre chat (appétit, poids, pelage, éliminations) ?", "Have you noticed any physical changes in your cat (appetite, weight, coat, elimination)?", "Haben Sie körperliche Veränderungen bei Ihrer Katze bemerkt (Appetit, Gewicht, Fell, Ausscheidungen)?"),
+            tr("Avez-vous observé des changements physiques chez votre chat (appétit, poids, pelage, éliminations) ?", "Have you noticed any physical changes in your cat (appetite, weight, coat, elimination)?", "Haben Sie körperliche Veränderungen bei Ihrer Katze bemerkt (Appetit, Gewicht, Fell, Ausscheidungen)?", "¿Has notado cambios físicos en tu gato (apetito, peso, pelaje, eliminación)?"),
             trList(
                 listOf("Non, rien de particulier", "Peut-être — je ne suis pas certain(e)",
                     "Oui, un changement notable", "Oui, quelque chose qui m'inquiète vraiment"),
@@ -1138,12 +1269,14 @@ fun questionsApplication(): List<Question> {
                     "Yes, a notable change", "Yes, something that really concerns me"),
                 listOf("Nein, nichts Besonderes", "Vielleicht – ich bin mir nicht sicher",
                     "Ja, eine deutliche Veränderung", "Ja, etwas, das mich wirklich beunruhigt")
-            )),
+            ,
+                listOf("No, nada en particular", "Quizás: no estoy seguro/a", "Sí, un cambio notable", "Sí, algo que me preocupa de verdad"))),
 
         QuestionChoix("lieu_residence",
-            tr("Où habitez-vous ?", "Where do you live?", "Wo wohnen Sie?"),
+            tr("Où habitez-vous ?", "Where do you live?", "Wo wohnen Sie?", "¿Dónde vives?"),
             trList(listOf("Dans l'Essonne (91)", "Ailleurs en France", "Dans un autre pays francophone (Belgique, Suisse, Luxembourg…)"),
                 listOf("In Essonne (91)", "Elsewhere in France", "In another French-speaking country (Belgium, Switzerland, Luxembourg…)"),
-                listOf("Im Département Essonne (91)", "Anderswo in Frankreich", "In einem anderen französischsprachigen Land (Belgien, Schweiz, Luxemburg …)")))
+                listOf("Im Département Essonne (91)", "Anderswo in Frankreich", "In einem anderen französischsprachigen Land (Belgien, Schweiz, Luxemburg …)"),
+                listOf("En Essonne (91)", "En otra parte de Francia", "En otro país francófono (Bélgica, Suiza, Luxemburgo…)")))
     )
 }

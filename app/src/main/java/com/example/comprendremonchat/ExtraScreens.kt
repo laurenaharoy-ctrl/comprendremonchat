@@ -90,7 +90,7 @@ fun PremiumTopBarWithActions(
                 IconButton(onClick = onBack) {
                     Icon(
                         Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = tr("Retour", "Back", "Zurück"),
+                        contentDescription = tr("Retour", "Back", "Zurück", "Volver"),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -130,6 +130,12 @@ fun categoriesSignalement(): List<CategorieSignalement> = trList(
         CategorieSignalement("contenu", "Fehlerhafter Inhalt", "Eine Information scheint falsch, ein Text ist unverständlich…", Icons.Rounded.HelpOutline),
         CategorieSignalement("suggestion", "Vorschlag", "Eine Idee, um die App zu verbessern oder eine Funktion hinzuzufügen…", Icons.Rounded.Lightbulb),
         CategorieSignalement("autre", "Sonstiges", "Alles, was in keine der obigen Kategorien passt.", Icons.Rounded.MoreHoriz)
+    ),
+    listOf(
+        CategorieSignalement("bug", "Error / Problema técnico", "La aplicación se cierra, un botón no funciona, una pantalla se queda bloqueada…", Icons.Rounded.BugReport),
+        CategorieSignalement("contenu", "Contenido incorrecto", "Una información parece errónea, un texto no se entiende…", Icons.Rounded.HelpOutline),
+        CategorieSignalement("suggestion", "Sugerencia", "Una idea para mejorar la aplicación o añadir una función…", Icons.Rounded.Lightbulb),
+        CategorieSignalement("autre", "Otro", "Todo lo que no encaja en las categorías anteriores.", Icons.Rounded.MoreHoriz)
     )
 )
 
@@ -145,6 +151,10 @@ fun ecransDisponibles(): List<String> = trList(
     listOf(
         "Startseite", "Einführung", "Fragebogen", "Ergebnis",
         "Verhaltenslexikon", "Ernährung", "Verlauf", "Allgemein / Sonstiges"
+    ),
+    listOf(
+        "Inicio", "Introducción", "Cuestionario", "Resultado",
+        "Diccionario de comportamiento", "Alimentación", "Historial", "General / Otro"
     )
 )
 
@@ -159,7 +169,7 @@ fun FeedbackScreen(
     val ecrans = ecransDisponibles()
 
     var categorieSelectionnee by remember { mutableStateOf<CategorieSignalement?>(null) }
-    var ecranSelectionne by remember { mutableStateOf(ecranActuel.ifBlank { tr("Général / Autre", "General / Other", "Allgemein / Sonstiges") }) }
+    var ecranSelectionne by remember { mutableStateOf(ecranActuel.ifBlank { tr("Général / Autre", "General / Other", "Allgemein / Sonstiges", "General / Otro") }) }
     var message by remember { mutableStateOf("") }
     var envoye by remember { mutableStateOf(false) }
 
@@ -183,34 +193,34 @@ fun FeedbackScreen(
                     }
                     Spacer(modifier = Modifier.height(14.dp))
                     Text(
-                        tr("Merci pour votre retour !", "Thank you for your feedback!", "Danke für Ihre Rückmeldung!"),
+                        tr("Merci pour votre retour !", "Thank you for your feedback!", "Danke für Ihre Rückmeldung!", "¡Gracias por tu opinión!"),
                         style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        tr("Votre message a bien été transmis. Il contribuera à améliorer l'application.", "Your message has been sent. It will help improve the app.", "Ihre Nachricht wurde gesendet. Sie hilft, die App zu verbessern."),
+                        tr("Votre message a bien été transmis. Il contribuera à améliorer l'application.", "Your message has been sent. It will help improve the app.", "Ihre Nachricht wurde gesendet. Sie hilft, die App zu verbessern.", "Tu mensaje se ha enviado correctamente. Ayudará a mejorar la aplicación."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    PrimaryGlowButton(text = tr("Retour", "Back", "Zurück"), onClick = onRetour)
+                    PrimaryGlowButton(text = tr("Retour", "Back", "Zurück", "Volver"), onClick = onRetour)
                 }
             } else {
                 PremiumCard(centered = true) {
-                    EditorialKicker(tr("Signalement", "Report", "Meldung"), centered = true)
+                    EditorialKicker(tr("Signalement", "Report", "Meldung", "Reporte"), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        tr("Quelque chose ne va pas ?", "Something wrong?", "Stimmt etwas nicht?"),
+                        tr("Quelque chose ne va pas ?", "Something wrong?", "Stimmt etwas nicht?", "¿Algo no funciona?"),
                         style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        tr("Votre retour est précieux. Décrivez le problème ou la suggestion.", "Your feedback is valuable. Describe the issue or suggestion.", "Ihre Rückmeldung ist wertvoll. Beschreiben Sie das Problem oder Ihren Vorschlag."),
+                        tr("Votre retour est précieux. Décrivez le problème ou la suggestion.", "Your feedback is valuable. Describe the issue or suggestion.", "Ihre Rückmeldung ist wertvoll. Beschreiben Sie das Problem oder Ihren Vorschlag.", "Tu opinión es valiosa. Describe el problema o la sugerencia."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 PremiumCard {
-                    EditorialKicker(tr("Type de signalement", "Report type", "Art der Meldung"))
+                    EditorialKicker(tr("Type de signalement", "Report type", "Art der Meldung", "Tipo de reporte"))
                     Spacer(modifier = Modifier.height(12.dp))
                     categories.forEach { categorie ->
                         val selected = categorieSelectionnee?.id == categorie.id
@@ -247,7 +257,7 @@ fun FeedbackScreen(
                 }
 
                 PremiumCard {
-                    EditorialKicker(tr("Écran concerné", "Screen concerned", "Betroffener Bildschirm"))
+                    EditorialKicker(tr("Écran concerné", "Screen concerned", "Betroffener Bildschirm", "Pantalla afectada"))
                     Spacer(modifier = Modifier.height(12.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         ecrans.chunked(2).forEach { row ->
@@ -275,10 +285,10 @@ fun FeedbackScreen(
                 }
 
                 PremiumCard {
-                    EditorialKicker(tr("Description", "Description", "Beschreibung"))
+                    EditorialKicker(tr("Description", "Description", "Beschreibung", "Descripción"))
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        tr("Décrivez le problème ou votre suggestion avec le plus de détails possible.", "Describe the issue or your suggestion in as much detail as possible.", "Beschreiben Sie das Problem oder Ihren Vorschlag so genau wie möglich."),
+                        tr("Décrivez le problème ou votre suggestion avec le plus de détails possible.", "Describe the issue or your suggestion in as much detail as possible.", "Beschreiben Sie das Problem oder Ihren Vorschlag so genau wie möglich.", "Describe el problema o tu sugerencia con el mayor detalle posible."),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -287,7 +297,7 @@ fun FeedbackScreen(
                         modifier = Modifier.fillMaxWidth().height(140.dp),
                         placeholder = {
                             Text(
-                                tr("Ex. : Sur l'écran résultat, le bouton PDF ne fonctionne pas…", "E.g.: On the result screen, the PDF button doesn't work…", "z. B.: Auf dem Ergebnisbildschirm funktioniert die Schaltfläche PDF nicht…")
+                                tr("Ex. : Sur l'écran résultat, le bouton PDF ne fonctionne pas…", "E.g.: On the result screen, the PDF button doesn't work…", "z. B.: Auf dem Ergebnisbildschirm funktioniert die Schaltfläche PDF nicht…", "Ej.: En la pantalla de resultados, el botón PDF no funciona…")
                             )
                         },
                         shape = RoundedCornerShape(16.dp), maxLines = 8,
@@ -301,14 +311,14 @@ fun FeedbackScreen(
                     if (message.trim().isNotEmpty() && message.trim().length < 10) {
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            tr("Ajoutez quelques détails pour nous aider à comprendre.", "Add a few more details to help us understand.", "Fügen Sie ein paar Details hinzu, damit wir es besser verstehen."),
+                            tr("Ajoutez quelques détails pour nous aider à comprendre.", "Add a few more details to help us understand.", "Fügen Sie ein paar Details hinzu, damit wir es besser verstehen.", "Añade algunos detalles para ayudarnos a entender."),
                             style = MaterialTheme.typography.bodySmall, color = PremiumPalette.PrioriteModere
                         )
                     }
                 }
 
                 PrimaryGlowButton(
-                    text = tr("Envoyer le signalement", "Send report", "Meldung senden"),
+                    text = tr("Envoyer le signalement", "Send report", "Meldung senden", "Enviar el reporte"),
                     onClick = {
                         if (peutEnvoyer) {
                             onEnvoyer(categorieSelectionnee!!.label, ecranSelectionne, message.trim())
@@ -320,10 +330,10 @@ fun FeedbackScreen(
                 )
 
                 PremiumCard(centered = true) {
-                    EditorialKicker(tr("Confidentialité", "Privacy", "Datenschutz"), centered = true)
+                    EditorialKicker(tr("Confidentialité", "Privacy", "Datenschutz", "Privacidad"), centered = true)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        tr("Votre signalement est envoyé par email directement. Aucune donnée personnelle n'est collectée automatiquement.", "Your report is sent directly by email. No personal data is collected automatically.", "Ihre Meldung wird direkt per E-Mail gesendet. Es werden keine personenbezogenen Daten automatisch erhoben."),
+                        tr("Votre signalement est envoyé par email directement. Aucune donnée personnelle n'est collectée automatiquement.", "Your report is sent directly by email. No personal data is collected automatically.", "Ihre Meldung wird direkt per E-Mail gesendet. Es werden keine personenbezogenen Daten automatisch erhoben.", "Tu reporte se envía directamente por correo electrónico. No se recopila automáticamente ningún dato personal."),
                         style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -349,14 +359,14 @@ fun HistoriqueScreen(
     if (showConfirmSupprimerTout) {
         AlertDialog(
             onDismissRequest = { showConfirmSupprimerTout = false },
-            title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?")) },
-            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved assessments will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.")) },
+            title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?", "¿Eliminar todo el historial?")) },
+            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved assessments will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.", "Esta acción no se puede deshacer. Todas las evaluaciones guardadas se eliminarán definitivamente.")) },
             confirmButton = {
                 Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(tr("Supprimer tout", "Delete all", "Alles löschen"), color = Color.White) }
+                ) { Text(tr("Supprimer tout", "Delete all", "Alles löschen", "Eliminar todo"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
+            dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(tr("Annuler", "Cancel", "Abbrechen", "Cancelar")) } }
         )
     }
 
@@ -371,15 +381,15 @@ fun HistoriqueScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen"),
+                    tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones"),
                     style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     if (bilans.isEmpty()) {
-                        tr("Aucun bilan sauvegardé pour l'instant.", "No saved assessments yet.", "Noch keine gespeicherte Einschätzung.")
+                        tr("Aucun bilan sauvegardé pour l'instant.", "No saved assessments yet.", "Noch keine gespeicherte Einschätzung.", "Todavía no hay evaluaciones guardadas.")
                     } else {
-                        trList("${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}", "${bilans.size} saved assessment${if (bilans.size > 1) "s" else ""}", "${bilans.size} gespeicherte Einschätzung${if (bilans.size > 1) "en" else ""}")
+                        trList("${bilans.size} bilan${if (bilans.size > 1) "s" else ""} sauvegardé${if (bilans.size > 1) "s" else ""}", "${bilans.size} saved assessment${if (bilans.size > 1) "s" else ""}", "${bilans.size} gespeicherte Einschätzung${if (bilans.size > 1) "en" else ""}", if (bilans.size > 1) "${bilans.size} evaluaciones guardadas" else "${bilans.size} evaluación guardada")
                     },
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -390,7 +400,7 @@ fun HistoriqueScreen(
                     Icon(Icons.Rounded.Pets, contentDescription = null, tint = PremiumPalette.Accent, modifier = Modifier.size(40.dp))
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        tr("Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.", "Completed assessments will appear here automatically after each questionnaire.", "Ihre Einschätzungen erscheinen hier automatisch nach jedem abgeschlossenen Fragebogen."),
+                        tr("Les bilans réalisés apparaîtront ici automatiquement après chaque questionnaire complété.", "Completed assessments will appear here automatically after each questionnaire.", "Ihre Einschätzungen erscheinen hier automatisch nach jedem abgeschlossenen Fragebogen.", "Las evaluaciones aparecerán aquí automáticamente después de cada cuestionario completado."),
                         textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -411,7 +421,7 @@ fun HistoriqueScreen(
                     Icon(Icons.Rounded.DeleteSweep, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen"),
+                        tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen", "Eliminar todo el historial"),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -428,14 +438,14 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?")) },
-            text = { Text(tr("Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.", "The assessment for ${bilan.nomChien} on ${bilan.date} will be permanently deleted.", "Die Einschätzung von ${bilan.nomChien} vom ${bilan.date} wird endgültig gelöscht.")) },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?", "¿Eliminar esta evaluación?")) },
+            text = { Text(tr("Le bilan de ${bilan.nomChien} du ${bilan.date} sera supprimé définitivement.", "The assessment for ${bilan.nomChien} on ${bilan.date} will be permanently deleted.", "Die Einschätzung von ${bilan.nomChien} vom ${bilan.date} wird endgültig gelöscht.", "La evaluación de ${bilan.nomChien} del ${bilan.date} se eliminará definitivamente.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(tr("Supprimer", "Delete", "Löschen"), color = Color.White) }
+                ) { Text(tr("Supprimer", "Delete", "Löschen", "Eliminar"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
+            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen", "Cancelar")) } }
         )
     }
 
@@ -463,7 +473,7 @@ fun BilanHistoriqueItem(bilan: BilanSauvegarde, onOuvrir: () -> Unit, onSupprime
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (bilan.aDejaMordu) Icon(Icons.Rounded.Warning, contentDescription = null, tint = PremiumPalette.PrioriteUrgente, modifier = Modifier.size(18.dp))
                     IconButton(onClick = { showConfirm = true }, modifier = Modifier.size(34.dp)) {
-                        Icon(Icons.Rounded.Delete, contentDescription = tr("Supprimer", "Delete", "Löschen"), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Rounded.Delete, contentDescription = tr("Supprimer", "Delete", "Löschen", "Eliminar"), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
                     }
                 }
             }
@@ -496,6 +506,10 @@ fun QuatreAxesMini(peur: Int, attachement: Int, impulsivite: Int, reactivite: In
         listOf(
             "Sicherheit" to peur, "Bindung" to attachement,
             "Instinkte" to impulsivite, "Zusammenleben" to reactivite
+        ),
+        listOf(
+            "Seguridad" to peur, "Vínculo" to attachement,
+            "Instintos" to impulsivite, "Convivencia" to reactivite
         )
     )
     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -522,14 +536,14 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
     if (showConfirm) {
         AlertDialog(
             onDismissRequest = { showConfirm = false },
-            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?")) },
-            text = { Text(tr("Cette action est irréversible.", "This action cannot be undone.", "Diese Aktion kann nicht rückgängig gemacht werden.")) },
+            title = { Text(tr("Supprimer ce bilan ?", "Delete this assessment?", "Diese Einschätzung löschen?", "¿Eliminar esta evaluación?")) },
+            text = { Text(tr("Cette action est irréversible.", "This action cannot be undone.", "Diese Aktion kann nicht rückgängig gemacht werden.", "Esta acción no se puede deshacer.")) },
             confirmButton = {
                 Button(onClick = { onSupprimer(); showConfirm = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(tr("Supprimer", "Delete", "Löschen"), color = Color.White) }
+                ) { Text(tr("Supprimer", "Delete", "Löschen", "Eliminar"), color = Color.White) }
             },
-            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen")) } }
+            dismissButton = { TextButton(onClick = { showConfirm = false }) { Text(tr("Annuler", "Cancel", "Abbrechen", "Cancelar")) } }
         )
     }
 
@@ -545,7 +559,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             if (bilan.aDejaMordu) AlerteMorsureCard(bilan.nomChien)
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Bilan sauvegardé", "Saved assessment", "Gespeicherte Einschätzung"), centered = true)
+                EditorialKicker(tr("Bilan sauvegardé", "Saved assessment", "Gespeicherte Einschätzung", "Evaluación guardada"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.nomChien, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(6.dp))
@@ -555,7 +569,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Synthèse", "Summary", "Zusammenfassung"), centered = true)
+                EditorialKicker(tr("Synthèse", "Summary", "Zusammenfassung", "Resumen"), centered = true)
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)) {
                     val couleur = when (priorite) {
@@ -565,7 +579,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                         PrioriteAction.URGENTE -> PremiumPalette.PrioriteUrgente
                     }
                     Box(modifier = Modifier.clip(RoundedCornerShape(999.dp)).background(couleur.copy(alpha = 0.12f)).padding(horizontal = 14.dp, vertical = 8.dp)) {
-                        Text("${tr("Priorité : ", "Priority: ", "Priorität: ")}${textePrioriteAction(priorite)}", color = couleur, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelLarge)
+                        Text("${tr("Priorité : ", "Priority: ", "Priorität: ", "Prioridad: ")}${textePrioriteAction(priorite)}", color = couleur, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelLarge)
                     }
                     Box(modifier = Modifier.clip(RoundedCornerShape(999.dp)).background(if (isSystemInDarkTheme()) Color(0xFF342923) else Color(0xFFF0E5DC)).padding(horizontal = 14.dp, vertical = 8.dp)) {
                         Text(texteNiveauSituation(situation), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -574,28 +588,28 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Carte du profil", "Profile card", "Profilkarte"), centered = true)
+                EditorialKicker(tr("Carte du profil", "Profile card", "Profilkarte", "Tarjeta del perfil"), centered = true)
                 Spacer(modifier = Modifier.height(14.dp))
                 QuatreAxesMini(peur = bilan.peur, attachement = bilan.attachement, impulsivite = bilan.impulsivite, reactivite = bilan.reactivite)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Lecture principale", "Main reading", "Wichtigste Deutung"), centered = true)
+                EditorialKicker(tr("Lecture principale", "Main reading", "Wichtigste Deutung", "Lectura principal"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.hypothesePrincipale, textAlign = TextAlign.Center, style = MaterialTheme.typography.bodyLarge)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Première piste concrète", "First concrete step", "Ein erster konkreter Ansatz"), centered = true)
+                EditorialKicker(tr("Première piste concrète", "First concrete step", "Ein erster konkreter Ansatz", "Primera pista concreta"), centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(bilan.conseilPrincipal, textAlign = TextAlign.Center)
             }
 
             PremiumCard(centered = true) {
-                EditorialKicker(tr("Rappel", "Note", "Zur Erinnerung"), centered = true)
+                EditorialKicker(tr("Rappel", "Note", "Zur Erinnerung", "Recuerda"), centered = true)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This assessment is an indicative record. Your cat's situation may have changed since then.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben."),
+                    tr("Ce bilan est un enregistrement indicatif. La situation de votre chat a pu évoluer depuis.", "This assessment is an indicative record. Your cat's situation may have changed since then.", "Diese Einschätzung ist eine unverbindliche Momentaufnahme. Die Situation Ihrer Katze kann sich seitdem verändert haben.", "Esta evaluación es un registro orientativo. La situación de tu gato puede haber cambiado desde entonces."),
                     textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -613,7 +627,7 @@ fun HistoriqueDetailScreen(modifier: Modifier = Modifier, bilan: BilanSauvegarde
                 Icon(Icons.Rounded.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    tr("Supprimer ce bilan", "Delete this assessment", "Diese Einschätzung löschen"),
+                    tr("Supprimer ce bilan", "Delete this assessment", "Diese Einschätzung löschen", "Eliminar esta evaluación"),
                     fontWeight = FontWeight.SemiBold
                 )
             }

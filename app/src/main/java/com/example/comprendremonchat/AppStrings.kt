@@ -6,11 +6,12 @@ import java.util.Locale
 // DÉTECTION DE LANGUE
 // ═══════════════════════════════════════════════════════════
 
-enum class AppLang { FR, EN, DE }
+enum class AppLang { FR, EN, DE, ES }
 
 fun appLang(): AppLang = when (android.os.LocaleList.getDefault()[0].language) {
     "en" -> AppLang.EN
     "de" -> AppLang.DE
+    "es" -> AppLang.ES
     else -> AppLang.FR
 }
 
@@ -18,16 +19,20 @@ fun isEnglish(): Boolean = appLang() == AppLang.EN
 
 fun isGerman(): Boolean = appLang() == AppLang.DE
 
-/** Renvoie le texte dans la langue du téléphone : français (par défaut), anglais ou allemand. */
-fun tr(fr: String, en: String, de: String): String = when (appLang()) {
+fun isSpanish(): Boolean = appLang() == AppLang.ES
+
+/** Renvoie le texte dans la langue du téléphone : français (par défaut), anglais, allemand ou espagnol. */
+fun tr(fr: String, en: String, de: String, es: String): String = when (appLang()) {
     AppLang.EN -> en
     AppLang.DE -> de
+    AppLang.ES -> es
     AppLang.FR -> fr
 }
 
-fun <T> trList(fr: T, en: T, de: T): T = when (appLang()) {
+fun <T> trList(fr: T, en: T, de: T, es: T): T = when (appLang()) {
     AppLang.EN -> en
     AppLang.DE -> de
+    AppLang.ES -> es
     AppLang.FR -> fr
 }
 
@@ -50,6 +55,14 @@ fun libelleAxeTraduit(axe: Axe): String = when (appLang()) {
             Axe.LIEN -> "Bindung zum Menschen"
             Axe.INSTINCTS -> "Ausdruck der Instinkte"
             Axe.COHABITATION -> "Zusammenleben und Revier"
+        }
+    }
+    AppLang.ES -> {
+        when (axe) {
+            Axe.SECURITE -> "Seguridad emocional"
+            Axe.LIEN -> "Vínculo con el humano"
+            Axe.INSTINCTS -> "Expresión de los instintos"
+            Axe.COHABITATION -> "Convivencia y territorio"
         }
     }
     else -> {
@@ -77,6 +90,13 @@ fun texteNiveauSituationTraduit(niveau: NiveauSituation): String = when (appLang
             NiveauSituation.SENSIBLE -> "Heikle Situation"
         }
     }
+    AppLang.ES -> {
+        when (niveau) {
+            NiveauSituation.STABLE -> "Situación estable"
+            NiveauSituation.A_TRAVAILLER -> "Por trabajar"
+            NiveauSituation.SENSIBLE -> "Situación delicada"
+        }
+    }
     else -> {
         when (niveau) {
             NiveauSituation.STABLE -> "Situation stable"
@@ -101,6 +121,13 @@ fun texteVigilanceTraduit(vigilance: NiveauVigilance, nomChat: String): String {
                 NiveauVigilance.FAIBLE -> "Im Moment zeigt sich bei $nom nichts Dringendes."
                 NiveauVigilance.MODEREE -> "Einige Punkte verdienen bei $nom Aufmerksamkeit."
                 NiveauVigilance.ELEVEE -> "Einige Anzeichen rechtfertigen bei $nom rasche Aufmerksamkeit."
+            }
+        }
+        AppLang.ES -> {
+            when (vigilance) {
+                NiveauVigilance.FAIBLE -> "Por ahora, nada urgente destaca en el caso de $nom."
+                NiveauVigilance.MODEREE -> "Algunos puntos merecen atención en el caso de $nom."
+                NiveauVigilance.ELEVEE -> "Algunas señales justifican una atención rápida en el caso de $nom."
             }
         }
         else -> {
@@ -130,6 +157,14 @@ fun textePrioriteActionTraduit(priorite: PrioriteAction): String = when (appLang
             PrioriteAction.URGENTE -> "Dringend"
         }
     }
+    AppLang.ES -> {
+        when (priorite) {
+            PrioriteAction.FAIBLE -> "Baja"
+            PrioriteAction.MODEREE -> "Moderada"
+            PrioriteAction.ELEVEE -> "Alta"
+            PrioriteAction.URGENTE -> "Urgente"
+        }
+    }
     else -> {
         when (priorite) {
             PrioriteAction.FAIBLE -> "Faible"
@@ -146,7 +181,7 @@ fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Str
             "Un chat globalement à l'aise, avec quelques points à observer.",
             "A generally comfortable cat, with a few points to watch.",
             "Eine insgesamt ausgeglichene Katze, bei der einige Punkte Aufmerksamkeit verdienen."
-        )
+        , "Un gato en general a gusto, con algunos puntos a observar.")
     }
     return when (appLang()) {
         AppLang.EN -> {
@@ -165,6 +200,14 @@ fun resumeEmotionnelTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Str
                 Axe.COHABITATION -> "Eine Katze mit Schwierigkeiten im Umgang mit ihrem Umfeld"
             }
         }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> "Un gato al que le cuesta sentirse seguro en su entorno"
+                Axe.LIEN -> "Un gato cuya relación con su humano está en el centro de sus dificultades"
+                Axe.INSTINCTS -> "Un gato cuyas necesidades instintivas no encuentran suficiente salida"
+                Axe.COHABITATION -> "Un gato con dificultades en sus relaciones con su entorno"
+            }
+        }
         else -> {
             when (axe) {
                 Axe.SECURITE -> "Un chat qui peine à se sentir en sécurité dans son environnement"
@@ -181,7 +224,7 @@ fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String
             "Rien n'indique de difficulté marquée : son comportement semble globalement adapté à son environnement.",
             "Nothing points to a marked difficulty: its behavior seems well adapted to its environment overall.",
             "Nichts deutet auf eine ausgeprägte Schwierigkeit hin: Das Verhalten der Katze scheint insgesamt gut an ihre Umgebung angepasst."
-        )
+        , "Nada indica una dificultad marcada: su comportamiento parece, en general, bien adaptado a su entorno.")
     }
     return when (appLang()) {
         AppLang.EN -> {
@@ -198,6 +241,14 @@ fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String
                 Axe.LIEN -> "Dieses Verhalten spiegelt ein Bedürfnis nach Verbindung oder im Gegenteil eine Schwierigkeit im Umgang mit Nähe wider."
                 Axe.INSTINCTS -> "Diese Verhaltensweisen sind oft Ausdruck natürlicher Instinkte, die kein passendes Ventil gefunden haben."
                 Axe.COHABITATION -> "Diese Reaktionen sind oft ein Versuch, mit einer sozialen Situation umzugehen, die sie überfordert."
+            }
+        }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> "Sus reacciones reflejan un intento de protegerse de lo que percibe como amenazante."
+                Axe.LIEN -> "Su comportamiento refleja una necesidad de conexión o, al contrario, una dificultad para manejar la cercanía."
+                Axe.INSTINCTS -> "Sus comportamientos suelen ser la expresión de instintos naturales que no han encontrado una salida adecuada."
+                Axe.COHABITATION -> "Sus reacciones suelen ser un intento de manejar una situación social que lo desborda."
             }
         }
         else -> {
@@ -217,7 +268,7 @@ fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Stri
             "Besoin principal : préserver un cadre stable et un environnement enrichi.",
             "Main need: keeping a stable routine and an enriched environment.",
             "Hauptbedürfnis: einen stabilen Rahmen und eine abwechslungsreich gestaltete Umgebung bewahren."
-        )
+        , "Necesidad principal: mantener un marco estable y un entorno enriquecido.")
     }
     return when (appLang()) {
         AppLang.EN -> {
@@ -234,6 +285,14 @@ fun besoinPrincipalTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): Stri
                 Axe.LIEN -> "Hauptbedürfnis: das richtige Gleichgewicht zwischen beruhigender Nähe und Selbstständigkeit finden."
                 Axe.INSTINCTS -> "Hauptbedürfnis: eine abwechslungsreich gestaltete Umgebung und gelenktes Ausleben ihrer Instinkte."
                 Axe.COHABITATION -> "Hauptbedürfnis: ein Umgang mit Raum und Ressourcen, der Spannungen verringert."
+            }
+        }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> "Necesidad principal: previsibilidad, refugios disponibles y respeto de sus límites."
+                Axe.LIEN -> "Necesidad principal: encontrar el equilibrio justo entre presencia tranquilizadora y autonomía."
+                Axe.INSTINCTS -> "Necesidad principal: un entorno enriquecido y una expresión canalizada de sus instintos."
+                Axe.COHABITATION -> "Necesidad principal: gestionar el espacio y los recursos para reducir las tensiones."
             }
         }
         else -> {
@@ -256,6 +315,9 @@ fun phraseFinTraduit(nomChat: String): String {
         AppLang.DE -> {
             "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern sie besser zu verstehen, um gemeinsam gelassener voranzukommen."
         }
+        AppLang.ES -> {
+            "El objetivo no es etiquetar a $nom, sino comprenderlo mejor para avanzar juntos con más tranquilidad."
+        }
         else -> {
             "L'objectif n'est pas d'étiqueter $nom, mais de mieux le comprendre pour avancer ensemble de façon plus sereine."
         }
@@ -277,6 +339,14 @@ fun libelleNiveauAxeTraduit(niveau: NiveauAxe): String = when (appLang()) {
             NiveauAxe.A_SURVEILLER -> "Zu beobachten"
             NiveauAxe.MARQUE -> "Ausgeprägt"
             NiveauAxe.TRES_MARQUE -> "Stark ausgeprägt"
+        }
+    }
+    AppLang.ES -> {
+        when (niveau) {
+            NiveauAxe.PEU_MARQUE -> "Poco marcado"
+            NiveauAxe.A_SURVEILLER -> "A vigilar"
+            NiveauAxe.MARQUE -> "Marcado"
+            NiveauAxe.TRES_MARQUE -> "Muy marcado"
         }
     }
     else -> {
@@ -317,6 +387,15 @@ fun determinerProfilTypeTraduit(securite: Int, lien: Int, instincts: Int, cohabi
                 Axe.COHABITATION -> if (firstScore >= 75) "Katze im Konflikt" else "Revierbetonte Katze"
             }
         }
+        AppLang.ES -> {
+            if (firstScore <= 25) return "Gato equilibrado y pleno"
+            when (first) {
+                Axe.SECURITE -> if (firstScore >= 75) "Gato ansioso" else "Gato sensible"
+                Axe.LIEN -> if (firstScore >= 75) "Gato hiperapegado" else "Gato muy unido"
+                Axe.INSTINCTS -> if (firstScore >= 75) "Gato con gran falta de estimulación" else "Gato poco estimulado"
+                Axe.COHABITATION -> if (firstScore >= 75) "Gato en conflicto" else "Gato territorial"
+            }
+        }
         else -> {
             if (firstScore <= 25) return "Chat épanoui et équilibré"
             when (first) {
@@ -347,6 +426,14 @@ fun phraseHumaineTraduit(nomChat: String, securite: Int, lien: Int, instincts: I
                 maxAxe <= 50 -> "$nom zeigt einige Schwachstellen, die Aufmerksamkeit verdienen."
                 maxAxe <= 75 -> "$nom scheint in manchen Bereichen eine schwierige Phase zu durchleben."
                 else -> "$nom zeigt deutliche Signale, die besondere Aufmerksamkeit erfordern."
+            }
+        }
+        AppLang.ES -> {
+            when {
+                maxAxe <= 25 -> "$nom parece evolucionar sobre una base globalmente estable y serena."
+                maxAxe <= 50 -> "$nom presenta algunas fragilidades que merecen atención."
+                maxAxe <= 75 -> "$nom parece estar pasando por una etapa difícil en algunos aspectos."
+                else -> "$nom presenta señales importantes que requieren una atención especial."
             }
         }
         else -> {
@@ -388,6 +475,17 @@ fun genererProfilGlobalTraduit(nomChat: String, securite: Int, lien: Int, instin
                 else -> ProfilGlobal("Differenziert zu betrachtendes Profil", "Einige Punkte verdienen Aufmerksamkeit, ohne dass ein Aspekt klar überwiegt.", profilType, scoreGlobal, phraseHumaine)
             }
         }
+        AppLang.ES -> {
+            when {
+                maxAxe <= 25 -> ProfilGlobal("Perfil globalmente equilibrado", "Las respuestas sugieren un gato a gusto consigo mismo.", profilType, scoreGlobal, phraseHumaine)
+                securite >= 65 && lien >= 65 -> ProfilGlobal("Inseguridad emocional y dependencia", "El perfil sugiere un gato que busca tranquilizarse constantemente.", profilType, scoreGlobal, phraseHumaine)
+                securite >= 65 -> ProfilGlobal("Inseguridad emocional marcada", "Las respuestas sugieren un gato al que le cuesta sentirse seguro.", profilType, scoreGlobal, phraseHumaine)
+                lien >= 65 -> ProfilGlobal("Hiperapego o dificultades en la relación", "El vínculo con el humano parece estar en el centro de las dificultades.", profilType, scoreGlobal, phraseHumaine)
+                instincts >= 65 -> ProfilGlobal("Instintos poco canalizados", "Las necesidades naturales del gato no encuentran una salida adecuada.", profilType, scoreGlobal, phraseHumaine)
+                cohabitation >= 65 -> ProfilGlobal("Dificultades de convivencia", "Las relaciones con su entorno son fuente de tensión.", profilType, scoreGlobal, phraseHumaine)
+                else -> ProfilGlobal("Perfil con matices", "Algunos puntos a vigilar, sin que ningún aspecto predomine claramente.", profilType, scoreGlobal, phraseHumaine)
+            }
+        }
         else -> {
             when {
                 maxAxe <= 25 -> ProfilGlobal("Profil globalement équilibré", "Les réponses suggèrent un chat bien dans ses pattes.", profilType, scoreGlobal, phraseHumaine)
@@ -403,11 +501,11 @@ fun genererProfilGlobalTraduit(nomChat: String, securite: Int, lien: Int, instin
 }
 
 fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, cohabitation: Int, reponsesChoix: Map<String, Int> = emptyMap()): String {
-    if (reponsesChoix["proprete_type"] == 0) return tr("La malpropreté urinaire peut avoir des causes purement médicales (infection urinaire, problèmes rénaux ou vésicaux, calculs) qui produisent exactement les mêmes symptômes qu'un problème comportemental : le chat en vient à éviter le bac parce qu'il associe le geste d'y uriner à une douleur, sans lien avec un stress émotionnel.", "Urinary house-soiling can have purely medical causes (urinary infection, kidney or bladder issues, bladder stones) that produce the exact same symptoms as a behavioral problem: the cat starts avoiding the litter box because it associates the box itself with pain, with no link to emotional stress.", "Harn-Unsauberkeit kann rein medizinische Ursachen haben (Harnwegsinfektion, Nieren- oder Blasenprobleme, Blasensteine), die genau dieselben Symptome hervorrufen wie ein Verhaltensproblem: Die Katze meidet schließlich das Katzenklo, weil sie das Urinieren darin mit Schmerzen verbindet – ohne Zusammenhang mit emotionalem Stress.")
-    if (reponsesChoix["proprete_type"] == 2) return tr("Quand l'urine et les selles sont concernées à la fois, les deux aspects n'ont généralement pas la même origine. La partie urinaire peut être purement médicale (infection, calculs, douleur), tandis que l'aspect selles est plus souvent lié au bac lui-même — propreté, taille ou emplacement — ou au stress, une fois la cause médicale écartée.", "When both urine and stools are involved, the two aspects usually don't share the same origin. The urinary part can be purely medical (infection, bladder stones, pain), while the stool aspect is more often linked to the litter box itself — cleanliness, size, or location — or to stress, once a medical cause has been ruled out.", "Wenn Urin und Kot gleichzeitig betroffen sind, haben beide meist nicht dieselbe Ursache. Der Harnanteil kann rein medizinisch sein (Infektion, Blasensteine, Schmerzen), während der Kotabsatz eher mit dem Katzenklo selbst zusammenhängt – Sauberkeit, Größe oder Standort – oder, sobald eine medizinische Ursache ausgeschlossen ist, mit Stress.")
-    if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2)) return tr("Chez un chat âgé, la désorientation et les vocalises nocturnes inexpliquées peuvent refléter un vieillissement cérébral normal (déclin cognitif lié à l'âge) plutôt qu'un problème comportemental à corriger — un phénomène assez proche de ce que l'on observe parfois chez l'humain vieillissant.", "In an older cat, disorientation and unexplained night vocalizing can reflect normal brain aging (age-related cognitive decline) rather than a behavioral problem to correct — a phenomenon fairly close to what is sometimes observed in aging humans.", "Bei einer älteren Katze können Orientierungslosigkeit und unerklärliches nächtliches Miauen eher auf ein normales Altern des Gehirns (altersbedingter kognitiver Abbau) hinweisen als auf ein Verhaltensproblem, das korrigiert werden muss – ähnlich wie man es manchmal bei älteren Menschen beobachtet.")
-    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) return tr("Concrètement, cela signifie que ce comportement ne peut plus se résoudre en attendant que les hormones se stabilisent — c'est le geste en lui-même qu'il faut désapprendre, comme n'importe quelle habitude acquise. Cela demande généralement plus de patience et de constance qu'un marquage territorial ou lié au stress, mais reste tout à fait travaillable.", "In practice, this means the behavior can no longer be resolved simply by waiting for hormones to settle — the behavior itself needs to be unlearned, much like any acquired habit. This generally takes more patience and consistency than territorial or stress-related marking, but it is very much possible to work on.", "Konkret bedeutet das, dass sich dieses Verhalten nicht mehr lösen lässt, indem man abwartet, bis sich die Hormone stabilisieren – das Verhalten selbst muss verlernt werden, wie jede erlernte Gewohnheit. Das erfordert meist mehr Geduld und Beständigkeit als eine revier- oder stressbedingte Markierung, lässt sich aber durchaus bearbeiten.")
-    if (maxOf(securite, lien, instincts, cohabitation) <= 25) return tr("Les éléments recueillis ne mettent pas en évidence de difficulté marquée à ce stade.", "The information collected does not highlight any marked difficulty at this stage.", "Die gesammelten Angaben zeigen derzeit keine ausgeprägte Schwierigkeit.")
+    if (reponsesChoix["proprete_type"] == 0) return tr("La malpropreté urinaire peut avoir des causes purement médicales (infection urinaire, problèmes rénaux ou vésicaux, calculs) qui produisent exactement les mêmes symptômes qu'un problème comportemental : le chat en vient à éviter le bac parce qu'il associe le geste d'y uriner à une douleur, sans lien avec un stress émotionnel.", "Urinary house-soiling can have purely medical causes (urinary infection, kidney or bladder issues, bladder stones) that produce the exact same symptoms as a behavioral problem: the cat starts avoiding the litter box because it associates the box itself with pain, with no link to emotional stress.", "Harn-Unsauberkeit kann rein medizinische Ursachen haben (Harnwegsinfektion, Nieren- oder Blasenprobleme, Blasensteine), die genau dieselben Symptome hervorrufen wie ein Verhaltensproblem: Die Katze meidet schließlich das Katzenklo, weil sie das Urinieren darin mit Schmerzen verbindet – ohne Zusammenhang mit emotionalem Stress.", "Hacer pis fuera del arenero puede tener causas puramente médicas (infección urinaria, problemas renales o de vejiga, cálculos) que producen exactamente los mismos síntomas que un problema de comportamiento: el gato acaba evitando el arenero porque asocia orinar en él con dolor, sin relación con un estrés emocional.")
+    if (reponsesChoix["proprete_type"] == 2) return tr("Quand l'urine et les selles sont concernées à la fois, les deux aspects n'ont généralement pas la même origine. La partie urinaire peut être purement médicale (infection, calculs, douleur), tandis que l'aspect selles est plus souvent lié au bac lui-même — propreté, taille ou emplacement — ou au stress, une fois la cause médicale écartée.", "When both urine and stools are involved, the two aspects usually don't share the same origin. The urinary part can be purely medical (infection, bladder stones, pain), while the stool aspect is more often linked to the litter box itself — cleanliness, size, or location — or to stress, once a medical cause has been ruled out.", "Wenn Urin und Kot gleichzeitig betroffen sind, haben beide meist nicht dieselbe Ursache. Der Harnanteil kann rein medizinisch sein (Infektion, Blasensteine, Schmerzen), während der Kotabsatz eher mit dem Katzenklo selbst zusammenhängt – Sauberkeit, Größe oder Standort – oder, sobald eine medizinische Ursache ausgeschlossen ist, mit Stress.", "Cuando se trata a la vez de orina y de heces, los dos aspectos no suelen tener el mismo origen. La parte urinaria puede ser puramente médica (infección, cálculos, dolor), mientras que lo de las heces suele estar más relacionado con el propio arenero (limpieza, tamaño o ubicación) o con el estrés, una vez descartada la causa médica.")
+    if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2)) return tr("Chez un chat âgé, la désorientation et les vocalises nocturnes inexpliquées peuvent refléter un vieillissement cérébral normal (déclin cognitif lié à l'âge) plutôt qu'un problème comportemental à corriger — un phénomène assez proche de ce que l'on observe parfois chez l'humain vieillissant.", "In an older cat, disorientation and unexplained night vocalizing can reflect normal brain aging (age-related cognitive decline) rather than a behavioral problem to correct — a phenomenon fairly close to what is sometimes observed in aging humans.", "Bei einer älteren Katze können Orientierungslosigkeit und unerklärliches nächtliches Miauen eher auf ein normales Altern des Gehirns (altersbedingter kognitiver Abbau) hinweisen als auf ein Verhaltensproblem, das korrigiert werden muss – ähnlich wie man es manchmal bei älteren Menschen beobachtet.", "En un gato mayor, la desorientación y las vocalizaciones nocturnas sin explicación pueden reflejar un envejecimiento cerebral normal (deterioro cognitivo asociado a la edad) más que un problema de comportamiento que haya que corregir, algo bastante parecido a lo que a veces se observa en las personas mayores.")
+    if (reponsesChoix["marquage_habitude_post_sterilisation"] == 0) return tr("Concrètement, cela signifie que ce comportement ne peut plus se résoudre en attendant que les hormones se stabilisent — c'est le geste en lui-même qu'il faut désapprendre, comme n'importe quelle habitude acquise. Cela demande généralement plus de patience et de constance qu'un marquage territorial ou lié au stress, mais reste tout à fait travaillable.", "In practice, this means the behavior can no longer be resolved simply by waiting for hormones to settle — the behavior itself needs to be unlearned, much like any acquired habit. This generally takes more patience and consistency than territorial or stress-related marking, but it is very much possible to work on.", "Konkret bedeutet das, dass sich dieses Verhalten nicht mehr lösen lässt, indem man abwartet, bis sich die Hormone stabilisieren – das Verhalten selbst muss verlernt werden, wie jede erlernte Gewohnheit. Das erfordert meist mehr Geduld und Beständigkeit als eine revier- oder stressbedingte Markierung, lässt sich aber durchaus bearbeiten.", "En concreto, esto significa que este comportamiento ya no puede resolverse esperando a que las hormonas se estabilicen: es el propio gesto lo que hay que desaprender, como cualquier hábito adquirido. Por lo general requiere más paciencia y constancia que un marcaje territorial o relacionado con el estrés, pero se puede trabajar perfectamente.")
+    if (maxOf(securite, lien, instincts, cohabitation) <= 25) return tr("Les éléments recueillis ne mettent pas en évidence de difficulté marquée à ce stade.", "The information collected does not highlight any marked difficulty at this stage.", "Die gesammelten Angaben zeigen derzeit keine ausgeprägte Schwierigkeit.", "La información recopilada no muestra ninguna dificultad marcada por ahora.")
     return when (appLang()) {
         AppLang.EN -> {
             when (axe) {
@@ -425,6 +523,14 @@ fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: In
                 Axe.COHABITATION -> "Ihre Katze scheint Schwierigkeiten im Umgang mit ihrem Umfeld zu haben, sei es mit anderen Tieren oder mit bestimmten Mitgliedern des Haushalts. Wahrscheinlich spielt der Umgang mit Raum und Ressourcen eine Rolle."
             }
         }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> "Las respuestas sugieren que a tu gato le cuesta sentirse seguro. Quizás percibe su entorno como imprevisible o amenazante, lo que genera una vigilancia permanente y agotadora."
+                Axe.LIEN -> "El vínculo contigo parece ocupar un lugar central en las dificultades de tu gato. Tanto si es demasiado fuerte (hiperapego) como demasiado frágil, puede generar comportamientos que alteran la convivencia."
+                Axe.INSTINCTS -> "Las necesidades instintivas de tu gato (cazar, explorar, arañar) no encuentran suficientes salidas adecuadas. Esta frustración puede expresarse a través de comportamientos no deseados."
+                Axe.COHABITATION -> "Tu gato parece tener dificultades en sus relaciones con su entorno, ya sea con otros animales o con ciertos miembros del hogar. La gestión del espacio y de los recursos probablemente influye."
+            }
+        }
         else -> {
             when (axe) {
                 Axe.SECURITE -> "Les réponses suggèrent que votre chat éprouve des difficultés à se sentir en sécurité. Il perçoit peut-être son environnement comme imprévisible ou menaçant, ce qui génère une vigilance permanente épuisante."
@@ -437,7 +543,7 @@ fun explicationProblemeTraduit(axe: Axe, securite: Int, lien: Int, instincts: In
 }
 
 fun conseilPrincipalTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, cohabitation: Int): String {
-    if (maxOf(securite, lien, instincts, cohabitation) <= 25) return tr("Maintenir un cadre stable, cohérent et prévisible — c'est la base du bien-être félin.", "Maintain a stable, consistent and predictable routine — this is the foundation of feline well-being.", "Einen stabilen, stimmigen und vorhersehbaren Rahmen bewahren – das ist die Grundlage für das Wohlbefinden einer Katze.")
+    if (maxOf(securite, lien, instincts, cohabitation) <= 25) return tr("Maintenir un cadre stable, cohérent et prévisible — c'est la base du bien-être félin.", "Maintain a stable, consistent and predictable routine — this is the foundation of feline well-being.", "Einen stabilen, stimmigen und vorhersehbaren Rahmen bewahren – das ist die Grundlage für das Wohlbefinden einer Katze.", "Mantener un marco estable, coherente y predecible: es la base del bienestar felino.")
     return when (appLang()) {
         AppLang.EN -> {
             when (axe) {
@@ -453,6 +559,14 @@ fun conseilPrincipalTraduit(axe: Axe, securite: Int, lien: Int, instincts: Int, 
                 Axe.LIEN -> "Schrittweise an der Selbstständigkeit arbeiten, mit kurzen Abschieden ohne emotionale Rituale, und dabei Kontaktmomente beibehalten, die die Katze selbst wählt."
                 Axe.INSTINCTS -> "Tägliche interaktive Spieleinheiten (Federangel, Beutespielzeug) und Futterpuzzles einführen, um Ihre Katze geistig und körperlich zu fördern."
                 Axe.COHABITATION -> "Den Umgang mit Ressourcen und Raum überdenken – jede Katze sollte Zugang zu ihren eigenen Ressourcen haben, ohne sie verteidigen zu müssen."
+            }
+        }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> "Enriquecer el entorno con refugios variados y garantizar una rutina estable y predecible. La seguridad se construye con una repetición tranquilizadora."
+                Axe.LIEN -> "Trabajar progresivamente la autonomía con salidas cortas y sin rituales emocionales, manteniendo los momentos de contacto que elija el gato."
+                Axe.INSTINCTS -> "Introducir sesiones diarias de juego interactivo (caña con plumas, juguetes presa) y juguetes dispensadores de comida para estimular mental y físicamente a tu gato."
+                Axe.COHABITATION -> "Revisar la gestión de los recursos y del espacio: cada gato debe tener acceso a sus propios recursos sin tener que defenderlos."
             }
         }
         else -> {
@@ -557,6 +671,49 @@ fun genererPlanActionTraduit(axe: Axe, reponsesChoix: Map<String, Int>, nomChat:
                 aFaire += "Einen Tierarzt aufsuchen, um eine körperliche Ursache für das beobachtete Verhalten auszuschließen."
             }
         }
+        AppLang.ES -> {
+            when (axe) {
+                Axe.SECURITE -> {
+                    aFaire += "Crear u optimizar refugios (cajas, escondites en altura, túneles)."
+                    aFaire += "Mantener una rutina diaria estable para las comidas, el juego y las interacciones."
+                    aFaire += "Dejar que el gato inicie el contacto en lugar de imponérselo."
+                    aEviter += "Los cambios bruscos en el entorno o en la rutina."
+                    aEviter += "Forzar el contacto cuando el gato indica que quiere estar solo."
+                    aObserver += "Los momentos y situaciones que desencadenan miedo o retraimiento."
+                    aObserver += "La evolución en el uso de los refugios."
+                }
+                Axe.LIEN -> {
+                    aFaire += "Practicar salidas cortas y neutras, sin despedidas emotivas."
+                    aFaire += "Dejar prendas que hayas usado para tranquilizar a tu gato cuando no estás."
+                    aFaire += "Ofrecer juguetes de actividad (dispensadores, juguetes con comida)."
+                    aEviter += "Las despedidas muy efusivas que aumentan la ansiedad."
+                    aEviter += "Ceder siempre a las peticiones de atención."
+                    aObserver += "El comportamiento en los minutos que siguen a tu salida."
+                    aObserver += "Su capacidad para tranquilizarse y relajarse solo."
+                }
+                Axe.INSTINCTS -> {
+                    aFaire += "Introducir 2 o 3 sesiones de juego interactivo de 10 a 15 minutos al día."
+                    aFaire += "Rotar los juguetes con regularidad para mantener el interés."
+                    aFaire += "Usar juguetes dispensadores de comida para alimentar el instinto de caza."
+                    aEviter += "Los juguetes que están siempre a la vista y pierden su atractivo."
+                    aEviter += "Las interacciones demasiado cortas o demasiado predecibles."
+                    aObserver += "El nivel de energía y el interés por el juego."
+                    aObserver += "Los comportamientos que mejoran después de las sesiones de juego."
+                }
+                Axe.COHABITATION -> {
+                    aFaire += "Duplicar todos los recursos (comederos, areneros, rascadores, camas)."
+                    aFaire += "Crear zonas reservadas para cada animal, con acceso seguro."
+                    aFaire += "Favorecer encuentros positivos con comida o juego."
+                    aEviter += "Forzar las interacciones entre animales que ya están en tensión."
+                    aEviter += "Las situaciones de competencia por los recursos."
+                    aObserver += "Las señales de tensión que preceden a los conflictos."
+                    aObserver += "Las zonas que cada animal se apropia."
+                }
+            }
+            if (reponsesChoix["signe_physique"] == 2 || reponsesChoix["signe_physique"] == 3) {
+                aFaire += "Consultar a un veterinario para descartar una causa física del comportamiento observado."
+            }
+        }
         else -> {
             when (axe) {
                 Axe.SECURITE -> {
@@ -621,6 +778,13 @@ fun genererMessageSituationTraduit(niveauSituation: NiveauSituation, nomChat: St
                 NiveauSituation.SENSIBLE -> "Die Situation von $nom wirkt heikler und verdient besondere Aufmerksamkeit."
             }
         }
+        AppLang.ES -> {
+            when (niveauSituation) {
+                NiveauSituation.STABLE -> "Por ahora, la situación de $nom parece bastante estable."
+                NiveauSituation.A_TRAVAILLER -> "Conviene trabajar la situación de $nom de forma progresiva."
+                NiveauSituation.SENSIBLE -> "La situación de $nom parece más delicada y merece una atención especial."
+            }
+        }
         else -> {
             when (niveauSituation) {
                 NiveauSituation.STABLE -> "À ce stade, la situation semble plutôt stable pour $nom."
@@ -641,7 +805,7 @@ fun genererRaisonSituationTraduit(
             "Les réponses globales invitent à avancer progressivement.",
             "Overall, the answers suggest moving forward gradually.",
             "Die Antworten insgesamt legen ein schrittweises Vorgehen nahe."
-        )
+        , "En conjunto, las respuestas invitan a avanzar de forma progresiva.")
     }
     return when (appLang()) {
         AppLang.EN -> {
@@ -658,6 +822,14 @@ fun genererRaisonSituationTraduit(
                 reponsesChoix["evolution_probleme"] == 2 -> "Dass es sich zu verschlimmern scheint, kann darauf hindeuten, dass das Problem mehr Raum einnimmt."
                 contexte.physique >= 4 -> "Körperliche Anzeichen oder ein mögliches Unwohlsein legen nahe, vorrangig einen Tierarzt aufzusuchen."
                 else -> "Die Antworten insgesamt legen ein schrittweises Vorgehen nahe."
+            }
+        }
+        AppLang.ES -> {
+            when {
+                reponsesChoix["duree_probleme"] == 0 -> "El hecho de que el comportamiento sea muy reciente requiere una vigilancia especial."
+                reponsesChoix["evolution_probleme"] == 2 -> "Que parezca estar empeorando puede indicar que el problema está ganando terreno."
+                contexte.physique >= 4 -> "Los signos físicos o una posible molestia invitan a consultar primero a un veterinario."
+                else -> "En conjunto, las respuestas invitan a avanzar de forma progresiva."
             }
         }
         else -> {
@@ -709,6 +881,23 @@ fun genererConseilsPratiquesToTraduit(nomChat: String, reponsesChoix: Map<String
             if (estMaleEntier(reponsesChoix) && cohabitation >= 40) conseils += "Bei einem unkastrierten Kater sind Markieren und Revierspannungen häufiger – eine Kastration kann mit Ihrem Tierarzt besprochen werden."
             if (estFemelleEntiere(reponsesChoix) && securite >= 40) conseils += "Bei einer unkastrierten Katze können manche Verhaltensweisen je nach Zyklus schwanken – beobachten Sie, ob die Spannungen in bestimmten Phasen zunehmen."
             if (conseils.isEmpty()) conseils += "Den Alltag weiter beobachten und die bestehenden Gewohnheiten beibehalten."
+        }
+        AppLang.ES -> {
+            if (reponsesChoix["proprete_type"] == 0)
+                conseils += "Anota el lugar y la hora de cada accidente, así como el comportamiento de $nom al orinar (maullidos, postura, cantidad): estas observaciones ayudarán a tu veterinario a orientar el diagnóstico."
+            if (reponsesChoix["proprete_type"] == 2)
+                conseils += "Anota el lugar y la hora de cada accidente, así como el comportamiento de $nom al orinar, y revisa también el mantenimiento del arenero (limpieza diaria, tamaño adecuado, sin tapa si es posible): puede bastar para resolver lo de las heces una vez descartada médicamente la causa urinaria."
+            if (reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2))
+                conseils += "Mantén el entorno de $nom lo más estable y predecible posible: evita mover muebles, comederos y el arenero."
+            if (securite >= 50) conseils += "Aumentar los refugios y escondites para que $nom pueda sentirse seguro en todo momento."
+            if (lien >= 50) conseils += "Trabajar progresivamente la autonomía manteniendo rituales estables y predecibles."
+            if (instincts >= 50) conseils += "Ofrecer sesiones diarias de juego interactivo para canalizar sus instintos naturales."
+            if (cohabitation >= 50) conseils += "Duplicar los recursos (comederos, areneros, rascadores) para reducir la competencia."
+            if (reponsesChoix["surtoilettage"] == 1) conseils += "El exceso de acicalamiento suele ser señal de estrés crónico: identificar y reducir las fuentes de tensión."
+            if (reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix)) conseils += "Para calmar el estrés territorial que provoca el marcaje, aumenta los recursos (areneros, puntos de agua, rascadores) y limita los cambios repentinos en el entorno de $nom."
+            if (estMaleEntier(reponsesChoix) && cohabitation >= 40) conseils += "En un macho sin esterilizar, el marcaje y las tensiones territoriales son más frecuentes: puedes hablar de la castración con tu veterinario."
+            if (estFemelleEntiere(reponsesChoix) && securite >= 40) conseils += "En una hembra sin esterilizar, algunos comportamientos pueden variar según el ciclo: observa si las tensiones aumentan en ciertos momentos."
+            if (conseils.isEmpty()) conseils += "Seguir observando el día a día y mantener las rutinas que ya funcionan."
         }
         else -> {
             if (reponsesChoix["proprete_type"] == 0)
@@ -768,6 +957,22 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 else -> null
             }
         }
+        AppLang.ES -> {
+            when {
+                reponsesChoix["proprete_type"] == 0 -> "Consulta rápidamente si observas señales de urgencia en $nom: maullidos de dolor al orinar, idas y venidas frecuentes al arenero sin resultado o ausencia total de orina desde hace más de 24 horas. Estas señales pueden indicar una obstrucción urinaria, que es una urgencia veterinaria."
+                reponsesChoix["proprete_type"] == 2 -> "Consulta rápidamente si observas en $nom señales de obstrucción urinaria (maullidos de dolor al orinar, idas al arenero sin resultado, ausencia de orina desde hace más de 24 horas). En cuanto a las heces, también conviene consultar si la diarrea persiste, si hay sangre o una pérdida de peso sin explicación."
+                reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Teniendo en cuenta la edad de $nom y los signos descritos, se recomienda en primer lugar una revisión veterinaria para descartar o confirmar un deterioro cognitivo asociado a la edad antes de plantear un enfoque de comportamiento."
+                reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Este marcaje se ha convertido en un hábito adquirido más que en un comportamiento hormonal: un especialista en comportamiento felino puede ayudar a $nom a desaprender este gesto concreto, algo que suele llevar más tiempo que un marcaje relacionado con el estrés."
+                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Se ha señalado un arañazo o una mordedura a otro animal. A menudo esto indica una falta de socialización o una convivencia que hay que replantear: un especialista en comportamiento felino puede ayudarte a reconstruir una presentación más progresiva y segura entre los animales."
+                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Se ha señalado un arañazo o una mordedura a una persona: se recomienda para $nom el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino, tanto por tu seguridad como por su bienestar."
+                contexte.physique >= 4 -> "Se han detectado signos físicos: se recomienda en primer lugar una consulta veterinaria para $nom antes de cualquier enfoque de comportamiento."
+                reponsesChoix["surtoilettage"] == 1 -> "El exceso de acicalamiento puede tener un origen médico: se aconseja la opinión de un veterinario para $nom antes de actuar sobre el comportamiento."
+                reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "El marcaje con orina en un gato esterilizado justifica primero una revisión veterinaria para $nom, para descartar una infección urinaria."
+                niveauSituation == NiveauSituation.SENSIBLE -> "La situación merece la mirada de un especialista en comportamiento felino que pueda acompañar a $nom y orientarte de forma concreta."
+                maxOf(securite, lien, instincts, cohabitation) >= 75 -> "La intensidad de las dificultades observadas sugiere que un especialista en comportamiento felino podría ser de gran ayuda para $nom."
+                else -> null
+            }
+        }
         else -> {
             when {
                 reponsesChoix["proprete_type"] == 0 -> "Consultez rapidement si vous observez des signes d'urgence chez $nom : miaulements de douleur en urinant, allers-retours fréquents à la litière sans résultat, ou absence totale d'urine depuis plus de 24h. Ces signes peuvent indiquer un blocage urinaire, qui est une urgence vétérinaire."
@@ -822,6 +1027,23 @@ fun detecterHypothesePrincipaleTraduit(reponsesChoix: Map<String, Int>,
                 instincts >= 65 -> "Natürliche Instinkte (Jagen, Erkunden, Kratzen), die zu wenig ausgelebt werden und nach einem Ventil suchen."
                 cohabitation >= 65 -> "Spannungen im Zusammenleben, die im Alltag Stress und Konflikte erzeugen."
                 else -> "Mehrere Faktoren scheinen beteiligt zu sein, ohne dass eine Achse klar überwiegt – ein ganzheitlicher Ansatz wird empfohlen."
+            }
+        }
+        AppLang.ES -> {
+            when {
+                reponsesChoix["proprete_type"] == 0 -> "Como se trata de orina, primero hay que descartar una causa médica con un veterinario."
+                reponsesChoix["proprete_type"] == 2 -> "Como se trata a la vez de orina y de heces, primero hay que descartar la causa médica de la parte urinaria antes de plantear un trabajo de comportamiento sobre las heces."
+                reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Algunos signos (desorientación, vocalizaciones nocturnas sin explicación) pueden sugerir un deterioro cognitivo asociado a la edad más que un problema puramente de comportamiento."
+                reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Este marcaje con orina parece haber empezado durante el celo, antes de la esterilización, y desde entonces se ha convertido en un hábito adquirido más que en un comportamiento hormonal."
+                contexte.physique >= 4 -> "Los signos señalados invitan a considerar un componente físico o médico antes de seguir con el aspecto de comportamiento."
+                reponsesChoix["surtoilettage"] == 1 && securite >= 50 -> "El exceso de acicalamiento unido a una inseguridad emocional sugiere un estrés crónico que se expresa a través del cuerpo."
+                reponsesChoix["marquage_urinaire"] == 1 -> "El marcaje con orina sugiere un estrés territorial u hormonal, según si está esterilizado o no."
+                securite >= 65 && lien >= 65 -> "Un apego ansioso unido a una inseguridad emocional: tu gato busca tranquilizarse constantemente."
+                securite >= 65 -> "Una inseguridad emocional importante, que se traduce en una vigilancia permanente y reacciones de miedo."
+                lien >= 65 -> "Un hiperapego o una dificultad para manejar la separación, que genera angustia cuando no estás."
+                instincts >= 65 -> "Instintos naturales (caza, exploración, arañado) poco canalizados que buscan expresarse."
+                cohabitation >= 65 -> "Tensiones de convivencia que generan estrés y conflictos en el día a día."
+                else -> "Varios factores parecen estar implicados, sin que ningún eje predomine claramente: se recomienda un enfoque global."
             }
         }
         else -> {
@@ -892,6 +1114,28 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
                     listOf("Einen stabilen und vorhersehbaren Rahmen bewahren.", "Die Umgebung nach und nach bereichern."))
             }
         }
+        AppLang.ES -> {
+            when {
+                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Prioridad inmediata: replantear la presentación con los otros animales",
+                    "Como ya ha habido un arañazo o una mordedura a otro animal, la convivencia debe reconstruirse con calma para $nom.",
+                    listOf("Separar temporalmente a los animales en conflicto.", "Considerar el acompañamiento de un especialista en comportamiento felino para una reintroducción progresiva."))
+                reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un profesional",
+                    "Como ya ha habido un arañazo o una mordedura a una persona, la situación de $nom no debe tomarse a la ligera.",
+                    listOf("Evitar las situaciones de riesgo identificadas.", "Consultar a un veterinario especialista en comportamiento o a un especialista en comportamiento felino."))
+                contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un veterinario",
+                    "Se han señalado signos físicos en $nom: la prioridad es médica.",
+                    listOf("Pedir cita con el veterinario rápidamente.", "No esperar a que los síntomas empeoren."))
+                priorite == PrioriteAction.ELEVEE -> PrioriteImmediate(PrioriteAction.ELEVEE, "Prioridad inmediata: actuar sin demora",
+                    "La situación justifica una acción rápida para $nom.",
+                    listOf("Aligerar los contextos difíciles.", "Considerar el acompañamiento de un especialista en comportamiento felino."))
+                priorite == PrioriteAction.MODEREE -> PrioriteImmediate(PrioriteAction.MODEREE, "Prioridad inmediata: avanzar progresivamente",
+                    "La situación de $nom merece atención.",
+                    listOf("Empezar un trabajo progresivo sobre el entorno.", "Observar la frecuencia y la intensidad de los comportamientos."))
+                else -> PrioriteImmediate(PrioriteAction.FAIBLE, "Prioridad inmediata: observar con calma",
+                    "Nada urgente en el caso de $nom: sigue observando.",
+                    listOf("Mantener un marco estable y predecible.", "Enriquecer el entorno poco a poco."))
+            }
+        }
         else -> {
             when {
                 reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : reprendre la présentation avec les autres animaux",
@@ -941,6 +1185,16 @@ fun detecterFacteursAggravantsTraduit(reponsesChoix: Map<String, Int>, contexte:
             if (reponsesChoix["plusieurs_chats"] == 1 && cohabitation >= 50) facteurs += "Konfliktreiches Zusammenleben mehrerer Katzen"
             if (estMaleEntier(reponsesChoix) && cohabitation >= 40) facteurs += "Unkastrierter Kater – Markieren und Revierspannungen häufiger"
         }
+        AppLang.ES -> {
+            if (reponsesChoix["apparition"] == 1) facteurs += "Aparición repentina del comportamiento"
+            if (reponsesChoix["evolution_probleme"] == 2) facteurs += "Comportamiento que empeora"
+            if (reponsesChoix["intensite_probleme"] == 3) facteurs += "Intensidad muy fuerte"
+            if (contexte.physique >= 4) facteurs += "Sospecha de causa física o médica"
+            if (reponsesChoix["acces_exterieur"] == 0 && instincts >= 50) facteurs += "Gato de interior con instintos poco canalizados"
+            if (maxOf(securite, lien, instincts, cohabitation) >= 75) facteurs += "Nivel alto en al menos un eje"
+            if (reponsesChoix["plusieurs_chats"] == 1 && cohabitation >= 50) facteurs += "Convivencia conflictiva entre varios gatos"
+            if (estMaleEntier(reponsesChoix) && cohabitation >= 40) facteurs += "Macho sin esterilizar: marcaje y tensiones territoriales más frecuentes"
+        }
         else -> {
             if (reponsesChoix["apparition"] == 1) facteurs += "Apparition brutale du comportement"
             if (reponsesChoix["evolution_probleme"] == 2) facteurs += "Comportement en aggravation"
@@ -971,6 +1225,13 @@ fun detecterFacteursProtecteursTraduit(reponsesChoix: Map<String, Int>, contexte
             if (reponsesChoix["acces_exterieur"] == 1) facteurs += "Freigang möglich"
             if (estSterilise(reponsesChoix)) facteurs += "Kastrierte Katze – stabilisierender Faktor"
             if (contexte.scoreContexte <= 3) facteurs += "Die Gesamtsituation deutet nicht auf eine verschlechterte Lage hin"
+        }
+        AppLang.ES -> {
+            if (reponsesChoix["evolution_probleme"] == 0) facteurs += "Parece que ya hay una mejoría"
+            if (reponsesChoix["frequence_probleme"] == 0) facteurs += "El comportamiento sigue siendo poco frecuente"
+            if (reponsesChoix["acces_exterieur"] == 1) facteurs += "Tiene acceso al exterior"
+            if (estSterilise(reponsesChoix)) facteurs += "Gato esterilizado: factor de estabilidad"
+            if (contexte.scoreContexte <= 3) facteurs += "El contexto general no sugiere una situación deteriorada"
         }
         else -> {
             if (reponsesChoix["evolution_probleme"] == 0) facteurs += "Une amélioration semble déjà présente"
@@ -1019,6 +1280,22 @@ fun titreSectionTraduit(questionId: String): String {
                 "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Zusammenleben und Revier"
                 "a_un_probleme", "lieu_residence" -> "Weiterführendes"
                 else -> "Aktuelle Situation"
+            }
+        }
+        AppLang.ES -> {
+            when (questionId) {
+                "nom_chat", "age", "sterilise", "acces_exterieur", "vie_interieur", "senior_desorientation", "senior_vocalise_nocturne" -> "Tu gato"
+                "race_categorie" -> "Perfil de raza"
+                "reaction_stress_ponctuel", "reaction_inconnu", "cache_souvent", "adaptation_changement",
+                "surtoilettage" -> "Seguridad emocional"
+                "recherche_proximite", "reaction_absence", "proprete_stress", "proprete_type",
+                "demande_attention_vocale" -> "Vínculo con el humano"
+                "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
+                "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expresión de los instintos"
+                "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
+                "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Convivencia y territorio"
+                "a_un_probleme", "lieu_residence" -> "Para ir más lejos"
+                else -> "Contexto actual"
             }
         }
         else -> {
@@ -1073,6 +1350,23 @@ fun aideQuestionTraduit(questionId: String): String? {
                 "senior_vocalise_nocturne" -> "Gemeint ist lautes und beharrliches Miauen ohne erkennbaren Auslöser."
                 "proprete_type" -> "Diese Angabe hilft zu erkennen, ob zuerst eine medizinische Ursache abgeklärt werden sollte."
                 "cible_agression" -> "So lässt sich ein Sicherheitsproblem gegenüber Menschen von einer Schwierigkeit im Umgang mit anderen Tieren unterscheiden."
+                else -> null
+            }
+        }
+        AppLang.ES -> {
+            when (questionId) {
+                "race_categorie" -> "Elige el grupo que más se parezca a tu gato."
+                "sterilise" -> "La esterilización influye en algunos comportamientos, como el marcaje o las tensiones territoriales."
+                "surtoilettage" -> "El exceso de acicalamiento se nota por zonas con poco pelo o calvas."
+                "reaction_absence" -> "Piensa en lo que observas al volver a casa o en lo que te cuentan tus vecinos."
+                "agressivite_caresses" -> "Por ejemplo, muerde o araña de repente mientras lo acaricias."
+                "a_deja_griffe_mordu" -> "Incluso un arañazo o una mordedura aislados, aunque sean leves, cuentan."
+                "signe_physique" -> "Incluso una duda o una sospecha vale la pena señalarla."
+                "marquage_urinaire" -> "El marcaje con orina se hace de pie, con la cola levantada, sobre superficies verticales."
+                "senior_desorientation" -> "Por ejemplo, parece perdido cerca de su comedero, de su arenero o de una puerta conocida."
+                "senior_vocalise_nocturne" -> "Se trata de maullidos fuertes e insistentes, sin un desencadenante evidente."
+                "proprete_type" -> "Este dato ayuda a saber si primero hay que comprobar una causa médica."
+                "cible_agression" -> "Esto permite distinguir un problema de seguridad con las personas de una dificultad de socialización con otros animales."
                 else -> null
             }
         }
@@ -1490,7 +1784,8 @@ fun questionsApplicationTraduites(): List<Question> {
             QuestionChoix("signe_physique", "Haben Sie körperliche Veränderungen bei Ihrer Katze bemerkt (Appetit, Gewicht, Fell, Ausscheidungen)?",
                 listOf("Nein, nichts Besonderes", "Vielleicht – ich bin mir nicht sicher",
                     "Ja, eine deutliche Veränderung", "Ja, etwas, das mich wirklich beunruhigt"))
-        )
+        ),
+        questionsApplication() // espagnol : utilise la liste principale (fonction non utilisée)
     )
 }
 
