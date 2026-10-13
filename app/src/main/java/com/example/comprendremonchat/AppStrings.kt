@@ -180,7 +180,7 @@ fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String
         return tr(
             "Rien n'indique de difficulté marquée : son comportement semble globalement adapté à son environnement.",
             "Nothing points to a marked difficulty: its behavior seems well adapted to its environment overall.",
-            "Nichts deutet auf eine ausgeprägte Schwierigkeit hin: Ihr Verhalten scheint insgesamt gut an ihre Umgebung angepasst."
+            "Nichts deutet auf eine ausgeprägte Schwierigkeit hin: Das Verhalten der Katze scheint insgesamt gut an ihre Umgebung angepasst."
         )
     }
     return when (appLang()) {
@@ -194,10 +194,10 @@ fun intentionChatTraduit(axe: Axe, niveau: NiveauAxe = NiveauAxe.MARQUE): String
         }
         AppLang.DE -> {
             when (axe) {
-                Axe.SECURITE -> "Ihre Reaktionen zeigen den Versuch, sich vor dem zu schützen, was sie als bedrohlich wahrnimmt."
-                Axe.LIEN -> "Ihr Verhalten spiegelt ein Bedürfnis nach Verbindung oder im Gegenteil eine Schwierigkeit im Umgang mit Nähe wider."
-                Axe.INSTINCTS -> "Ihre Verhaltensweisen sind oft Ausdruck natürlicher Instinkte, die kein passendes Ventil gefunden haben."
-                Axe.COHABITATION -> "Ihre Reaktionen sind oft ein Versuch, mit einer sozialen Situation umzugehen, die sie überfordert."
+                Axe.SECURITE -> "Diese Reaktionen zeigen den Versuch, sich vor dem zu schützen, was sie als bedrohlich wahrnimmt."
+                Axe.LIEN -> "Dieses Verhalten spiegelt ein Bedürfnis nach Verbindung oder im Gegenteil eine Schwierigkeit im Umgang mit Nähe wider."
+                Axe.INSTINCTS -> "Diese Verhaltensweisen sind oft Ausdruck natürlicher Instinkte, die kein passendes Ventil gefunden haben."
+                Axe.COHABITATION -> "Diese Reaktionen sind oft ein Versuch, mit einer sozialen Situation umzugehen, die sie überfordert."
             }
         }
         else -> {
@@ -527,7 +527,7 @@ fun genererPlanActionTraduit(axe: Axe, reponsesChoix: Map<String, Int>, nomChat:
                 }
                 Axe.LIEN -> {
                     aFaire += "Kurze, neutrale Abschiede üben, ohne große Gefühlsbekundungen."
-                    aFaire += "Getragene Kleidungsstücke liegen lassen, um sie in Ihrer Abwesenheit zu beruhigen."
+                    aFaire += "Getragene Kleidungsstücke liegen lassen, um Ihre Katze in Ihrer Abwesenheit zu beruhigen."
                     aFaire += "Beschäftigungsspielzeug anbieten (Futterspender, Futterpuzzles)."
                     aEviter += "Sehr betonte Abschiedsrituale, die die Angst verstärken."
                     aEviter += "Jeder Forderung nach Aufmerksamkeit nachgeben."
@@ -562,7 +562,7 @@ fun genererPlanActionTraduit(axe: Axe, reponsesChoix: Map<String, Int>, nomChat:
                 Axe.SECURITE -> {
                     aFaire += "Créer ou optimiser les refuges (boîtes, cachettes en hauteur, tunnels)."
                     aFaire += "Maintenir une routine quotidienne stable pour les repas, le jeu et les interactions."
-                    aFaire += "Laisser le chat initier les contacts plutôt que de l'imposer."
+                    aFaire += "Laisser le chat initier les contacts plutôt que de les imposer."
                     aEviter += "Les changements brusques de l'environnement ou de la routine."
                     aEviter += "Forcer le contact quand le chat signale qu'il veut être seul."
                     aObserver += "Les moments et situations qui déclenchent la peur ou le retrait."

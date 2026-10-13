@@ -297,7 +297,7 @@ object PdfExporter {
 
         val texte11 = makePaint(11f, COLOR_INK)
         pager.sectionTitle(
-            t("Premier levier utile", "First useful lever", "Erster hilfreicher Hebel"),
+            t("Premier levier utile", "First useful step", "Erster hilfreicher Schritt"),
             keepWith = minOf(cardHeight(analyse.conseilPrincipal, texte11), 300f)
         )
         pager.card(analyse.conseilPrincipal, COLOR_WARM_BG_ALT, COLOR_ACCENT, texte11)

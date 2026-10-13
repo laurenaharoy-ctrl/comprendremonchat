@@ -204,13 +204,13 @@ val categoriesRacesChatDe = listOf(
         "Trennungsangst und übermäßiges Miauen kommen in dieser Gruppe häufiger vor."),
     CategorieRace("ragdoll", "Ragdoll",
         listOf("Sehr große Toleranz", "Starkes Bedürfnis nach menschlicher Nähe", "Wenig konfliktfreudig"),
-        "Ihre Toleranz sollte nicht mit fehlenden Bedürfnissen verwechselt werden – sie kann still leiden."),
+        "Die Toleranz der Ragdoll sollte nicht mit fehlenden Bedürfnissen verwechselt werden – sie kann still leiden."),
     CategorieRace("bengal", "Bengal",
         listOf("Sehr hohes Energieniveau", "Intensives Bedürfnis nach Beschäftigung", "Starke Persönlichkeit"),
         "Mangelnde körperliche und geistige Beschäftigung kann schnell problematisches Verhalten auslösen."),
     CategorieRace("british", "Britisch Kurzhaar",
         listOf("Ruhiges, unabhängiges Temperament", "Verträgt das Alleinsein gut", "Wenig ausdrucksstark"),
-        "Ihre scheinbare Ruhe kann Stress verbergen, wenn die feinen Signale nicht erkannt werden."),
+        "Die scheinbare Ruhe dieser Rasse kann Stress verbergen, wenn die feinen Signale nicht erkannt werden."),
     CategorieRace("abyssin", "Abessinier",
         listOf("Sehr aktiv und neugierig", "Bedürfnis nach Freiheit", "Verträgt Langeweile schlecht"),
         "Eine abwechslungsreich gestaltete Umgebung ist unerlässlich – sie langweilt sich schnell und reagiert stark."),
@@ -474,7 +474,7 @@ object QuestionnaireEngine {
     ): String {
         val nom = nomChatAffiche(nomChat)
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
-        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "\$nom seems to be in a good overall balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu entwickeln. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.")
+        if (maxAxe <= 25) return tr("$nom semble évoluer dans un équilibre global satisfaisant. Aucune origine comportementale particulière ne ressort à ce stade.", "$nom seems to be in a good overall balance. No particular behavioral origin stands out at this stage.", "$nom scheint sich in einem insgesamt zufriedenstellenden Gleichgewicht zu befinden. Zum jetzigen Zeitpunkt zeigt sich keine besondere verhaltensbezogene Ursache.")
 
         return when (appLang()) {
             AppLang.EN -> {
@@ -886,15 +886,15 @@ fun questionsApplication(): List<Question> {
         QuestionChoix("demande_attention_vocale",
             tr("Votre chat vocalise-t-il de façon insistante pour obtenir votre attention (que vous soyez présent(e) ou après une absence) ?", "Does your cat vocalize insistently to get your attention (whether you are present or after an absence)?", "Miaut Ihre Katze beharrlich, um Ihre Aufmerksamkeit zu bekommen (während Sie da sind oder nach einer Abwesenheit)?"),
             trList(
-                listOf("Il accepte facilement, peu ou pas de demande vocale",
+                listOf("Non, rarement — il accepte facilement d'attendre",
                     "Il vocalise parfois pour demander de l'attention, puis se calme",
                     "Il insiste fortement (miaule, fait des bêtises) pour attirer l'attention",
                     "Il peut devenir agité ou agressif si ignoré"),
-                listOf("It accepts it easily, with little or no meowing for attention",
+                listOf("No, rarely — it easily accepts waiting",
                     "It sometimes vocalizes to ask for attention, then calms down",
                     "It insists strongly (meows, causes trouble) to get attention",
                     "It can become agitated or aggressive if ignored"),
-                listOf("Sie akzeptiert es leicht und fordert kaum oder gar nicht lautstark Aufmerksamkeit",
+                listOf("Nein, selten – sie kann gut warten",
                     "Sie miaut manchmal, um Aufmerksamkeit zu fordern, und beruhigt sich dann",
                     "Sie bleibt sehr hartnäckig (miaut, stellt etwas an), um Aufmerksamkeit zu bekommen",
                     "Sie kann unruhig oder aggressiv werden, wenn sie ignoriert wird")

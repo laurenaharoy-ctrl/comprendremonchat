@@ -1277,7 +1277,7 @@ fun DictionnaireDetailScreen(modifier: Modifier = Modifier, ficheId: String) {
                     Bullet(stringResource(fiche.aEviterKey))
                 }
                 PremiumCard(centered = true) {
-                    EditorialKicker("Rappel", centered = true)
+                    EditorialKicker(tr("Rappel", "Reminder", "Zur Erinnerung"), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(stringResource(R.string.texte_rappel_fiche), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }

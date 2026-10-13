@@ -238,7 +238,7 @@
 
     <string name="alim_ingestion1_titre">Was tun, wenn meine Katze etwas Fragwürdiges gefressen hat?</string>
     <string name="alim_ingestion1_resume">Ruhig und schnell reagieren.</string>
-    <string name="alim_ingestion1_contenu">Finden Sie heraus, was die Katze in etwa welcher Menge aufgenommen hat. Versuchen Sie nicht selbst, Erbrechen auszulösen. Wenden Sie sich an Ihren Tierarzt oder an eine Giftnotrufzentrale für Tiere, wenn der Stoff giftig sein könnte.</string>
+    <string name="alim_ingestion1_contenu">Finden Sie heraus, was die Katze aufgenommen hat und ungefähr wie viel. Versuchen Sie nicht selbst, Erbrechen auszulösen. Wenden Sie sich an Ihren Tierarzt oder an eine Giftnotrufzentrale für Tiere, wenn der Stoff giftig sein könnte.</string>
 
     <string name="alim_ingestion2_titre">Welche Anzeichen sollten nach dem Verschlucken alarmieren?</string>
     <string name="alim_ingestion2_resume">Manche Anzeichen erfordern eine dringende tierärztliche Untersuchung.</string>
