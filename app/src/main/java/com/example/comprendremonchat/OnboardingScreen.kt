@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -216,7 +216,7 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
 
     AppBackground {
         Column(
-            modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.navigationBars)
+            modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),

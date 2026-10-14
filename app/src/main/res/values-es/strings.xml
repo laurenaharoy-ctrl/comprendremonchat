@@ -4,7 +4,7 @@
 
     <!-- Accueil -->
     <string name="btn_demarrer">Iniciar la evaluación</string>
-    <string name="btn_dictionnaire">Diccionario de comportamiento</string>
+    <string name="btn_dictionnaire">Diccionario</string>
     <string name="btn_alimentation">Alimentación</string>
     <string name="btn_reprendre">Continuar el cuestionario</string>
 
@@ -42,7 +42,7 @@
     <string name="subsection_a_observer">Qué observar</string>
     <string name="kicker_conseils">Consejos complementarios</string>
     <string name="kicker_demander_aide">Cuándo pedir ayuda</string>
-    <string name="texte_morsure_signale">Se ha señalado un arañazo o una mordedura: se recomienda el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino.</string>
+    <string name="texte_morsure_signale">Se ha señalado un arañazo o una mordedura: se recomienda el acompañamiento de un veterinario etólogo o de un especialista en comportamiento felino.</string>
     <string name="kicker_important">Importante</string>
     <string name="texte_important_bilan">Esta evaluación es solo orientativa. No sustituye a un veterinario ni a un especialista en comportamiento felino.</string>
     <string name="kicker_aller_plus_loin">Para ir más lejos con</string>
@@ -60,7 +60,7 @@
     <!-- Alerte morsure -->
     <string name="alerte_morsure_titre">ARAÑAZO / MORDEDURA SEÑALADOS</string>
     <string name="alerte_morsure_corps">%1$s ya ha arañado o mordido. Esta situación merece una atención especial.</string>
-    <string name="alerte_morsure_conseil">Se recomienda el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino.</string>
+    <string name="alerte_morsure_conseil">Se recomienda el acompañamiento de un veterinario etólogo o de un especialista en comportamiento felino.</string>
 
     <!-- Profil de race -->
     <string name="kicker_profil_race">Perfil de raza</string>

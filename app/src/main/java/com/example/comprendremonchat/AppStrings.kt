@@ -827,7 +827,7 @@ fun genererRaisonSituationTraduit(
         AppLang.ES -> {
             when {
                 reponsesChoix["duree_probleme"] == 0 -> "El hecho de que el comportamiento sea muy reciente requiere una vigilancia especial."
-                reponsesChoix["evolution_probleme"] == 2 -> "Que parezca estar empeorando puede indicar que el problema está ganando terreno."
+                reponsesChoix["evolution_probleme"] == 2 -> "Si parece estar empeorando, puede que el problema esté ganando terreno."
                 contexte.physique >= 4 -> "Los signos físicos o una posible molestia invitan a consultar primero a un veterinario."
                 else -> "En conjunto, las respuestas invitan a avanzar de forma progresiva."
             }
@@ -964,7 +964,7 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Teniendo en cuenta la edad de $nom y los signos descritos, se recomienda en primer lugar una revisión veterinaria para descartar o confirmar un deterioro cognitivo asociado a la edad antes de plantear un enfoque de comportamiento."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Este marcaje se ha convertido en un hábito adquirido más que en un comportamiento hormonal: un especialista en comportamiento felino puede ayudar a $nom a desaprender este gesto concreto, algo que suele llevar más tiempo que un marcaje relacionado con el estrés."
                 reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Se ha señalado un arañazo o una mordedura a otro animal. A menudo esto indica una falta de socialización o una convivencia que hay que replantear: un especialista en comportamiento felino puede ayudarte a reconstruir una presentación más progresiva y segura entre los animales."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Se ha señalado un arañazo o una mordedura a una persona: se recomienda para $nom el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino, tanto por tu seguridad como por su bienestar."
+                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Se ha señalado un arañazo o una mordedura a una persona: se recomienda para $nom el acompañamiento de un veterinario etólogo o de un especialista en comportamiento felino, tanto por tu seguridad como por su bienestar."
                 contexte.physique >= 4 -> "Se han detectado signos físicos: se recomienda en primer lugar una consulta veterinaria para $nom antes de cualquier enfoque de comportamiento."
                 reponsesChoix["surtoilettage"] == 1 -> "El exceso de acicalamiento puede tener un origen médico: se aconseja la opinión de un veterinario para $nom antes de actuar sobre el comportamiento."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "El marcaje con orina en un gato esterilizado justifica primero una revisión veterinaria para $nom, para descartar una infección urinaria."
@@ -1121,7 +1121,7 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
                     listOf("Separar temporalmente a los animales en conflicto.", "Considerar el acompañamiento de un especialista en comportamiento felino para una reintroducción progresiva."))
                 reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un profesional",
                     "Como ya ha habido un arañazo o una mordedura a una persona, la situación de $nom no debe tomarse a la ligera.",
-                    listOf("Evitar las situaciones de riesgo identificadas.", "Consultar a un veterinario especialista en comportamiento o a un especialista en comportamiento felino."))
+                    listOf("Evitar las situaciones de riesgo identificadas.", "Consultar a un veterinario etólogo o a un especialista en comportamiento felino."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un veterinario",
                     "Se han señalado signos físicos en $nom: la prioridad es médica.",
                     listOf("Pedir cita con el veterinario rápidamente.", "No esperar a que los síntomas empeoren."))

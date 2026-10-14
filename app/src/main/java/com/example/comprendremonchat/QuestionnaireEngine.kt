@@ -638,7 +638,7 @@ object QuestionnaireEngine {
                             append("El marcaje con orina de $nom parece haber empezado durante el celo, antes de su esterilización. ")
                             append("La causa hormonal original ha desaparecido, pero el comportamiento se ha convertido en un hábito adquirido: el gesto sigue arraigado aunque la razón inicial ya no exista. ")
                             append("Este tipo de marcaje convertido en hábito suele tardar más en corregirse que un marcaje relacionado solo con el estrés, porque hay que desaprender un gesto repetido en lugar de simplemente reducir una fuente de tensión. ")
-                            append("Se recomienda un acompañamiento de comportamiento centrado en este punto concreto.")
+                            append("Se recomienda el apoyo de un profesional del comportamiento centrado en este punto concreto.")
                             return@buildString
                         }
                         append("La frustración instintiva de $nom puede tener varios orígenes. ")
