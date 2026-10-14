@@ -1445,7 +1445,7 @@ fun ParametresScreen(modifier: Modifier = Modifier, onRevoirOnboarding: () -> Un
                 Text(stringResource(R.string.texte_confidentialite), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(14.dp))
                 SecondaryPremiumButton(stringResource(R.string.btn_politique_confidentialite), onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchien/confidentialite.html"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://laurenaharoy-ctrl.github.io/comprendremonchat/confidentialite.html"))
                     context.startActivity(intent)
                 }, leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null) })
             }
