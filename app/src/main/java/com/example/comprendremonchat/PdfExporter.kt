@@ -543,11 +543,19 @@ object PdfExporter {
     private fun dessineFooterAvecQr(canvas: Canvas, pageNum: Int, totalPages: Int) {
         val footerTop = QR_FOOTER_TOP
         drawCard(canvas, MARGIN, footerTop, PAGE_W - MARGIN, PAGE_H - MARGIN + 2f, COLOR_WARM_BG, COLOR_BORDER, 14f)
-        val qrSize = 62
-        val qrBitmap = generateQrCode("https://play.google.com/store/apps/details?id=com.laurena.comprendremonchat", 300)
-        val qrLeft = (PAGE_W - MARGIN - qrSize - 14f).toInt()
-        val qrTop = (footerTop + 14f).toInt()
-        canvas.drawBitmap(qrBitmap, null, Rect(qrLeft, qrTop, qrLeft + qrSize, qrTop + qrSize), null)
+        val qrSize = 54
+        val qrTop = (footerTop + 12f).toInt()
+        val labelPaint = makePaint(7f, COLOR_INK_SOFT)
+        val appQrLeft = (PAGE_W - MARGIN - qrSize - 14f).toInt()
+        canvas.drawBitmap(generateQrCode("https://play.google.com/store/apps/details?id=com.laurena.comprendremonchat", 300), null, Rect(appQrLeft, qrTop, appQrLeft + qrSize, qrTop + qrSize), null)
+        val appLabel = t("Application", "App", "App", "Aplicación")
+        canvas.drawText(appLabel, appQrLeft + (qrSize - labelPaint.measureText(appLabel)) / 2f, qrTop + qrSize + 10f, labelPaint)
+        if (appLang() == AppLang.FR) {
+            val siteQrLeft = appQrLeft - qrSize - 12
+            canvas.drawBitmap(generateQrCode("https://comportementaliste91.fr", 300), null, Rect(siteQrLeft, qrTop, siteQrLeft + qrSize, qrTop + qrSize), null)
+            val siteLabel = "Site internet"
+            canvas.drawText(siteLabel, siteQrLeft + (qrSize - labelPaint.measureText(siteLabel)) / 2f, qrTop + qrSize + 10f, labelPaint)
+        }
         val tx = MARGIN + 14f
         canvas.drawText(
             t("Document g\u00e9n\u00e9r\u00e9 automatiquement", "Automatically generated document", "Automatisch erstelltes Dokument", "Documento generado automáticamente"),
@@ -556,6 +564,10 @@ object PdfExporter {
         canvas.drawText(
             t("Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.", "Track your cat's progress with the app.", "Verfolgen Sie die Entwicklung Ihrer Katze mit der App.", "Sigue la evolución de tu gato con la aplicación."),
             tx, footerTop + 40f, makePaint(8.5f, COLOR_INK_SOFT)
+        )
+        canvas.drawText(
+            t("Consultations : comportementaliste91.fr", "Scan the QR code to open the app", "QR-Code scannen, um die App zu öffnen", "Escanea el código QR para acceder a la aplicación"),
+            tx, footerTop + 60f, makePaint(9.5f, COLOR_PRIMARY, bold = true)
         )
         val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages", "Página $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
