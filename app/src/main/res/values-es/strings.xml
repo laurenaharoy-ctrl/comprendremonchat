@@ -1,0 +1,262 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">Comprender a mi gato</string>
+
+    <!-- Accueil -->
+    <string name="btn_demarrer">Iniciar la evaluación</string>
+    <string name="btn_dictionnaire">Diccionario de comportamiento</string>
+    <string name="btn_alimentation">Alimentación</string>
+    <string name="btn_reprendre">Continuar el cuestionario</string>
+
+    <!-- Questionnaire -->
+    <string name="label_sur">de</string>
+    <string name="btn_continuer">Continuar</string>
+    <string name="placeholder_prenom_chat">Ej.: Luna, Milo, Simba…</string>
+    <string name="label_prenom_chat">Nombre de tu gato</string>
+    <string name="hint_saisir_prenom">Escribe el nombre de tu gato para continuar</string>
+    <string name="hint_choisir_reponse">Elige una respuesta para continuar</string>
+
+    <!-- Chargement -->
+    <string name="chargement_analyse">Analizando…</string>
+    <string name="chargement_profil">Leyendo el perfil de tu gato…</string>
+    <string name="chargement_bilan">Preparando tu evaluación…</string>
+
+    <!-- Résultat -->
+    <string name="kicker_votre_bilan">Tu evaluación</string>
+    <string name="titre_bilan_pour">Evaluación de</string>
+    <string name="kicker_lecture_principale">Lectura principal</string>
+    <string name="label_priorite">Prioridad: </string>
+    <string name="kicker_ressent">Lo que probablemente siente</string>
+    <string name="kicker_coup_oeil">De un vistazo</string>
+    <string name="kicker_facteurs">Factores detectados</string>
+    <string name="subsection_aggrave">Lo que puede empeorar la situación</string>
+    <string name="subsection_protege">Lo que ayuda</string>
+    <string name="kicker_niveau_situation">Nivel de la situación</string>
+    <string name="kicker_inquieter">¿Hay que preocuparse?</string>
+    <string name="kicker_ce_qui_passe">Lo que probablemente está pasando</string>
+    <string name="highlight_chip">El punto de apoyo principal</string>
+    <string name="highlight_footer">A menudo es aquí donde el cambio empieza a tomar forma.</string>
+    <string name="kicker_3_jours">Los próximos 3 días</string>
+    <string name="subsection_a_faire">Qué hacer</string>
+    <string name="subsection_a_eviter">Qué evitar</string>
+    <string name="subsection_a_observer">Qué observar</string>
+    <string name="kicker_conseils">Consejos complementarios</string>
+    <string name="kicker_demander_aide">Cuándo pedir ayuda</string>
+    <string name="texte_morsure_signale">Se ha señalado un arañazo o una mordedura: se recomienda el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino.</string>
+    <string name="kicker_important">Importante</string>
+    <string name="texte_important_bilan">Esta evaluación es solo orientativa. No sustituye a un veterinario ni a un especialista en comportamiento felino.</string>
+    <string name="kicker_aller_plus_loin">Para ir más lejos con</string>
+    <string name="label_fiches_comportementales">Fichas de comportamiento</string>
+    <string name="label_reperes_alimentation">Pautas de alimentación</string>
+    <string name="kicker_a_retenir">Lo esencial</string>
+    <string name="kicker_le_livre">El libro</string>
+    <string name="texte_livre">Si quieres profundizar</string>
+    <string name="btn_voir_livres">Ver mis libros</string>
+    <string name="btn_partager">Compartir</string>
+    <string name="btn_export_pdf">PDF</string>
+    <string name="btn_copier_resume">Copiar el resumen</string>
+    <string name="btn_recommencer">Empezar de nuevo</string>
+
+    <!-- Alerte morsure -->
+    <string name="alerte_morsure_titre">ARAÑAZO / MORDEDURA SEÑALADOS</string>
+    <string name="alerte_morsure_corps">%1$s ya ha arañado o mordido. Esta situación merece una atención especial.</string>
+    <string name="alerte_morsure_conseil">Se recomienda el acompañamiento de un veterinario especialista en comportamiento o de un especialista en comportamiento felino.</string>
+
+    <!-- Profil de race -->
+    <string name="kicker_profil_race">Perfil de raza</string>
+    <string name="label_predispositions">Predisposiciones frecuentes en este grupo</string>
+    <string name="kicker_origines">¿Por qué es así?</string>
+    <string name="chip_comprendre_agir">Comprender para actuar mejor</string>
+
+    <!-- Dictionnaire comportemental -->
+    <string name="kicker_dictionnaire">Diccionario de comportamiento</string>
+    <string name="titre_dictionnaire">Pautas para leer mejor el lenguaje de tu gato</string>
+    <string name="placeholder_recherche">Buscar una ficha…</string>
+    <string name="aucune_fiche">Ninguna ficha coincide con «%1$s».</string>
+    <string name="texte_important_dictionnaire">Estas fichas ofrecen pautas para leer el comportamiento felino. No sustituyen la opinión de un profesional.</string>
+    <string name="kicker_fiche_comportementale">Ficha de comportamiento</string>
+    <string name="kicker_explication">Explicación</string>
+    <string name="kicker_que_faire">Qué hacer</string>
+    <string name="kicker_a_eviter_fiche">Qué evitar</string>
+    <string name="texte_rappel_fiche">Un comportamiento aislado no siempre basta para sacar conclusiones. El contexto y el conjunto del lenguaje corporal cuentan igual.</string>
+    <string name="fiche_introuvable">Ficha no encontrada.</string>
+
+    <!-- Alimentation -->
+    <string name="kicker_alimentation">Alimentación del gato</string>
+    <string name="texte_alimentation_intro">Pautas prácticas para alimentar a tu gato con tranquilidad.</string>
+    <string name="kicker_a_retenir_alimentation">Lo esencial primero</string>
+    <string name="bullet_carnivore">El gato es un carnívoro estricto: su alimentación debe ser mayoritariamente de origen animal.</string>
+    <string name="bullet_plantes_toxiques">Algunas plantas y alimentos comunes pueden ser muy tóxicos para él.</string>
+    <string name="bullet_ingestion_suspecte">Ante una ingestión sospechosa, consulta rápidamente a un veterinario.</string>
+    <string name="texte_important_alimentation">Esta guía ofrece pautas generales. No sustituye a un veterinario.</string>
+    <string name="texte_rappel_alimentation">Ante síntomas o una ingestión dudosa, consulta preferentemente a un veterinario.</string>
+    <string name="btn_retour_categorie">Volver a la categoría</string>
+    <string name="btn_retour_rubriques">Volver a las secciones</string>
+    <string name="kicker_alimentation_detail">Alimentación</string>
+
+    <!-- Catégories alimentation -->
+    <string name="cat_dangereux_titre">Alimentos peligrosos para el gato</string>
+    <string name="cat_dangereux_desc">Los alimentos y plantas que hay que evitar por completo.</string>
+    <string name="cat_autorises_titre">Alimentos permitidos con moderación</string>
+    <string name="cat_autorises_desc">Lo que se le puede dar con moderación.</string>
+    <string name="cat_ingestion_titre">Qué hacer en caso de ingestión</string>
+    <string name="cat_ingestion_desc">Qué hacer si el gato se ha tragado algo.</string>
+    <string name="cat_digestion_titre">Digestión / hierba / vómitos / heces</string>
+    <string name="cat_digestion_desc">Hierba, vómitos, bolas de pelo y heces.</string>
+
+    <!-- Paramètres -->
+    <string name="kicker_parametres">Ajustes</string>
+    <string name="titre_parametres">Comprender a mi gato</string>
+    <string name="label_version">Versión %1$s</string>
+    <string name="kicker_tutoriel">Tutorial</string>
+    <string name="texte_tutoriel">Ver de nuevo la presentación de la aplicación desde el principio.</string>
+    <string name="btn_revoir_intro">Ver de nuevo la introducción</string>
+    <string name="kicker_confidentialite">Privacidad</string>
+    <string name="texte_confidentialite">Esta aplicación no recopila ningún dato personal. Las evaluaciones se guardan únicamente en tu dispositivo. Las notificaciones son locales.</string>
+    <string name="btn_politique_confidentialite">Política de privacidad</string>
+    <string name="kicker_a_propos">Acerca de</string>
+    <string name="texte_a_propos">Desarrollada para ayudar a los dueños a comprender mejor a su gato y mejorar su calidad de vida.</string>
+
+    <!-- Navigation / TopBar -->
+    <string name="nav_retour">Volver</string>
+
+    <!-- Fiches comportement — Titres et résumés -->
+    <string name="comp_ronronnement_titre">Ronroneo</string>
+    <string name="comp_ronronnement_resume">No siempre es sinónimo de bienestar: también puede indicar estrés.</string>
+    <string name="comp_ronronnement_explication">El ronroneo se produce por la vibración de la laringe. A menudo indica bienestar, pero también puede ser una forma de calmarse ante el estrés o el dolor.</string>
+    <string name="comp_ronronnement_que_faire">Observar el contexto general antes de concluir que el gato está feliz.</string>
+    <string name="comp_ronronnement_a_eviter">Ignorar un ronroneo inusual o excesivo.</string>
+
+    <string name="comp_clin_oeil_titre">Parpadeo lento</string>
+    <string name="comp_clin_oeil_resume">Una señal de confianza y de cariño de tu gato.</string>
+    <string name="comp_clin_oeil_explication">El gato entrecierra los ojos lentamente mirándote como señal de confianza. Responder de la misma forma refuerza el vínculo.</string>
+    <string name="comp_clin_oeil_que_faire">Imitar esta señal para reforzar la relación.</string>
+    <string name="comp_clin_oeil_a_eviter">Mirar fijamente al gato a los ojos sin parpadear: puede vivirlo como una amenaza.</string>
+
+    <string name="comp_queue_dressee_titre">Cola levantada</string>
+    <string name="comp_queue_dressee_resume">Una señal de saludo amistoso.</string>
+    <string name="comp_queue_dressee_explication">Una cola vertical indica una intención amistosa y confianza. El pequeño gancho en la punta señala un saludo especialmente cálido.</string>
+    <string name="comp_queue_dressee_que_faire">Responder de forma positiva a esta invitación al contacto.</string>
+    <string name="comp_queue_dressee_a_eviter">Ignorar esta señal de sociabilidad.</string>
+
+    <string name="comp_queue_fouettante_titre">Cola que azota</string>
+    <string name="comp_queue_fouettante_resume">Una señal de agitación o de irritación.</string>
+    <string name="comp_queue_fouettante_explication">A diferencia del perro, un gato que azota la cola está irritado o sobreexcitado. No es una señal de alegría.</string>
+    <string name="comp_queue_fouettante_que_faire">Dejar de interactuar y permitir que el gato se calme.</string>
+    <string name="comp_queue_fouettante_a_eviter">Seguir acariciando o jugando con un gato que azota la cola.</string>
+
+    <string name="comp_oreilles_arriere_titre">Orejas aplastadas hacia atrás</string>
+    <string name="comp_oreilles_arriere_resume">Señal de alerta máxima.</string>
+    <string name="comp_oreilles_arriere_explication">Cuando las orejas se pegan hacia atrás, el gato tiene miedo o está a punto de reaccionar de forma agresiva. Detén cualquier interacción de inmediato.</string>
+    <string name="comp_oreilles_arriere_que_faire">Crear distancia de inmediato.</string>
+    <string name="comp_oreilles_arriere_a_eviter">Seguir tocando o acercándose a un gato con las orejas hacia atrás.</string>
+
+    <string name="comp_ventre_expose_titre">Panza al aire</string>
+    <string name="comp_ventre_expose_resume">Una señal de confianza, no necesariamente una invitación.</string>
+    <string name="comp_ventre_expose_explication">Mostrar la panza indica una confianza enorme, pero no siempre es una invitación a acariciarla. Muchos gatos arañan si se toca esta zona vulnerable.</string>
+    <string name="comp_ventre_expose_que_faire">Observar si el gato acepta de verdad las caricias en la panza antes de insistir.</string>
+    <string name="comp_ventre_expose_a_eviter">Acariciar automáticamente la panza de un gato que se da la vuelta.</string>
+
+    <string name="comp_petrir_titre">Amasar (hacer pan)</string>
+    <string name="comp_petrir_resume">Un comportamiento de bienestar heredado de la etapa de lactancia.</string>
+    <string name="comp_petrir_explication">El gato amasa con las patas delanteras, un gesto heredado del gatito que mama de su madre. Es una señal de comodidad y de seguridad.</string>
+    <string name="comp_petrir_que_faire">Dejar que ocurra este comportamiento: es muy buena señal.</string>
+    <string name="comp_petrir_a_eviter">Castigar o interrumpir bruscamente este momento de bienestar.</string>
+
+    <string name="comp_frotter_tete_titre">Frotar la cabeza (cabezazo)</string>
+    <string name="comp_frotter_tete_resume">Un marcaje afectivo y una señal de confianza.</string>
+    <string name="comp_frotter_tete_explication">El gato frota el hocico, las mejillas o la sien para dejar sus feromonas. Es una señal de confianza y de vínculo afectivo.</string>
+    <string name="comp_frotter_tete_que_faire">Responder de forma positiva a este contacto que inicia el gato.</string>
+    <string name="comp_frotter_tete_a_eviter">Apartar al gato que viene a frotarse la cabeza contigo.</string>
+
+    <string name="comp_chatter_titre">Castañeteo de dientes</string>
+    <string name="comp_chatter_resume">Una reacción ante una presa inalcanzable.</string>
+    <string name="comp_chatter_explication">Este sonido rápido aparece cuando el gato observa un pájaro u otra presa que no puede atrapar. Expresa frustración y un instinto de caza activado.</string>
+    <string name="comp_chatter_que_faire">Proponer una sesión de juego con una caña con plumas para canalizar este instinto.</string>
+    <string name="comp_chatter_a_eviter">Preocuparse: es un comportamiento normal.</string>
+
+    <string name="comp_griffage_titre">Arañar superficies</string>
+    <string name="comp_griffage_resume">Una necesidad vital de marcaje y de cuidado de las uñas.</string>
+    <string name="comp_griffage_explication">El gato araña para marcar su territorio (feromonas de las almohadillas), estirarse y cuidar sus uñas. Es una necesidad fundamental.</string>
+    <string name="comp_griffage_que_faire">Ofrecer rascadores variados en los lugares adecuados (cerca de las zonas de descanso).</string>
+    <string name="comp_griffage_a_eviter">Castigar el arañado: no elimina la necesidad y el gato buscará otras superficies.</string>
+
+    <string name="comp_marquage_urinaire_titre">Marcaje con orina (spray)</string>
+    <string name="comp_marquage_urinaire_resume">Una comunicación territorial, a menudo relacionada con el estrés.</string>
+    <string name="comp_marquage_urinaire_explication">El gato rocía orina de pie, hacia atrás, con la cola temblorosa. Es un comportamiento de marcaje distinto de la eliminación normal. En un gato esterilizado, suele ser señal de estrés territorial.</string>
+    <string name="comp_marquage_urinaire_que_faire">Identificar y reducir la fuente de estrés (un gato de fuera visible, un conflicto con otro animal de la casa).</string>
+    <string name="comp_marquage_urinaire_a_eviter">Castigar al gato: aumenta el estrés y, por tanto, el marcaje.</string>
+
+    <string name="comp_hyperactivite_titre">Hiperactividad nocturna</string>
+    <string name="comp_hyperactivite_resume">A menudo relacionada con una falta de estimulación durante el día.</string>
+    <string name="comp_hyperactivite_explication">El gato es activo por naturaleza al amanecer y al anochecer. La falta de juego durante el día puede traducirse en agitación nocturna.</string>
+    <string name="comp_hyperactivite_que_faire">Proponer una sesión de juego intensa antes de acostarse y luego una comida.</string>
+    <string name="comp_hyperactivite_a_eviter">Dejar que el gato se aburra todo el día y sorprenderse de su agitación nocturna.</string>
+
+    <string name="comp_destruction_titre">Destrozos cuando no estás</string>
+    <string name="comp_destruction_resume">A menudo relacionados con el estrés o el aburrimiento.</string>
+    <string name="comp_destruction_explication">Un gato que destroza cosas cuando está solo no actúa por venganza. Es una señal de angustia o de aburrimiento.</string>
+    <string name="comp_destruction_que_faire">Enriquecer el entorno: juguetes que se van rotando, ventanas accesibles, escondites.</string>
+    <string name="comp_destruction_a_eviter">Castigar después de los hechos: el gato no relaciona el castigo con lo que hizo antes.</string>
+
+    <string name="comp_vocalisation_titre">Maullidos excesivos</string>
+    <string name="comp_vocalisation_resume">Varias causas posibles según el contexto.</string>
+    <string name="comp_vocalisation_explication">Los maullidos excesivos pueden indicar hambre, aburrimiento, una petición de atención, dolor o, en un gato mayor, el inicio de un deterioro cognitivo. Los siameses y las razas orientales son más habladores por naturaleza.</string>
+    <string name="comp_vocalisation_que_faire">Consultar a un veterinario si los maullidos son nuevos, o si son nocturnos e intensos.</string>
+    <string name="comp_vocalisation_a_eviter">Responder siempre a las peticiones con maullidos: refuerza el comportamiento.</string>
+
+    <string name="comp_coup_de_chaleur_titre">Golpe de calor</string>
+    <string name="comp_coup_de_chaleur_resume">Una urgencia veterinaria menos visible en el gato que en el perro.</string>
+    <string name="comp_coup_de_chaleur_explication">El gato regula muy mal su temperatura: apenas suda y jadea mucho menos que el perro. Por eso, un gato que respira con la boca abierta nunca es algo banal: a menudo ya es una señal de angustia avanzada. Con mucho calor, en un viaje largo o en un espacio cerrado sin ventilación, su temperatura puede subir peligrosamente sin que las señales sean muy visibles al principio. Las razas braquicéfalas (persa, exótico de pelo corto...), los gatos mayores, con sobrepeso o encerrados en un lugar caluroso tienen un riesgo especial. Las señales de alerta incluyen una respiración rápida o con la boca abierta, postración, vómitos, salivación excesiva o desmayo.</string>
+    <string name="comp_coup_de_chaleur_que_faire">Lleva de inmediato al gato a un lugar fresco y ventilado, mójale el cuerpo y las patas con agua tibia (nunca helada), ofrécele agua sin obligarlo y contacta con un veterinario de urgencia aunque parezca mejorar.</string>
+    <string name="comp_coup_de_chaleur_a_eviter">Usar agua helada o bolsas de hielo directamente sobre la piel, obligar al gato a beber de golpe o esperar a ver si se le pasa antes de llamar al veterinario: en el gato, las señales visibles suelen aparecer tarde.</string>
+
+    <!-- Fiches alimentation — Titres et résumés -->
+    <string name="alim_dangereux1_titre">¿Qué alimentos hay que evitar sí o sí?</string>
+    <string name="alim_dangereux1_resume">Algunos alimentos de las personas pueden ser peligrosos para el gato.</string>
+    <string name="alim_dangereux1_contenu">Por prudencia, hay que evitar el chocolate, la cebolla, el ajo, las uvas (frescas o pasas), el alcohol, los huesos cocidos y los alimentos muy grasos o muy salados. La leche de vaca también la toleran mal la mayoría de los gatos adultos. Ante una ingestión sospechosa, consulta rápidamente si aparecen síntomas.</string>
+
+    <string name="alim_dangereux2_titre">Plantas tóxicas para el gato</string>
+    <string name="alim_dangereux2_resume">Algunas plantas comunes son peligrosas.</string>
+    <string name="alim_dangereux2_contenu">El lirio (muy tóxico, puede provocar insuficiencia renal), el filodendro, el potus, la azalea y el lirio de los valles están entre las plantas más peligrosas. Si tu gato ha mordisqueado una planta desconocida y presenta síntomas, acude de urgencia al veterinario.</string>
+
+    <string name="alim_dangereux3_titre">¿Por qué evitar los huesos para gatos?</string>
+    <string name="alim_dangereux3_resume">Los huesos cocidos pueden ser peligrosos.</string>
+    <string name="alim_dangereux3_contenu">Los huesos cocidos pueden astillarse y provocar heridas internas. Evítalos siempre. Los huesos crudos pueden ofrecerse bajo vigilancia, pero pide antes la opinión de tu veterinario.</string>
+
+    <string name="alim_autorises1_titre">¿Puede el gato comer verduras?</string>
+    <string name="alim_autorises1_resume">Con moderación y según la verdura.</string>
+    <string name="alim_autorises1_contenu">Algunas verduras cocidas, como la zanahoria o el calabacín, pueden tolerarse en pequeña cantidad. La alimentación del gato debe seguir siendo mayoritariamente cárnica: es un carnívoro estricto y no puede sintetizar ciertos aminoácidos esenciales, como la taurina.</string>
+
+    <string name="alim_autorises2_titre">Premios para gatos: ¿útiles o arriesgados?</string>
+    <string name="alim_autorises2_resume">Útiles como refuerzo positivo, con moderación.</string>
+    <string name="alim_autorises2_contenu">Los premios pueden ser útiles en las sesiones de juego o de aprendizaje. No deben superar el 10 % de la ración diaria. Elige premios adaptados a los gatos y sin aditivos en exceso.</string>
+
+    <string name="alim_autorises3_titre">¿Cómo cambiar la comida de tu gato?</string>
+    <string name="alim_autorises3_resume">Una transición progresiva es imprescindible.</string>
+    <string name="alim_autorises3_contenu">Cambia la alimentación en 7 a 10 días, mezclando progresivamente el alimento antiguo y el nuevo. Los gatos son muy sensibles a los cambios de alimentación y pueden rechazar de golpe una comida nueva o tener problemas digestivos.</string>
+
+    <string name="alim_ingestion1_titre">¿Qué hago si mi gato ha comido algo dudoso?</string>
+    <string name="alim_ingestion1_resume">Reaccionar con calma y rapidez.</string>
+    <string name="alim_ingestion1_contenu">Identifica qué ha ingerido el gato y en qué cantidad aproximada. No intentes provocarle el vómito tú mismo. Contacta con tu veterinario o con un servicio de toxicología veterinaria si la sustancia puede ser tóxica.</string>
+
+    <string name="alim_ingestion2_titre">¿Qué señales deben alertarte después de una ingestión?</string>
+    <string name="alim_ingestion2_resume">Algunas señales requieren una consulta urgente.</string>
+    <string name="alim_ingestion2_contenu">Los vómitos repetidos, la diarrea intensa, el decaimiento, los temblores, la dificultad para respirar, la salivación excesiva, las convulsiones o un comportamiento inusual son señales de alerta. Consulta sin esperar.</string>
+
+    <string name="alim_digestion1_titre">¿Por qué mi gato come hierba?</string>
+    <string name="alim_digestion1_resume">Un comportamiento normal que hay que vigilar si es excesivo.</string>
+    <string name="alim_digestion1_contenu">La hierba ayuda al gato a expulsar las bolas de pelo y puede actuar como purgante natural. Ofrécele hierba para gatos en maceta: es beneficiosa para la mayoría de los gatos de interior.</string>
+
+    <string name="alim_digestion2_titre">Mi gato vomita, ¿es grave?</string>
+    <string name="alim_digestion2_resume">Depende de la frecuencia y del contexto.</string>
+    <string name="alim_digestion2_contenu">Un vómito aislado de bolas de pelo suele ser benigno. Los vómitos frecuentes, con sangre, o acompañados de decaimiento o de rechazo a comer requieren una consulta veterinaria.</string>
+
+    <string name="alim_digestion3_titre">Bolas de pelo: ¿cómo ayudar a tu gato?</string>
+    <string name="alim_digestion3_resume">Un problema frecuente con soluciones sencillas.</string>
+    <string name="alim_digestion3_contenu">Cepilla a tu gato con regularidad, ofrécele hierba para gatos y considera una alimentación específica contra las bolas de pelo. Si los vómitos son muy frecuentes o hay estreñimiento, consulta al veterinario.</string>
+
+    <string name="alim_digestion4_titre">Mi gato pide comida todo el tiempo</string>
+    <string name="alim_digestion4_resume">Pedir comida puede tener varias causas.</string>
+    <string name="alim_digestion4_contenu">Un gato que pide comida a menudo puede tener falta de estimulación, una ración insuficiente o haberse acostumbrado a pedir. Los juguetes dispensadores de comida pueden ayudar a canalizar este comportamiento a la vez que lo estimulan mentalmente.</string>
+</resources>

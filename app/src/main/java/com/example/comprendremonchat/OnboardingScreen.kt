@@ -174,6 +174,37 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
                 Icons.Rounded.History to "Verlauf der Einschätzungen"
             )
         )
+    ),
+    listOf(
+        OnboardingSlide(
+            kicker = "Te damos la bienvenida",
+            titre = "Comprender a mi gato",
+            description = "Esta aplicación te ayuda a descifrar el comportamiento de tu gato y a obtener pistas concretas adaptadas a su perfil único.",
+            illustrationType = IllustrationType.CHAT_LOGO
+        ),
+        OnboardingSlide(
+            kicker = "Cómo funciona",
+            titre = "Un cuestionario, cuatro dimensiones",
+            description = "En pocos minutos, exploras los cuatro ejes que dan forma al comportamiento de tu gato en el día a día.",
+            illustrationType = IllustrationType.QUATRE_AXES,
+            features = listOf(
+                Icons.Rounded.Psychology to "Seguridad emocional",
+                Icons.Rounded.Favorite to "Vínculo con el humano",
+                Icons.Rounded.Spa to "Expresión de los instintos",
+                Icons.Rounded.Analytics to "Convivencia y territorio"
+            )
+        ),
+        OnboardingSlide(
+            kicker = "Lo que obtienes",
+            titre = "Una evaluación personalizada y completa",
+            description = "Al final del cuestionario, recibes una evaluación detallada con consejos concretos, un plan de acción y un PDF para compartir con tu veterinario.",
+            illustrationType = IllustrationType.BILAN_COMPLET,
+            features = listOf(
+                Icons.Rounded.CheckCircle to "Evaluación emocional",
+                Icons.Rounded.PictureAsPdf to "Exportación en PDF",
+                Icons.Rounded.History to "Historial de evaluaciones"
+            )
+        )
     )
 )
 
@@ -193,7 +224,7 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
             ) {
                 TextButton(onClick = onTerminer) {
                     Text(
-                        tr("Passer", "Skip", "Überspringen"),
+                        tr("Passer", "Skip", "Überspringen", "Omitir"),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -227,9 +258,9 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
                 val estDernierSlide = pagerState.currentPage == slides.lastIndex
                 PrimaryGlowButton(
                     text = if (estDernierSlide) {
-                        tr("Commencer", "Get started", "Los geht’s")
+                        tr("Commencer", "Get started", "Los geht’s", "Empezar")
                     } else {
-                        tr("Suivant", "Next", "Weiter")
+                        tr("Suivant", "Next", "Weiter", "Siguiente")
                     },
                     onClick = {
                         if (estDernierSlide) onTerminer()
@@ -268,7 +299,7 @@ fun OnboardingSlideContent(slide: OnboardingSlide) {
             when (slide.illustrationType) {
                 IllustrationType.CHAT_LOGO -> Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen"),
+                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen", "Logotipo de Comprender a mi gato"),
                     modifier = Modifier.fillMaxSize().padding(16.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -417,7 +448,7 @@ fun AccueilIllustrationCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                tr("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen"),
+                tr("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen", "Comprender a mi gato"),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.ExtraBold, color = PremiumPalette.Primary,
                 textAlign = TextAlign.Center
@@ -429,14 +460,14 @@ fun AccueilIllustrationCard() {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo_accueil),
-                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen"),
+                    contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen", "Logotipo de Comprender a mi gato"),
                     modifier = Modifier.size(160.dp).clip(RoundedCornerShape(28.dp)),
                     contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                tr("Bienvenue", "Welcome", "Willkommen"),
+                tr("Bienvenue", "Welcome", "Willkommen", "Te damos la bienvenida"),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

@@ -742,7 +742,7 @@ fun ResultatScreen(
                 PrimaryGlowButton(
                     text = stringResource(R.string.btn_voir_livres),
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tr("https://comprendre-mon-chat.carrd.co", "https://understanding-my-cat.carrd.co", "https://understanding-my-cat.carrd.co")))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tr("https://comprendre-mon-chat.carrd.co", "https://understanding-my-cat.carrd.co", "https://understanding-my-cat.carrd.co", "https://comprendre-mon-chat.carrd.co")))
                         context.startActivity(intent)
                     },
                     leading = { Icon(Icons.Rounded.MenuBook, contentDescription = null, tint = Color.White) }
@@ -871,7 +871,7 @@ fun ConsultationCard(lieuResidence: Int? = null) {
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = tr("Nous suivre sur Facebook", "Follow us on Facebook", "Folgen Sie uns auf Facebook"),
+                text = tr("Nous suivre sur Facebook", "Follow us on Facebook", "Folgen Sie uns auf Facebook", "Síguenos en Facebook"),
                 color = Color(0xFF1877F2),
                 style = MaterialTheme.typography.bodyMedium,
                 textDecoration = TextDecoration.Underline,
@@ -1277,7 +1277,7 @@ fun DictionnaireDetailScreen(modifier: Modifier = Modifier, ficheId: String) {
                     Bullet(stringResource(fiche.aEviterKey))
                 }
                 PremiumCard(centered = true) {
-                    EditorialKicker(tr("Rappel", "Reminder", "Zur Erinnerung"), centered = true)
+                    EditorialKicker(tr("Rappel", "Reminder", "Zur Erinnerung", "Recuerda"), centered = true)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(stringResource(R.string.texte_rappel_fiche), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }

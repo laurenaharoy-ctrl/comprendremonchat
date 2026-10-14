@@ -50,14 +50,15 @@ object PdfExporter {
     private val QR_FOOTER_TOP = PAGE_H - MARGIN - 90f
     private val CONTENT_BOTTOM_QR = QR_FOOTER_TOP - 12f
 
-    private fun t(fr: String, en: String, de: String) = tr(fr, en, de)
-    private fun appName() = t("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen")
+    private fun t(fr: String, en: String, de: String, es: String) = tr(fr, en, de, es)
+    private fun appName() = t("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen", "Comprender a mi gato")
 
     fun exporterBilanPdf(context: Context, nomChat: String, analyse: ResultatAnalyse): File {
         val nom = nomChatAffiche(nomChat)
         val date = when (appLang()) {
             AppLang.EN -> SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(Date())
             AppLang.DE -> SimpleDateFormat("dd. MMMM yyyy", Locale.GERMAN).format(Date())
+            AppLang.ES -> SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale("es")).format(Date())
             else -> SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH).format(Date())
         }
         val couleurPriorite = couleurPourPriorite(analyse.prioriteAction)
@@ -76,8 +77,8 @@ object PdfExporter {
             .replace("\\s+".toRegex(), "_")
             .replace("[^a-z0-9_]+".toRegex(), "")
 
-        val prefix = t("bilan", "assessment", "einschaetzung")
-        val file = File(context.cacheDir, "${prefix}_${nomFichierSafe.ifBlank { t("chat", "cat", "katze") }}.pdf")
+        val prefix = t("bilan", "assessment", "einschaetzung", "evaluacion")
+        val file = File(context.cacheDir, "${prefix}_${nomFichierSafe.ifBlank { t("chat", "cat", "katze", "gato") }}.pdf")
         FileOutputStream(file).use { document.writeTo(it) }
         document.close()
         return file
@@ -206,7 +207,7 @@ object PdfExporter {
         canvas.drawText(nom, (PAGE_W - nomPaint.measureText(nom)) / 2f, 96f, nomPaint)
 
         val sousTitrePaint = makePaint(12f, COLOR_INK_SOFT, italic = true)
-        val sousTitre = t("Bilan émotionnel", "Emotional assessment", "Emotionale Einschätzung")
+        val sousTitre = t("Bilan émotionnel", "Emotional assessment", "Emotionale Einschätzung", "Evaluación emocional")
         canvas.drawText(sousTitre, (PAGE_W - sousTitrePaint.measureText(sousTitre)) / 2f, 118f, sousTitrePaint)
 
         drawLine(canvas, MARGIN + 40f, 130f, PAGE_W - MARGIN - 40f, 130f, COLOR_BORDER, 0.8f)
@@ -228,17 +229,17 @@ object PdfExporter {
         drawLine(canvas, MARGIN, pager.y, PAGE_W - MARGIN, pager.y, COLOR_BORDER, 0.5f)
         pager.y += 24f
 
-        pager.sectionTitle(t("En un coup d\u2019\u0153il", "At a glance", "Auf einen Blick"), keepWith = 200f)
+        pager.sectionTitle(t("En un coup d\u2019\u0153il", "At a glance", "Auf einen Blick", "De un vistazo"), keepWith = 200f)
 
         val gridItems = listOf(
-            t("Axe principal", "Main axis", "Hauptachse") to libelleAxe(analyse.problemePrincipal),
-            t("Situation", "Situation", "Situation") to texteNiveauSituation(analyse.niveauSituation),
-            t("Besoin principal", "Main need", "Hauptbedürfnis") to besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse))
+            t("Axe principal", "Main axis", "Hauptachse", "Eje principal") to libelleAxe(analyse.problemePrincipal),
+            t("Situation", "Situation", "Situation", "Situación") to texteNiveauSituation(analyse.niveauSituation),
+            t("Besoin principal", "Main need", "Hauptbedürfnis", "Necesidad principal") to besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse))
                 .removePrefix("Besoin principal : ")
                 .removePrefix("Main need: ")
                 .removePrefix("Hauptbedürfnis: ")
                 .removeSuffix("."),
-            t("Aide à envisager", "Support to consider", "Mögliche Unterstützung") to aideAEnvisager(analyse)
+            t("Aide à envisager", "Support to consider", "Mögliche Unterstützung", "Ayuda a considerar") to aideAEnvisager(analyse)
         )
         pager.y = drawInfoGrid(pager.canvas, pager.y, gridItems)
         pager.y += 20f
@@ -250,15 +251,15 @@ object PdfExporter {
     // PAGE 2 — Profil & Analyse
     // ════════════════════════════════════════════════════════════
     private fun dessineProfil(pager: Pager, nom: String, analyse: ResultatAnalyse) {
-        pager.newPage(t("Profil de $nom", "$nom's profile", "Profil von $nom"))
+        pager.newPage(t("Profil de $nom", "$nom's profile", "Profil von $nom", "Perfil de $nom"))
 
-        pager.sectionTitle(t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen"))
+        pager.sectionTitle(t("Les 4 dimensions", "The 4 dimensions", "Die 4 Dimensionen", "Las 4 dimensiones"))
 
         val axes = listOf(
-            Triple(t("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit"), analyse.niveauPeur, analyse.peur),
-            Triple(t("Lien humain", "Human bond", "Bindung zum Menschen"), analyse.niveauAttachement, analyse.attachement),
-            Triple(t("Instincts", "Instincts", "Instinkte"), analyse.niveauImpulsivite, analyse.impulsivite),
-            Triple(t("Cohabitation", "Cohabitation", "Zusammenleben"), analyse.niveauReactivite, analyse.reactivite)
+            Triple(t("Sécurité émotionnelle", "Emotional security", "Emotionale Sicherheit", "Seguridad emocional"), analyse.niveauPeur, analyse.peur),
+            Triple(t("Lien humain", "Human bond", "Bindung zum Menschen", "Vínculo con el humano"), analyse.niveauAttachement, analyse.attachement),
+            Triple(t("Instincts", "Instincts", "Instinkte", "Instintos"), analyse.niveauImpulsivite, analyse.impulsivite),
+            Triple(t("Cohabitation", "Cohabitation", "Zusammenleben", "Convivencia"), analyse.niveauReactivite, analyse.reactivite)
         )
         axes.forEach { (label, niveau, score) ->
             pager.ensure(46f)
@@ -270,21 +271,21 @@ object PdfExporter {
         val texte11 = makePaint(11f, COLOR_INK)
 
         pager.sectionTitle(
-            t("Hypoth\u00e8se de lecture", "Main hypothesis", "Deutungshypothese"),
+            t("Hypoth\u00e8se de lecture", "Main hypothesis", "Deutungshypothese", "Hipótesis de lectura"),
             keepWith = minOf(cardHeight(analyse.hypothesePrincipale, texte11), 300f)
         )
         pager.card(analyse.hypothesePrincipale, COLOR_WHITE, COLOR_ACCENT, texte11)
 
         if (analyse.explicationPrincipale.isNotBlank()) {
             pager.sectionTitle(
-                t("Ce qui se passe probablement", "What is probably happening", "Was wahrscheinlich geschieht"),
+                t("Ce qui se passe probablement", "What is probably happening", "Was wahrscheinlich geschieht", "Lo que probablemente está pasando"),
                 keepWith = minOf(paragraphHeight(analyse.explicationPrincipale, texte11), 300f)
             )
             pager.paragraph(analyse.explicationPrincipale, texte11)
         }
 
         if (analyse.marquageHabitudePostSterilisation) {
-            val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the behavior remains ingrained — this kind of habitual marking often takes longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.")
+            val texteHabitude = t("Ce marquage semble avoir débuté pendant les chaleurs, avant la stérilisation, et s'est transformé depuis en habitude acquise. La cause hormonale a disparu, mais le geste reste ancré — ce type de marquage devenu habituel est souvent plus long à corriger qu'un marquage lié au stress.", "This marking seems to have started during heat periods, before spaying, and has since turned into a learned habit. The hormonal cause is gone, but the behavior remains ingrained — this kind of habitual marking often takes longer to correct than stress-related marking.", "Dieses Markieren scheint während der Rolligkeit vor der Kastration begonnen zu haben und hat sich seitdem zu einer erlernten Gewohnheit entwickelt. Die hormonelle Ursache ist verschwunden, doch das Verhalten bleibt bestehen – eine solche zur Gewohnheit gewordene Markierung lässt sich oft langsamer korrigieren als eine stressbedingte.", "Este marcaje parece haber empezado durante el celo, antes de la esterilización, y desde entonces se ha convertido en un hábito adquirido. La causa hormonal ha desaparecido, pero el gesto sigue arraigado: este tipo de marcaje convertido en hábito suele tardar más en corregirse que un marcaje relacionado con el estrés.")
             pager.card(texteHabitude, COLOR_WARM_BG_ALT, COLOR_PRIMARY_SOFT, makePaint(10.5f, COLOR_PRIMARY_SOFT, bold = true))
         }
     }
@@ -293,31 +294,31 @@ object PdfExporter {
     // PAGE 3 — Plan d'action
     // ════════════════════════════════════════════════════════════
     private fun dessinePlan(pager: Pager, nom: String, analyse: ResultatAnalyse) {
-        pager.newPage(t("Plan d\u2019action pour $nom", "Action plan for $nom", "Aktionsplan für $nom"))
+        pager.newPage(t("Plan d\u2019action pour $nom", "Action plan for $nom", "Aktionsplan für $nom", "Plan de acción para $nom"))
 
         val texte11 = makePaint(11f, COLOR_INK)
         pager.sectionTitle(
-            t("Premier levier utile", "First useful step", "Erster hilfreicher Schritt"),
+            t("Premier levier utile", "First useful step", "Erster hilfreicher Schritt", "Primer paso útil"),
             keepWith = minOf(cardHeight(analyse.conseilPrincipal, texte11), 300f)
         )
         pager.card(analyse.conseilPrincipal, COLOR_WARM_BG_ALT, COLOR_ACCENT, texte11)
 
-        pager.sectionTitle(t("Les prochains jours", "The next few days", "Die nächsten Tage"))
+        pager.sectionTitle(t("Les prochains jours", "The next few days", "Die nächsten Tage", "Los próximos días"))
 
-        pager.label(t("\u00c0 faire", "To do", "Zu tun"))
+        pager.label(t("\u00c0 faire", "To do", "Zu tun", "Qué hacer"))
         analyse.planAction.aFaire.forEach { pager.bullet(it) }
         pager.y += 12f
 
-        pager.label(t("\u00c0 \u00e9viter", "To avoid", "Zu vermeiden"))
+        pager.label(t("\u00c0 \u00e9viter", "To avoid", "Zu vermeiden", "Qué evitar"))
         analyse.planAction.aEviter.forEach { pager.bullet(it) }
         pager.y += 12f
 
-        pager.label(t("\u00c0 observer", "To observe", "Zu beobachten"))
+        pager.label(t("\u00c0 observer", "To observe", "Zu beobachten", "Qué observar"))
         analyse.planAction.aObserver.forEach { pager.bullet(it) }
         pager.y += 18f
 
         if (analyse.aDejaMordu) {
-            val morsuText = if (analyse.cibleAgressionAnimal) t("Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.", "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely.", "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Eine Begleitung durch eine Fachperson für Katzenverhalten wird empfohlen, um das Zusammenleben schrittweise und sicher neu aufzubauen.") else t("Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.", "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation.", "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet. Eine verhaltensmedizinische tierärztliche Begleitung wird empfohlen, um die Situation zu beurteilen.")
+            val morsuText = if (analyse.cibleAgressionAnimal) t("Une griffure ou morsure envers un autre animal a \u00e9t\u00e9 signal\u00e9e. Un accompagnement par un comportementaliste f\u00e9lin est recommand\u00e9 pour reprendre la cohabitation de fa\u00e7on progressive et s\u00e9curis\u00e9e.", "A scratch or bite toward another animal has been reported. Support from a feline behaviorist is recommended to rebuild cohabitation gradually and safely.", "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Eine Begleitung durch eine Fachperson für Katzenverhalten wird empfohlen, um das Zusammenleben schrittweise und sicher neu aufzubauen.", "Se ha señalado un arañazo o una mordedura a otro animal. Se recomienda el acompañamiento de un especialista en comportamiento felino para retomar la convivencia de forma progresiva y segura.") else t("Une griffure ou morsure envers une personne a \u00e9t\u00e9 signal\u00e9e. Un accompagnement v\u00e9t\u00e9rinaire comportemental est recommand\u00e9 pour \u00e9valuer la situation.", "A scratch or bite toward a person has been reported. Support from a veterinary behaviorist is recommended to assess the situation.", "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet. Eine verhaltensmedizinische tierärztliche Begleitung wird empfohlen, um die Situation zu beurteilen.", "Se ha señalado un arañazo o una mordedura a una persona. Se recomienda el acompañamiento de un veterinario especialista en comportamiento para valorar la situación.")
             pager.card(
                 morsuText, COLOR_MORSURE_BG, COLOR_MORSURE_TEXTE,
                 makePaint(11f, COLOR_MORSURE_TEXTE, bold = true), spaceAfter = 10f
@@ -329,7 +330,7 @@ object PdfExporter {
     // PAGE 4 — À retenir (avec pied de page QR code)
     // ════════════════════════════════════════════════════════════
     private fun dessineARetenir(pager: Pager, nom: String, analyse: ResultatAnalyse, couleurPriorite: Int) {
-        pager.newPage(t("\u00c0 retenir", "Key takeaways", "Das Wichtigste"))
+        pager.newPage(t("\u00c0 retenir", "Key takeaways", "Das Wichtigste", "Lo esencial"))
         pager.bottom = CONTENT_BOTTOM_QR
 
         val recapText = when (appLang()) {
@@ -337,6 +338,12 @@ object PdfExporter {
                 append("$nom zeigt vor allem ein Profil „${analyse.profil.profilType}“.\n\n")
                 append("Situation: ${texteNiveauSituation(analyse.niveauSituation)}.\n\n")
                 append("Hauptachse: ${libelleAxe(analyse.problemePrincipal)}.\n\n")
+                append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
+            }
+            AppLang.ES -> buildString {
+                append("$nom muestra sobre todo un perfil «${analyse.profil.profilType.lowercase(Locale("es"))}».\n\n")
+                append("Situación: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale("es"))}.\n\n")
+                append("Eje principal: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale("es"))}.\n\n")
                 append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             AppLang.EN -> buildString {
@@ -360,12 +367,12 @@ object PdfExporter {
         drawStaticText(canvas, recapText, MARGIN + 24f, pager.y + 24f, (CONTENT_W - 48f).toInt(), makePaint(12f, COLOR_INK))
         pager.y += recapH + 32f
 
-        val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more suitable way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.")
+        val conclusion = tr("L\u2019objectif n\u2019est pas d\u2019\u00e9tiqueter $nom, mais d\u2019aider \u00e0 mieux lire ce qui se passe et \u00e0 avancer de mani\u00e8re plus adapt\u00e9e.", "The goal is not to label $nom, but to better understand what is happening and move forward in a more suitable way.", "Ziel ist es nicht, $nom ein Etikett aufzudrücken, sondern besser zu verstehen, was geschieht, und auf eine passendere Weise voranzukommen.", "El objetivo no es etiquetar a $nom, sino ayudar a entender mejor lo que pasa y avanzar de forma más adecuada.")
         val conclusionPaint = makePaint(11f, COLOR_INK)
-        pager.sectionTitle(t("Conclusion", "Conclusion", "Fazit"), keepWith = minOf(paragraphHeight(conclusion, conclusionPaint), 300f))
+        pager.sectionTitle(t("Conclusion", "Conclusion", "Fazit", "Conclusión"), keepWith = minOf(paragraphHeight(conclusion, conclusionPaint), 300f))
         pager.paragraph(conclusion, conclusionPaint, spaceAfter = 32f)
 
-        val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This assessment is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.")
+        val disclaimer = tr("Ce bilan est indicatif. Il ne remplace pas l\u2019avis d\u2019un v\u00e9t\u00e9rinaire ni d\u2019un comportementaliste f\u00e9lin. Il peut servir de base de discussion lors d\u2019une consultation.", "This assessment is indicative. It does not replace the advice of a veterinarian or feline behaviorist. It can serve as a basis for discussion during a consultation.", "Diese Einschätzung ist unverbindlich. Sie ersetzt nicht den Rat eines Tierarztes oder einer Fachperson für Katzenverhalten. Sie kann als Gesprächsgrundlage bei einer Beratung dienen.", "Esta evaluación es orientativa. No sustituye la opinión de un veterinario ni de un especialista en comportamiento felino. Puede servir como base de conversación en una consulta.")
         val disclaimerPaint = makePaint(9.5f, COLOR_INK_SOFT)
         val disclaimerH = measureStaticTextHeight(disclaimer, CONTENT_W.toInt(), disclaimerPaint)
         pager.ensure(16f + disclaimerH)
@@ -522,9 +529,9 @@ object PdfExporter {
     private fun dessineFooter(canvas: Canvas, pageNum: Int, totalPages: Int) {
         val footerY = PAGE_H - MARGIN - 14f
         drawLine(canvas, MARGIN, footerY - 10f, PAGE_W - MARGIN, footerY - 10f, COLOR_BORDER, 0.5f)
-        val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional assessment", "${appName()}  •  Unverbindliche emotionale Einschätzung")
+        val footerText = t("${appName()}  \u2022  Bilan émotionnel indicatif", "${appName()}  \u2022  Indicative emotional assessment", "${appName()}  •  Unverbindliche emotionale Einschätzung", "${appName()}  •  Evaluación emocional orientativa")
         canvas.drawText(footerText, MARGIN, footerY, makePaint(8f, COLOR_INK_SOFT))
-        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages")
+        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages", "Página $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), footerY, pagePaint)
     }
@@ -539,14 +546,14 @@ object PdfExporter {
         canvas.drawBitmap(qrBitmap, null, Rect(qrLeft, qrTop, qrLeft + qrSize, qrTop + qrSize), null)
         val tx = MARGIN + 14f
         canvas.drawText(
-            t("Document g\u00e9n\u00e9r\u00e9 automatiquement", "Automatically generated document", "Automatisch erstelltes Dokument"),
+            t("Document g\u00e9n\u00e9r\u00e9 automatiquement", "Automatically generated document", "Automatisch erstelltes Dokument", "Documento generado automáticamente"),
             tx, footerTop + 22f, makePaint(9f, COLOR_INK_SOFT)
         )
         canvas.drawText(
-            t("Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.", "Track your cat's progress with the app.", "Verfolgen Sie die Entwicklung Ihrer Katze mit der App."),
+            t("Suivez l\u2019\u00e9volution de votre chat avec l\u2019application.", "Track your cat's progress with the app.", "Verfolgen Sie die Entwicklung Ihrer Katze mit der App.", "Sigue la evolución de tu gato con la aplicación."),
             tx, footerTop + 40f, makePaint(8.5f, COLOR_INK_SOFT)
         )
-        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages")
+        val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages", "Página $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
         canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), PAGE_H - MARGIN - 4f, pagePaint)
     }
@@ -610,18 +617,18 @@ object PdfExporter {
     }
 
     private fun libellePourPriorite(p: PrioriteAction) = when (p) {
-        PrioriteAction.FAIBLE -> t("Priorit\u00e9 faible", "Low priority", "Geringe Priorität")
-        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "Worth monitoring", "Zu beobachten")
-        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Heightened attention", "Erhöhte Aufmerksamkeit")
-        PrioriteAction.URGENTE -> t("Action rapide", "Prompt action", "Rasches Handeln")
+        PrioriteAction.FAIBLE -> t("Priorit\u00e9 faible", "Low priority", "Geringe Priorität", "Prioridad baja")
+        PrioriteAction.MODEREE -> t("\u00c0 surveiller", "Worth monitoring", "Zu beobachten", "A vigilar")
+        PrioriteAction.ELEVEE -> t("Vigilance renforc\u00e9e", "Heightened attention", "Erhöhte Aufmerksamkeit", "Vigilancia reforzada")
+        PrioriteAction.URGENTE -> t("Action rapide", "Prompt action", "Rasches Handeln", "Acción rápida")
     }
 
     private fun aideAEnvisager(analyse: ResultatAnalyse) = when {
-        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
-        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "See a professional soon", "Zeitnah Fachperson hinzuziehen")
-        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
-        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt")
-        else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed", "Tierarzt bei Bedarf")
+        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
+        analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "See a professional soon", "Zeitnah Fachperson hinzuziehen", "Profesional pronto")
+        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
+        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
+        else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed", "Tierarzt bei Bedarf", "Veterinario si hace falta")
     }
 
     private fun generateQrCode(text: String, size: Int): Bitmap {
