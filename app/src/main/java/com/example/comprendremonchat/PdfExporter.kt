@@ -238,6 +238,7 @@ object PdfExporter {
                 .removePrefix("Besoin principal : ")
                 .removePrefix("Main need: ")
                 .removePrefix("Hauptbedürfnis: ")
+                .removePrefix("Necesidad principal: ")
                 .removeSuffix("."),
             t("Aide à envisager", "Support to consider", "Mögliche Unterstützung", "Ayuda a considerar") to aideAEnvisager(analyse)
         )
@@ -336,25 +337,25 @@ object PdfExporter {
         val recapText = when (appLang()) {
             AppLang.DE -> buildString {
                 append("$nom zeigt vor allem ein Profil „${analyse.profil.profilType}“.\n\n")
-                append("Situation: ${texteNiveauSituation(analyse.niveauSituation)}.\n\n")
+                append("Situation: ${niveauRecap(analyse.niveauSituation)}.\n\n")
                 append("Hauptachse: ${libelleAxe(analyse.problemePrincipal)}.\n\n")
                 append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             AppLang.ES -> buildString {
                 append("$nom muestra sobre todo un perfil «${analyse.profil.profilType.lowercase(Locale("es"))}».\n\n")
-                append("Situación: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale("es"))}.\n\n")
+                append("Situación: ${niveauRecap(analyse.niveauSituation)}.\n\n")
                 append("Eje principal: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale("es"))}.\n\n")
                 append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             AppLang.EN -> buildString {
                 append("$nom primarily presents a ${analyse.profil.profilType.lowercase(Locale.ENGLISH)} profile.\n\n")
-                append("Situation: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.ENGLISH)}.\n\n")
+                append("Situation: ${niveauRecap(analyse.niveauSituation)}.\n\n")
                 append("Main axis: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.ENGLISH)}.\n\n")
                 append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
             else -> buildString {
                 append("$nom pr\u00e9sente surtout un profil ${analyse.profil.profilType.lowercase(Locale.FRENCH)}.\n\n")
-                append("Situation\u00a0: ${texteNiveauSituation(analyse.niveauSituation).lowercase(Locale.FRENCH)}.\n\n")
+                append("Situation\u00a0: ${niveauRecap(analyse.niveauSituation)}.\n\n")
                 append("Axe principal\u00a0: ${libelleAxe(analyse.problemePrincipal).lowercase(Locale.FRENCH)}.\n\n")
                 append(besoinPrincipal(analyse.problemePrincipal, niveauAxePrincipal(analyse)))
             }
@@ -623,11 +624,17 @@ object PdfExporter {
         PrioriteAction.URGENTE -> t("Action rapide", "Prompt action", "Rasches Handeln", "Acción rápida")
     }
 
+    private fun niveauRecap(n: NiveauSituation): String = when (n) {
+        NiveauSituation.STABLE -> t("stable", "stable", "stabil", "estable")
+        NiveauSituation.A_TRAVAILLER -> t("\u00e0 travailler", "needs work", "Handlungsbedarf", "por trabajar")
+        NiveauSituation.SENSIBLE -> t("sensible", "sensitive", "heikel", "delicada")
+    }
+
     private fun aideAEnvisager(analyse: ResultatAnalyse) = when {
-        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
+        analyse.aDejaMordu -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario etólogo")
         analyse.prioriteAction == PrioriteAction.URGENTE -> t("Professionnel rapidement", "See a professional soon", "Zeitnah Fachperson hinzuziehen", "Profesional pronto")
-        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
-        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario especialista en comportamiento")
+        analyse.prioriteAction == PrioriteAction.ELEVEE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario etólogo")
+        analyse.niveauSituation == NiveauSituation.SENSIBLE -> t("V\u00e9t\u00e9rinaire comportemental", "Veterinary behaviorist", "Verhaltenstierarzt", "Veterinario etólogo")
         else -> t("V\u00e9t\u00e9rinaire si besoin", "Vet if needed", "Tierarzt bei Bedarf", "Veterinario si hace falta")
     }
 
