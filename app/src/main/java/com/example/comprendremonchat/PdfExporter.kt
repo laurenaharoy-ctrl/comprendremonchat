@@ -223,7 +223,7 @@ object PdfExporter {
         drawRoundRect(canvas, badgeLeft, 140f, badgeLeft + badgeW, 162f, 11f, couleurPriorite)
         canvas.drawText(badgeText, (PAGE_W - badgeTextW) / 2f, 155f, badgePaint)
 
-        drawStaticText(canvas, analyse.profil.phraseHumaine, MARGIN, 170f, CONTENT_W.toInt(),
+        drawStaticText(canvas, phraseHumaineCoherente(analyse, nom), MARGIN, 170f, CONTENT_W.toInt(),
             makePaint(11f, COLOR_INK, italic = true), Layout.Alignment.ALIGN_CENTER)
 
         // Si la couverture déborde, la page suivante reçoit un en-tête
@@ -571,7 +571,7 @@ object PdfExporter {
         )
         val pageLabel = t("Page $pageNum / $totalPages", "Page $pageNum / $totalPages", "Seite $pageNum / $totalPages", "Página $pageNum / $totalPages")
         val pagePaint = makePaint(8f, COLOR_INK_SOFT)
-        canvas.drawText(pageLabel, PAGE_W - MARGIN - pagePaint.measureText(pageLabel), PAGE_H - MARGIN - 4f, pagePaint)
+        canvas.drawText(pageLabel, MARGIN + 14f, footerTop + 80f, pagePaint)
     }
 
     private fun drawStaticText(canvas: Canvas, text: String, x: Float, y: Float, maxWidth: Int, paint: Paint, alignment: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL) {

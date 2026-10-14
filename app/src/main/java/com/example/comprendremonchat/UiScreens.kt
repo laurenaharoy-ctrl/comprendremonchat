@@ -36,6 +36,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.AutoStories
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -647,7 +648,7 @@ fun ResultatScreen(
             PremiumCard(centered = true) {
                 EditorialKicker("${stringResource(R.string.kicker_ressent)} ${nomChatAffiche(nomChat)}", centered = true)
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(analyse.profil.phraseHumaine, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+                Text(phraseHumaineCoherente(analyse, nomChatAffiche(nomChat)), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(14.dp))
                 Text(
                         resumeEmotionnel(analyse.problemePrincipal, niveauAxePrincipal(analyse)), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, color = PremiumPalette.Primary)
@@ -841,7 +842,8 @@ fun ConsultationCard(lieuResidence: Int? = null) {
                 onClick = {
                     val intent = Intent(Intent.ACTION_DIAL, Uri.parse(TELEPHONE_URI))
                     context.startActivity(intent)
-                }
+                },
+                leading = { Icon(Icons.Rounded.Phone, contentDescription = null) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
