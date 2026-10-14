@@ -203,6 +203,9 @@ object PdfExporter {
         val appTitle = appName()
         canvas.drawText(appTitle, (PAGE_W - appTitlePaint.measureText(appTitle)) / 2f, 44f, appTitlePaint)
 
+        val datePaint = makePaint(9f, COLOR_INK_SOFT)
+        canvas.drawText(date, PAGE_W - MARGIN - datePaint.measureText(date), 44f, datePaint)
+
         val nomPaint = makePaint(34f, COLOR_PRIMARY, bold = true)
         canvas.drawText(nom, (PAGE_W - nomPaint.measureText(nom)) / 2f, 96f, nomPaint)
 
