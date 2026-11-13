@@ -1828,7 +1828,7 @@ fun strConsultationDescription(lieu: Int? = null): String {
 }
 fun strConsultationDisclaimer() = "Cette consultation ne remplace pas une consultation vétérinaire et ne constitue pas un accompagnement comportemental complet à elle seule.\n\nEn cas de changement brutal de comportement, douleur, malpropreté soudaine, agressivité inhabituelle ou symptôme physique, consultez d'abord un vétérinaire."
 
-fun strConsultationPrix(lieu: Int? = null) = if (lieu == 0) "Visio : 50 € / 1 h  •  À domicile (Essonne) : 70 € / 1 h" else "Visioconférence : 50 € / 1 h"
+fun strConsultationPrix(lieu: Int? = null) = if (lieu == 0) "Visio : 50 € / 1 h\nÀ domicile (Essonne) : 70 € / 1 h" else "Visioconférence : 50 € / 1 h"
 
 fun strConsultationBouton(lieu: Int? = null) = (if (lieu == 2) TELEPHONE_INTERNATIONAL else TELEPHONE_NATIONAL).replace(" ", "\u00A0")
 
