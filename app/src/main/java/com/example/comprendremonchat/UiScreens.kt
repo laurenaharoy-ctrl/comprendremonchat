@@ -480,7 +480,7 @@ fun AccueilScreen(
                 Spacer(modifier = Modifier.height(6.dp))
                 PrimaryGlowButton(text = stringResource(R.string.btn_demarrer), onClick = onCommencer, leading = { Icon(Icons.Rounded.Pets, contentDescription = null, tint = Color.White) })
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    TuileAccueil(stringResource(R.string.btn_dictionnaire), Icons.Rounded.MenuBook, onDictionnaire, Modifier.weight(1f))
+                    TuileAccueil(tr("Dictionnaire", "Dictionary", "Lexikon", "Diccionario"), Icons.Rounded.MenuBook, onDictionnaire, Modifier.weight(1f))
                     TuileAccueil(stringResource(R.string.btn_alimentation), Icons.Rounded.Star, onAlimentation, Modifier.weight(1f))
                 }
                 if (hasSavedProgress) SecondaryPremiumButton(text = stringResource(R.string.btn_reprendre), onClick = onReprendre, leading = { Icon(Icons.Rounded.AutoStories, contentDescription = null) })

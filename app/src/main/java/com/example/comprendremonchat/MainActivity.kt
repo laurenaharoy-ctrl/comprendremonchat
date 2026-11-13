@@ -589,7 +589,12 @@ fun effacerReponsesMasquees(questions: List<Question>, reponsesChoix: MutableMap
 fun questionDoitEtreAffichee(question: Question, reponsesChoix: Map<String, Int>): Boolean {
     return when (question.id) {
         "vie_interieur" -> reponsesChoix["acces_exterieur"] != 0
-        "proprete_type" -> (reponsesChoix["proprete_stress"] ?: 0) != 0
+        // Le type (urine / selles) n'est demandé que si les besoins hors litière sont occasionnels ou réguliers,
+        // pas pour un épisode exceptionnel
+        "proprete_type" -> (reponsesChoix["proprete_stress"] ?: 0) >= 2
+        // Les précisions sur le comportement ne s'affichent que si l'utilisateur a répondu « Oui » à « a_un_probleme »
+        "apparition", "duree_probleme", "evolution_probleme", "frequence_probleme",
+        "intensite_probleme", "generalisation_probleme" -> reponsesChoix["a_un_probleme"] != 1
         "chaleur_marquage" -> reponsesChoix["sterilise"] == 3 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
         "marquage_habitude_post_sterilisation" -> reponsesChoix["sterilise"] == 1 && (reponsesChoix["marquage_urinaire"] ?: 0) != 0
         "senior_desorientation" -> reponsesChoix["age"] == 3
