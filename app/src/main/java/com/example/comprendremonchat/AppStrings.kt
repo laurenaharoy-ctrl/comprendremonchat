@@ -132,7 +132,7 @@ fun texteVigilanceTraduit(vigilance: NiveauVigilance, nomChat: String): String {
         }
         else -> {
             when (vigilance) {
-                NiveauVigilance.FAIBLE -> "Rien d'urgent ne ressort pour $nom à ce stade."
+                NiveauVigilance.FAIBLE -> "Pour l'instant, rien d'urgent ne ressort pour $nom."
                 NiveauVigilance.MODEREE -> "Quelques points méritent attention pour $nom."
                 NiveauVigilance.ELEVEE -> "Certains éléments justifient une attention rapide pour $nom."
             }
@@ -1796,7 +1796,7 @@ fun showConsultation(): Boolean = appLang() == AppLang.FR
 
 const val CGV_URL = "https://laurenaharoy-ctrl.github.io/comprendremonchat/cgv.html"
 
-const val WEBSITE_URL = "https://comportementaliste91.fr"
+const val WEBSITE_URL = "https://www.laurenaharoy.com/fr/"
 
 const val TELEPHONE_NATIONAL = "06 20 65 78 88"
 

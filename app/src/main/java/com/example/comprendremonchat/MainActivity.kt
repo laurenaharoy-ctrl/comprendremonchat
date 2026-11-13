@@ -122,6 +122,10 @@ fun ComprendreMonchatApp() {
     val questions = remember { questionsApplication() }
 
     var indexQuestion by remember { mutableStateOf(0) }
+
+    var montrerLettre by remember { mutableStateOf(false) }
+
+    var lettreVue by remember { mutableStateOf(false) }
     var screen by remember { mutableStateOf<AppScreen>(AppScreen.Accueil) }
     var hasSavedProgress by remember { mutableStateOf(false) }
     var isLoaded by remember { mutableStateOf(false) }
@@ -240,7 +244,8 @@ Envoyé depuis l'application Comprendre mon chat
     BackHandler(enabled = screen != AppScreen.Accueil && screen != AppScreen.Onboarding) {
         when (screen) {
             AppScreen.Questionnaire -> {
-                if (indexQuestion > 0) { indexQuestion--; saveState() }
+                if (montrerLettre) montrerLettre = false
+                else if (indexQuestion > 0) { indexQuestion--; saveState() }
                 else { screen = AppScreen.Accueil; saveState() }
             }
             AppScreen.Chargement -> { screen = AppScreen.Questionnaire; saveState() }
@@ -265,26 +270,24 @@ Envoyé depuis l'application Comprendre mon chat
                 val titreEcran = when (screen) {
                     AppScreen.Accueil -> ""
                     AppScreen.Onboarding -> ""
-                    AppScreen.Questionnaire -> tr("Questionnaire", "Questionnaire", "Fragebogen", "Cuestionario")
+                    AppScreen.Questionnaire -> ""
                     AppScreen.Chargement -> tr("Analyse", "Analysis", "Analyse", "Análisis")
                     AppScreen.Resultat -> tr("Résultat", "Results", "Ergebnis", "Resultado")
-                    AppScreen.Dictionnaire -> tr("Dictionnaire comportemental", "Behavioral dictionary", "Verhaltenslexikon", "Diccionario de comportamiento")
-                    is AppScreen.DictionnaireDetail -> {
-                        val ficheId = (screen as AppScreen.DictionnaireDetail).ficheId
-                        context.getString(R.string.kicker_fiche_comportementale)
-                    }
-                    AppScreen.Alimentation -> tr("Alimentation", "Nutrition", "Ernährung", "Alimentación")
+                    AppScreen.Dictionnaire -> ""
+                    is AppScreen.DictionnaireDetail -> ""
+                    AppScreen.Alimentation -> ""
                     AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung", "Reportar un problema")
                     AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones")
                     is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung", "Detalle de la evaluación")
-                    AppScreen.Parametres -> tr("Paramètres", "Settings", "Einstellungen", "Ajustes")
+                    AppScreen.Parametres -> ""
                 }
 
                 val onBack: (() -> Unit)? = if (screen != AppScreen.Accueil && screen != AppScreen.Chargement) {
                     {
                         when (screen) {
                             AppScreen.Questionnaire -> {
-                                if (indexQuestion > 0) indexQuestion--
+                                if (montrerLettre) montrerLettre = false
+                                else if (indexQuestion > 0) indexQuestion--
                                 else screen = AppScreen.Accueil
                                 saveState()
                             }
@@ -340,7 +343,8 @@ Envoyé depuis l'application Comprendre mon chat
                     }
                 }
 
-                PremiumTopBarWithActions(
+                // Pas de barre du haut pendant l'introduction : elle recouvrait le bouton « Passer »
+                if (screen != AppScreen.Onboarding) PremiumTopBarWithActions(
                     title = titreEcran,
                     onBack = onBack,
                     actions = actions
@@ -370,7 +374,7 @@ Envoyé depuis l'application Comprendre mon chat
                         onCommencer = {
                             reponsesTexte.clear()
                             reponsesChoix.clear()
-                            indexQuestion = 0
+                            indexQuestion = 0; lettreVue = false
                             screen = AppScreen.Questionnaire
                             clearSavedState()
                             saveState()
@@ -382,7 +386,14 @@ Envoyé depuis l'application Comprendre mon chat
                 }
 
                 AppScreen.Questionnaire -> {
-                    if (questionsVisibles.isNotEmpty()) {
+                    if (montrerLettre) {
+                        LettreMiCheminScreen(
+                            modifier = Modifier.padding(padding),
+                            nomChat = reponsesTexte["nom_chat"].orEmpty(),
+                            onContinuer = { montrerLettre = false },
+                            onPause = { montrerLettre = false; screen = AppScreen.Accueil; saveState() }
+                        )
+                    } else if (questionsVisibles.isNotEmpty()) {
                         val question = questionsVisibles[indexQuestion]
                         QuestionnaireScreen(
                             modifier = Modifier.padding(padding),
@@ -396,7 +407,14 @@ Envoyé depuis l'application Comprendre mon chat
                             onValeurChangee = { reponsesTexte[question.id] = it; saveState() },
                             onChoixSelectionne = { reponsesChoix[question.id] = it; effacerReponsesMasquees(questions, reponsesChoix); saveState() },
                             onSuivant = {
-                                if (indexQuestion < questionsVisibles.lastIndex) indexQuestion++
+                                if (indexQuestion < questionsVisibles.lastIndex) {
+                                    indexQuestion++
+                                    // Lettre d'encouragement à mi-parcours (une fois par session)
+                                    if (!lettreVue && questionsVisibles.size >= 10 && indexQuestion == questionsVisibles.size / 2) {
+                                        lettreVue = true
+                                        montrerLettre = true
+                                    }
+                                }
                                 else screen = AppScreen.Chargement
                                 saveState()
                             }
@@ -462,7 +480,7 @@ Envoyé depuis l'application Comprendre mon chat
                         onRecommencer = {
                             reponsesTexte.clear()
                             reponsesChoix.clear()
-                            indexQuestion = 0
+                            indexQuestion = 0; lettreVue = false
                             screen = AppScreen.Accueil
                             clearSavedState()
                         },
