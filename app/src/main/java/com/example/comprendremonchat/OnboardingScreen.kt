@@ -66,6 +66,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import com.laurena.comprendremonchat.R
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
 
 data class OnboardingSlide(
     val kicker: String,
@@ -91,7 +93,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "Comment ça marche",
-            titre = "Un questionnaire, quatre dimensions",
+            titre = "",
             description = "En quelques minutes, vous explorez les quatre axes qui façonnent le comportement de votre chat au quotidien.",
             illustrationType = IllustrationType.QUATRE_AXES,
             features = listOf(
@@ -103,12 +105,12 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "Ce que vous obtenez",
-            titre = "Un bilan personnalisé complet",
-            description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, un plan d'action et un PDF à partager avec votre vétérinaire.",
+            titre = "",
+            description = "À la fin du questionnaire, vous recevez un bilan détaillé avec des conseils concrets, les premières actions à mettre en place et un PDF à partager avec votre vétérinaire.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
                 Icons.Rounded.CheckCircle to "Bilan émotionnel",
-                Icons.Rounded.PictureAsPdf to "Export PDF 4 pages",
+                Icons.Rounded.PictureAsPdf to "Export PDF",
                 Icons.Rounded.History to "Historique des bilans"
             )
         )
@@ -122,7 +124,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "How it works",
-            titre = "One questionnaire, four dimensions",
+            titre = "",
             description = "In just a few minutes, you explore the four axes that shape your cat's everyday behavior.",
             illustrationType = IllustrationType.QUATRE_AXES,
             features = listOf(
@@ -134,12 +136,12 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "What you get",
-            titre = "A complete personalized assessment",
-            description = "At the end of the questionnaire, you receive a detailed assessment with practical advice, an action plan, and a PDF to share with your vet.",
+            titre = "",
+            description = "At the end of the questionnaire, you receive a detailed assessment with practical advice, the first steps to take, and a PDF to share with your vet.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
                 Icons.Rounded.CheckCircle to "Emotional assessment",
-                Icons.Rounded.PictureAsPdf to "4-page PDF export",
+                Icons.Rounded.PictureAsPdf to "PDF export",
                 Icons.Rounded.History to "Assessment history"
             )
         )
@@ -153,7 +155,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "So funktioniert’s",
-            titre = "Ein Fragebogen, vier Dimensionen",
+            titre = "",
             description = "In wenigen Minuten erkunden Sie die vier Achsen, die das Verhalten Ihrer Katze im Alltag prägen.",
             illustrationType = IllustrationType.QUATRE_AXES,
             features = listOf(
@@ -165,12 +167,12 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "Was Sie erhalten",
-            titre = "Eine vollständige, persönliche Einschätzung",
-            description = "Am Ende des Fragebogens erhalten Sie eine ausführliche Einschätzung mit konkreten Tipps, einem Aktionsplan und einem PDF, das Sie mit Ihrem Tierarzt teilen können.",
+            titre = "",
+            description = "Am Ende des Fragebogens erhalten Sie eine ausführliche Einschätzung mit konkreten Tipps, den ersten Schritten zur Umsetzung und einem PDF, das Sie mit Ihrem Tierarzt teilen können.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
                 Icons.Rounded.CheckCircle to "Emotionale Einschätzung",
-                Icons.Rounded.PictureAsPdf to "4-seitiger PDF-Export",
+                Icons.Rounded.PictureAsPdf to "PDF-Export",
                 Icons.Rounded.History to "Verlauf der Einschätzungen"
             )
         )
@@ -184,7 +186,7 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "Cómo funciona",
-            titre = "Un cuestionario, cuatro dimensiones",
+            titre = "",
             description = "En pocos minutos, exploras los cuatro ejes que dan forma al comportamiento de tu gato en el día a día.",
             illustrationType = IllustrationType.QUATRE_AXES,
             features = listOf(
@@ -196,8 +198,8 @@ fun onboardingSlides(): List<OnboardingSlide> = trList(
         ),
         OnboardingSlide(
             kicker = "Lo que obtienes",
-            titre = "Una evaluación personalizada y completa",
-            description = "Al final del cuestionario, recibes una evaluación detallada con consejos concretos, un plan de acción y un PDF para compartir con tu veterinario.",
+            titre = "",
+            description = "Al final del cuestionario, recibes una evaluación detallada con consejos concretos, las primeras acciones que poner en marcha y un PDF para compartir con tu veterinario.",
             illustrationType = IllustrationType.BILAN_COMPLET,
             features = listOf(
                 Icons.Rounded.CheckCircle to "Evaluación emocional",
@@ -214,7 +216,13 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
     val pagerState = rememberPagerState(pageCount = { slides.size })
     val scope = rememberCoroutineScope()
 
+    val couleurPatte = if (isSystemInDarkTheme()) PremiumPalette.PrimarySoft.copy(alpha = 0.09f) else PremiumPalette.Primary.copy(alpha = 0.07f)
     AppBackground {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val t = 20.dp.toPx()
+            traceDePattes(Offset(size.width * 0.04f, size.height * 0.30f), Offset(size.width * 0.30f, -t), 4, t, couleurPatte)
+            traceDePattes(Offset(size.width + t, size.height * 0.80f), Offset(size.width * 0.62f, size.height * 1.02f), 4, t, couleurPatte)
+        }
         Column(
             modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)
         ) {
@@ -277,76 +285,69 @@ fun OnboardingScreen(onTerminer: () -> Unit) {
 
 @Composable
 fun OnboardingSlideContent(slide: OnboardingSlide) {
-    val hasFeatures = slide.features.isNotEmpty()
+    // Les 3 pages suivent exactement la même structure : titre, (accroche), illustration, texte, complément
+    val isDark = isSystemInDarkTheme()
+    val bienvenue = slide.illustrationType == IllustrationType.CHAT_LOGO
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (!hasFeatures) {
-            Text(slide.titre, style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center, lineHeight = 28.sp)
-            Spacer(modifier = Modifier.height(16.dp))
+        Text(if (bienvenue) slide.titre else slide.kicker, style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold, color = marronTexte(),
+            textAlign = TextAlign.Center)
+        if (bienvenue) {
+            Spacer(modifier = Modifier.height(18.dp))
+            Text(tr("Mieux le comprendre pour mieux l'accompagner", "Understand them better to support them better", "Sie besser verstehen, um sie besser zu begleiten", "Comprenderlo mejor para acompañarlo mejor"),
+                style = styleDoux().copy(fontSize = 18.sp, lineHeight = 25.sp), color = marronTexte(), textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(18.dp))
+        } else {
+            Spacer(modifier = Modifier.height(18.dp))
         }
 
-        val illustrationSize = if (hasFeatures) 130.dp else 200.dp
-        Box(
-            modifier = Modifier.size(illustrationSize).clip(CircleShape)
-                .background(Brush.radialGradient(listOf(PremiumPalette.PaperWarm, PremiumPalette.Paper))),
-            contentAlignment = Alignment.Center
-        ) {
-            when (slide.illustrationType) {
-                IllustrationType.CHAT_LOGO -> Image(
-                    painter = painterResource(id = R.drawable.logo_accueil),
+        Box(modifier = Modifier.fillMaxWidth().height(150.dp), contentAlignment = Alignment.Center) {
+            if (bienvenue) {
+                Box(modifier = Modifier.matchParentSize().background(Brush.radialGradient(listOf(Color.White.copy(alpha = if (isDark) 0.06f else 0.6f), Color.Transparent))))
+                Image(painter = painterResource(id = R.drawable.logo_accueil_rogne),
                     contentDescription = tr("Logo Comprendre mon chat", "Understanding My Cat logo", "Logo Meine Katze verstehen", "Logotipo de Comprender a mi gato"),
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
-                    contentScale = ContentScale.Fit
-                )
-                IllustrationType.QUATRE_AXES -> QuatreAxesIllustration()
-                IllustrationType.BILAN_COMPLET -> BilanIllustration()
+                    modifier = Modifier.fillMaxHeight(), contentScale = ContentScale.Fit)
+            } else {
+                Box(
+                    modifier = Modifier.size(150.dp).clip(CircleShape)
+                        .background(Brush.radialGradient(listOf(PremiumPalette.PaperWarm, PremiumPalette.Paper))),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (slide.illustrationType == IllustrationType.QUATRE_AXES) QuatreAxesIllustration() else BilanIllustration()
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(if (hasFeatures) 16.dp else 20.dp))
+        Spacer(modifier = Modifier.height(18.dp))
+        Text(slide.description, style = styleDoux().copy(fontSize = 17.sp, lineHeight = 24.sp),
+            color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.height(if (bienvenue) 28.dp else 16.dp))
 
-        Text(slide.kicker.uppercase(), style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold, color = PremiumPalette.PrimarySoft,
-            letterSpacing = 2.sp, textAlign = TextAlign.Center)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (hasFeatures) {
-            Text(slide.titre, style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center, lineHeight = 28.sp)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        Text(slide.description, style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center, lineHeight = 22.sp)
-
-        if (hasFeatures) {
-            Spacer(modifier = Modifier.height(14.dp))
+        if (bienvenue) {
+            Text(tr("Créée par Lauréna Haroy\ncomportementaliste animalier", "Created by Lauréna Haroy\nanimal behaviourist", "Entwickelt von Lauréna Haroy\nVerhaltensberaterin für Tiere", "Creada por Lauréna Haroy\nespecialista en comportamiento animal"),
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+        } else {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 slide.features.forEach { (icon, label) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
-                            .background(PremiumPalette.PaperSoft.copy(alpha = 0.7f))
+                            .background(if (isDark) Color(0xFF231B17) else PremiumPalette.PaperSoft)
+                            .border(1.dp, if (isDark) Color(0xFF56433B) else PremiumPalette.Border, RoundedCornerShape(14.dp))
                             .padding(horizontal = 14.dp, vertical = 8.dp)
                     ) {
                         Box(
-                            modifier = Modifier.size(30.dp).clip(CircleShape)
-                                .background(PremiumPalette.Primary.copy(alpha = 0.10f)),
+                            modifier = Modifier.size(30.dp).clip(CircleShape).background(PremiumPalette.Primary),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(icon, contentDescription = null, tint = PremiumPalette.Primary,
-                                modifier = Modifier.size(16.dp))
+                            Icon(icon, contentDescription = null, tint = Beige, modifier = Modifier.size(16.dp))
                         }
-                        Text(label, style = MaterialTheme.typography.bodySmall,
+                        Text(label, style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
