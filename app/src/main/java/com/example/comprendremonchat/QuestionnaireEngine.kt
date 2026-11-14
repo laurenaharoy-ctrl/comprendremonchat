@@ -745,7 +745,7 @@ object QuestionnaireEngine {
             profil = profil, vigilance = vigilance, niveauSituation = niveauSituation, contexte = contexte,
             problemePrincipal = problemePrincipal,
             problemesImportants = determinerProblemesImportants(securite, lien, instincts, cohabitation),
-            explicationPrincipale = explicationProblemeTraduit(problemePrincipal, securite, lien, instincts, cohabitation, reponsesChoix),
+            explicationPrincipale = explicationProblemeTraduit(problemePrincipal, securite, lien, instincts, cohabitation, reponsesChoix, niveauSituation == NiveauSituation.STABLE),
             conseilPrincipal = conseilPrincipalTraduit(problemePrincipal, securite, lien, instincts, cohabitation),
             conseilsPratiques = genererConseilsPratiquesToTraduit(reponsesTexte["nom_chat"].orEmpty(), reponsesChoix, securite, lien, instincts, cohabitation),
             planAction = planAction,
