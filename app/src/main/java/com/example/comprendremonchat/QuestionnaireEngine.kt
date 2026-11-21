@@ -280,6 +280,23 @@ fun estFemelleEntiere(reponsesChoix: Map<String, Int>): Boolean =
 
 object QuestionnaireEngine {
 
+    // ── Griffure / morsure : nature, fréquence et période ──
+    // nature_griffure : 0 = pincement ou coup de patte pour dire « stop », 1 = vraie attaque
+    // frequence_griffure : 0 = une fois ou rarement, 1 = de temps en temps, 2 = souvent
+    // quand_griffure : 0 = uniquement quand il était chaton, 1 = ces derniers mois, 2 = il y a plus d'un an
+    private fun aGriffe(r: Map<String, Int>) = r["a_deja_griffe_mordu"] == 1 && r["quand_griffure"] != 0
+    /** Vraie attaque unique, il y a plus d'un an : priorité élevée mais pas urgente. */
+    fun griffureAncienneUnique(r: Map<String, Int>): Boolean =
+        aGriffe(r) && r["nature_griffure"] == 1 && r["quand_griffure"] == 2 && r["frequence_griffure"] == 0
+    /** Vraie attaque récente ou répétée (ou détails non renseignés) : signal critique. */
+    fun griffureForte(r: Map<String, Int>): Boolean =
+        aGriffe(r) && r["nature_griffure"] != 0 && !griffureAncienneUnique(r)
+    /** « Stop » (pincement, coup de patte) fréquents : à travailler, sans urgence. */
+    fun griffureStopFrequent(r: Map<String, Int>): Boolean =
+        aGriffe(r) && r["nature_griffure"] == 0 && r["frequence_griffure"] == 2
+    /** Griffure ou morsure qui justifie l'alerte « morsure » (vraie attaque, récente ou ancienne). */
+    fun griffurePesante(r: Map<String, Int>): Boolean = griffureForte(r) || griffureAncienneUnique(r)
+
     fun convertirChoixEnPoints(question: QuestionChoix, indexChoisi: Int): Int {
         val scoreBase = question.scoreParOption?.getOrNull(indexChoisi) ?: when (indexChoisi) {
             0 -> 0; 1 -> 1; 2 -> 2; 3 -> 3; else -> 0
@@ -333,7 +350,10 @@ object QuestionnaireEngine {
     fun calculerNiveauVigilance(questions: List<Question>, reponsesChoix: Map<String, Int>,
                                 securite: Int, lien: Int, instincts: Int, cohabitation: Int, contexte: ContexteAnalyse): NiveauVigilance {
         val questionsChoix = questions.filterIsInstance<QuestionChoix>()
-        val critiqueDetecte = questionsChoix.any { q -> q.signalCritique && (reponsesChoix[q.id] ?: 0) > 0 }
+        val critiqueDetecte = questionsChoix.any { q ->
+            q.signalCritique && (reponsesChoix[q.id] ?: 0) > 0 &&
+                !(q.id == "a_deja_griffe_mordu" && !griffureForte(reponsesChoix))
+        }
         val nbAlertes = questionsChoix.count { q -> q.signalAlerte && (reponsesChoix[q.id] ?: 0) >= 2 }
         val scoreMax = maxOf(securite, lien, instincts, cohabitation)
         val maleEntier = estMaleEntier(reponsesChoix)
@@ -355,14 +375,15 @@ object QuestionnaireEngine {
     fun calculerNiveauSituation(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse,
                                 securite: Int, lien: Int, instincts: Int, cohabitation: Int): NiveauSituation {
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
-        val signalCritique = contexte.physique >= 4 ||
-                reponsesChoix["a_deja_griffe_mordu"] == 1
+        val signalCritique = contexte.physique >= 4 || griffureForte(reponsesChoix)
+        val griffureATravailler = griffureAncienneUnique(reponsesChoix) || griffureStopFrequent(reponsesChoix)
 
         return when {
             signalCritique -> NiveauSituation.SENSIBLE
-            maxAxe <= 29 && contexte.scoreContexte < 5 -> NiveauSituation.STABLE
+            maxAxe <= 29 && contexte.scoreContexte < 5 && !griffureATravailler -> NiveauSituation.STABLE
             reponsesChoix["evolution_probleme"] == 2 && reponsesChoix["intensite_probleme"] == 3 -> NiveauSituation.SENSIBLE
             contexte.scoreContexte >= 10 -> NiveauSituation.SENSIBLE
+            griffureATravailler -> NiveauSituation.A_TRAVAILLER
             contexte.scoreContexte >= 5 -> NiveauSituation.A_TRAVAILLER
             maxAxe >= 55 -> NiveauSituation.A_TRAVAILLER
             else -> NiveauSituation.STABLE
@@ -416,15 +437,16 @@ object QuestionnaireEngine {
     fun determinerPrioriteAction(reponsesChoix: Map<String, Int>, contexte: ContexteAnalyse,
                                  securite: Int, lien: Int, instincts: Int, cohabitation: Int): PrioriteAction {
         val maxAxe = maxOf(securite, lien, instincts, cohabitation)
-        val signalCritique = contexte.physique >= 4 ||
-                reponsesChoix["a_deja_griffe_mordu"] == 1
+        val signalCritique = contexte.physique >= 4 || griffureForte(reponsesChoix)
 
         return when {
             signalCritique && reponsesChoix["cible_agression"] == 1 -> PrioriteAction.ELEVEE
             signalCritique -> PrioriteAction.URGENTE
-            maxAxe <= 29 && contexte.scoreContexte < 5 -> PrioriteAction.FAIBLE
+            griffureAncienneUnique(reponsesChoix) -> PrioriteAction.ELEVEE
+            maxAxe <= 29 && contexte.scoreContexte < 5 && !griffureStopFrequent(reponsesChoix) -> PrioriteAction.FAIBLE
             contexte.scoreContexte >= 10 -> PrioriteAction.ELEVEE
             maxAxe >= 75 -> PrioriteAction.ELEVEE
+            griffureStopFrequent(reponsesChoix) -> PrioriteAction.MODEREE
             contexte.scoreContexte >= 5 -> PrioriteAction.MODEREE
             maxAxe >= 55 -> PrioriteAction.MODEREE
             else -> PrioriteAction.FAIBLE
@@ -753,7 +775,7 @@ object QuestionnaireEngine {
             raisonSituation = genererRaisonSituationTraduit(reponsesChoix, contexte, niveauSituation),
             messageAide = genererMessageAideTraduit(reponsesChoix, contexte, niveauSituation, reponsesTexte["nom_chat"].orEmpty(), securite, lien, instincts, cohabitation),
             apparitionBrutale = reponsesChoix["apparition"] == 1,
-            aDejaMordu = reponsesChoix["a_deja_griffe_mordu"] == 1,
+            aDejaMordu = griffurePesante(reponsesChoix),
             hypothesePrincipale = hypothesePrincipale, prioriteAction = prioriteAction,
             prioriteImmediate = prioriteImmediate, explicationResultat = explicationResultat,
             facteursAggravants = facteursAggravants, facteursProtecteurs = facteursProtecteurs,
@@ -1187,6 +1209,30 @@ fun questionsApplication(): List<Question> {
             trList(listOf("Non, jamais", "Oui, cela s'est déjà produit"), listOf("No, never", "Yes, it has happened"), listOf("Nein, nie", "Ja, das ist schon vorgekommen"),
                 listOf("No, nunca", "Sí, ya ha ocurrido")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 4), poids = 2, signalCritique = true),
+
+        QuestionChoix("nature_griffure",
+            tr("Comment cela s'est-il passé ?", "How did it happen?", "Wie ist es passiert?", "¿Cómo ocurrió?"),
+            trList(listOf("Un pincement ou un coup de patte pour dire « stop » (pendant les caresses, la manipulation, le jeu)", "Une vraie attaque (morsure ou griffure appuyée, sans prévenir ou en poursuivant la personne)"),
+                listOf("A nip or a swipe of the paw to say \"stop\" (during petting, handling or play)", "A real attack (a hard bite or scratch, without warning or while chasing the person)"),
+                listOf("Ein Zwicken oder ein Pfotenhieb, um „Stopp“ zu sagen (beim Streicheln, Anfassen oder Spielen)", "Ein echter Angriff (fester Biss oder Kratzer, ohne Vorwarnung oder indem sie die Person verfolgt)"),
+                listOf("Un pellizco o un zarpazo para decir «basta» (durante las caricias, la manipulación o el juego)", "Un verdadero ataque (mordisco o arañazo fuerte, sin avisar o persiguiendo a la persona)")),
+            axe = Axe.COHABITATION, scoreParOption = listOf(0, 0)),
+
+        QuestionChoix("frequence_griffure",
+            tr("À quelle fréquence ?", "How often?", "Wie oft?", "¿Con qué frecuencia?"),
+            trList(listOf("Une fois ou rarement", "De temps en temps", "Souvent"),
+                listOf("Once or rarely", "From time to time", "Often"),
+                listOf("Einmal oder selten", "Ab und zu", "Oft"),
+                listOf("Una vez o rara vez", "De vez en cuando", "A menudo")),
+            axe = Axe.COHABITATION, scoreParOption = listOf(0, 0, 0)),
+
+        QuestionChoix("quand_griffure",
+            tr("Quand ?", "When?", "Wann?", "¿Cuándo?"),
+            trList(listOf("Uniquement quand il était chaton", "Ces derniers mois", "Il y a plus d'un an"),
+                listOf("Only when it was a kitten", "In the last few months", "More than a year ago"),
+                listOf("Nur als Kätzchen", "In den letzten Monaten", "Vor mehr als einem Jahr"),
+                listOf("Solo cuando era cachorro", "En los últimos meses", "Hace más de un año")),
+            axe = Axe.COHABITATION, scoreParOption = listOf(0, 0, 0)),
 
         QuestionChoix("cible_agression",
             tr("Envers qui cela s'est-il produit ?", "Who was it directed at?", "Gegen wen hat sich das gerichtet?", "¿Hacia quién fue?"),

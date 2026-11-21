@@ -944,8 +944,8 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["proprete_type"] == 2 -> "Seek care urgently if you notice signs of a urinary blockage in $nom (crying in pain while urinating, unsuccessful trips to the litter box, no urine for over 24 hours). As for the stools, a vet visit is also worth it if diarrhea persists, or if you notice blood or unexplained weight loss."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Given $nom's age and the signs described, a veterinary check-up is recommended as a priority to rule out or confirm age-related cognitive decline before considering a behavioral approach."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "This marking has become a learned habit rather than a hormonal behavior — a feline behavior consultant can help $nom unlearn this specific behavior, which often takes longer than addressing stress-related marking."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or to a living arrangement between the animals that needs a fresh start — a feline behavior consultant can help you rebuild a safer, more gradual introduction between them."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "A scratch or bite toward a person has been reported — support from a veterinary behaviorist or feline behavior consultant is recommended for $nom, both for your safety and $nom's well-being."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> "A scratch or bite toward another animal has been reported. This often points to a lack of socialization or to a living arrangement between the animals that needs a fresh start — a feline behavior consultant can help you rebuild a safer, more gradual introduction between them."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) -> "A scratch or bite toward a person has been reported — support from a veterinary behaviorist or feline behavior consultant is recommended for $nom, both for your safety and $nom's well-being."
                 contexte.physique >= 4 -> "Physical signs have been noted — a veterinary consultation is recommended as a priority for $nom before any behavioral approach."
                 reponsesChoix["surtoilettage"] == 1 -> "Over-grooming can have a medical cause — veterinary advice is recommended for $nom before addressing the behavior."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Urine marking in a neutered cat warrants a veterinary check-up for $nom first to rule out a urinary infection."
@@ -960,8 +960,8 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["proprete_type"] == 2 -> "Suchen Sie rasch einen Tierarzt auf, wenn Sie bei $nom Anzeichen eines Harnverschlusses bemerken (schmerzhaftes Miauen beim Urinieren, erfolglose Gänge zum Katzenklo, seit mehr als 24 Stunden kein Urin). Beim Kotabsatz bleibt ein Tierarztbesuch sinnvoll bei anhaltendem Durchfall, Blut oder unerklärlichem Gewichtsverlust."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Angesichts des Alters von $nom und der beschriebenen Anzeichen wird vorrangig eine tierärztliche Untersuchung empfohlen, um einen altersbedingten kognitiven Abbau auszuschließen oder zu bestätigen, bevor an einen verhaltensbezogenen Ansatz gedacht wird."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Diese Markierung ist eher zu einer erlernten Gewohnheit als zu einem hormonellen Verhalten geworden – eine Fachperson für Katzenverhalten kann $nom helfen, dieses Verhalten zu verlernen, was oft länger dauert als bei einer stressbedingten Markierung."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Das deutet oft auf mangelnde Sozialisierung oder ein Zusammenleben hin, das neu aufgebaut werden sollte – eine Fachperson für Katzenverhalten kann Ihnen helfen, eine schrittweisere und sicherere Zusammenführung der Tiere zu gestalten."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet – eine Begleitung durch einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten wird für $nom empfohlen, sowohl für Ihre Sicherheit als auch für ihr Wohlbefinden."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> "Es wurde ein Kratzer oder Biss gegenüber einem anderen Tier gemeldet. Das deutet oft auf mangelnde Sozialisierung oder ein Zusammenleben hin, das neu aufgebaut werden sollte – eine Fachperson für Katzenverhalten kann Ihnen helfen, eine schrittweisere und sicherere Zusammenführung der Tiere zu gestalten."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) -> "Es wurde ein Kratzer oder Biss gegenüber einem Menschen gemeldet – eine Begleitung durch einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten wird für $nom empfohlen, sowohl für Ihre Sicherheit als auch für ihr Wohlbefinden."
                 contexte.physique >= 4 -> "Es wurden körperliche Anzeichen festgestellt – für $nom wird vorrangig ein Tierarztbesuch empfohlen, vor jedem verhaltensbezogenen Ansatz."
                 reponsesChoix["surtoilettage"] == 1 -> "Übermäßige Fellpflege kann eine medizinische Ursache haben – für $nom wird tierärztlicher Rat empfohlen, bevor verhaltensbezogen gehandelt wird."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Harnmarkieren bei einer kastrierten Katze sollte bei $nom zuerst tierärztlich abgeklärt werden, um eine Harnwegsinfektion auszuschließen."
@@ -976,8 +976,8 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["proprete_type"] == 2 -> "Consulta rápidamente si observas en $nom señales de obstrucción urinaria (maullidos de dolor al orinar, idas al arenero sin resultado, ausencia de orina desde hace más de 24 horas). En cuanto a las heces, también conviene consultar si la diarrea persiste, si hay sangre o una pérdida de peso sin explicación."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Teniendo en cuenta la edad de $nom y los signos descritos, se recomienda en primer lugar una revisión veterinaria para descartar o confirmar un deterioro cognitivo asociado a la edad antes de plantear un enfoque de comportamiento."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Este marcaje se ha convertido en un hábito adquirido más que en un comportamiento hormonal: un especialista en comportamiento felino puede ayudar a $nom a desaprender este gesto concreto, algo que suele llevar más tiempo que un marcaje relacionado con el estrés."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Se ha señalado un arañazo o una mordedura a otro animal. A menudo esto indica una falta de socialización o una convivencia que hay que replantear: un especialista en comportamiento felino puede ayudarte a reconstruir una presentación más progresiva y segura entre los animales."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Se ha señalado un arañazo o una mordedura a una persona: se recomienda para $nom el acompañamiento de un veterinario etólogo o de un especialista en comportamiento felino, tanto por tu seguridad como por su bienestar."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> "Se ha señalado un arañazo o una mordedura a otro animal. A menudo esto indica una falta de socialización o una convivencia que hay que replantear: un especialista en comportamiento felino puede ayudarte a reconstruir una presentación más progresiva y segura entre los animales."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) -> "Se ha señalado un arañazo o una mordedura a una persona: se recomienda para $nom el acompañamiento de un veterinario etólogo o de un especialista en comportamiento felino, tanto por tu seguridad como por su bienestar."
                 contexte.physique >= 4 -> "Se han detectado signos físicos: se recomienda en primer lugar una consulta veterinaria para $nom antes de cualquier enfoque de comportamiento."
                 reponsesChoix["surtoilettage"] == 1 -> "El exceso de acicalamiento puede tener un origen médico: se aconseja la opinión de un veterinario para $nom antes de actuar sobre el comportamiento."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "El marcaje con orina en un gato esterilizado justifica primero una revisión veterinaria para $nom, para descartar una infección urinaria."
@@ -992,8 +992,8 @@ fun genererMessageAideTraduit(reponsesChoix: Map<String, Int>, contexte: Context
                 reponsesChoix["proprete_type"] == 2 -> "Consultez rapidement si vous observez chez $nom des signes de blocage urinaire (miaulements de douleur en urinant, allers-retours infructueux à la litière, absence d'urine depuis plus de 24h). Pour l'aspect selles, une consultation reste utile en cas de diarrhée persistante, de sang, ou de perte de poids inexpliquée."
                 reponsesChoix["age"] == 3 && (reponsesChoix["senior_desorientation"] == 2 || reponsesChoix["senior_vocalise_nocturne"] == 2) -> "Compte tenu de l'âge de $nom et des signes décrits, un bilan vétérinaire est recommandé en priorité pour écarter ou confirmer un déclin cognitif lié à l'âge avant d'envisager une approche comportementale."
                 reponsesChoix["marquage_habitude_post_sterilisation"] == 0 -> "Ce marquage est devenu une habitude acquise plutôt qu'un comportement hormonal — un comportementaliste félin peut aider $nom à désapprendre ce geste précis, ce qui prend souvent plus de temps qu'un marquage lié au stress."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> "Une griffure ou morsure envers un autre animal a été signalée. Cela évoque souvent un manque de sociabilisation ou une cohabitation à reprendre autrement — un comportementaliste félin peut vous aider à reconstruire une présentation plus progressive et sécurisée entre les animaux."
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> "Une griffure ou morsure envers une personne a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom, à la fois pour votre sécurité et pour son bien-être."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> "Une griffure ou morsure envers un autre animal a été signalée. Cela évoque souvent un manque de sociabilisation ou une cohabitation à reprendre autrement — un comportementaliste félin peut vous aider à reconstruire une présentation plus progressive et sécurisée entre les animaux."
+                QuestionnaireEngine.griffurePesante(reponsesChoix) -> "Une griffure ou morsure envers une personne a été signalée — un accompagnement par un vétérinaire comportementaliste ou un comportementaliste félin est recommandé pour $nom, à la fois pour votre sécurité et pour son bien-être."
                 contexte.physique >= 4 -> "Des signes physiques ont été relevés — une consultation vétérinaire est recommandée en priorité pour $nom avant toute approche comportementale."
                 reponsesChoix["surtoilettage"] == 1 -> "Le surtoilettage peut avoir une origine médicale — un avis vétérinaire est conseillé pour $nom avant d'agir sur le plan comportemental."
                 reponsesChoix["marquage_urinaire"] == 1 && estSterilise(reponsesChoix) -> "Le marquage urinaire chez un chat stérilisé mérite d'abord un bilan vétérinaire pour $nom pour écarter une infection urinaire."
@@ -1085,10 +1085,10 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
     return when (appLang()) {
         AppLang.EN -> {
             when {
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: rework the introduction with other animals",
+                QuestionnaireEngine.griffureForte(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Immediate priority: rework the introduction with other animals",
                     "Since there has already been a scratch or bite toward another animal, living together needs to be rebuilt calmly for $nom.",
                     listOf("Temporarily separate the animals in conflict.", "Consider support from a feline behavior consultant for a gradual reintroduction."))
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a professional",
+                QuestionnaireEngine.griffureForte(reponsesChoix) -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a professional",
                     "Since there has already been a scratch or bite toward a person, the situation should not be minimized for $nom.",
                     listOf("Avoid identified risk situations.", "Consult a veterinary behaviorist or feline behavior consultant."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Immediate priority: consult a veterinarian",
@@ -1107,10 +1107,10 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
         }
         AppLang.DE -> {
             when {
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Sofortige Priorität: die Zusammenführung mit den anderen Tieren neu aufbauen",
+                QuestionnaireEngine.griffureForte(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Sofortige Priorität: die Zusammenführung mit den anderen Tieren neu aufbauen",
                     "Da es bereits einen Kratzer oder Biss gegenüber einem anderen Tier gab, sollte das Zusammenleben für $nom in Ruhe neu aufgebaut werden.",
                     listOf("Die Tiere im Konflikt vorübergehend trennen.", "Eine Begleitung durch eine Fachperson für Katzenverhalten für eine schrittweise Wiederzusammenführung in Betracht ziehen."))
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Sofortige Priorität: eine Fachperson aufsuchen",
+                QuestionnaireEngine.griffureForte(reponsesChoix) -> PrioriteImmediate(PrioriteAction.URGENTE, "Sofortige Priorität: eine Fachperson aufsuchen",
                     "Da es bereits einen Kratzer oder Biss gegenüber einem Menschen gab, sollte die Situation von $nom nicht verharmlost werden.",
                     listOf("Die erkannten Risikosituationen vermeiden.", "Einen verhaltensmedizinisch ausgebildeten Tierarzt oder eine Fachperson für Katzenverhalten aufsuchen."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Sofortige Priorität: einen Tierarzt aufsuchen",
@@ -1129,10 +1129,10 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
         }
         AppLang.ES -> {
             when {
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Prioridad inmediata: replantear la presentación con los otros animales",
+                QuestionnaireEngine.griffureForte(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Prioridad inmediata: replantear la presentación con los otros animales",
                     "Como ya ha habido un arañazo o una mordedura a otro animal, la convivencia debe reconstruirse con calma para $nom.",
                     listOf("Separar temporalmente a los animales en conflicto.", "Considerar el acompañamiento de un especialista en comportamiento felino para una reintroducción progresiva."))
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un profesional",
+                QuestionnaireEngine.griffureForte(reponsesChoix) -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un profesional",
                     "Como ya ha habido un arañazo o una mordedura a una persona, la situación de $nom no debe tomarse a la ligera.",
                     listOf("Evitar las situaciones de riesgo identificadas.", "Consultar a un veterinario etólogo o a un especialista en comportamiento felino."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Prioridad inmediata: consultar a un veterinario",
@@ -1151,10 +1151,10 @@ fun construirePrioriteImmediateTraduit(reponsesChoix: Map<String, Int>, contexte
         }
         else -> {
             when {
-                reponsesChoix["a_deja_griffe_mordu"] == 1 && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : reprendre la présentation avec les autres animaux",
+                QuestionnaireEngine.griffureForte(reponsesChoix) && reponsesChoix["cible_agression"] == 1 -> PrioriteImmediate(PrioriteAction.ELEVEE, "Priorité immédiate : reprendre la présentation avec les autres animaux",
                     "Comme il y a déjà eu griffure ou morsure envers un autre animal, la cohabitation doit être reprise calmement pour $nom.",
                     listOf("Séparer temporairement les animaux en conflit.", "Envisager un accompagnement par un comportementaliste félin pour une réintroduction progressive."))
-                reponsesChoix["a_deja_griffe_mordu"] == 1 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un professionnel",
+                QuestionnaireEngine.griffureForte(reponsesChoix) -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un professionnel",
                     "Comme il y a déjà eu griffure ou morsure envers une personne, la situation ne doit pas être banalisée pour $nom.",
                     listOf("Éviter les situations à risque identifiées.", "Consulter un vétérinaire comportementaliste ou un comportementaliste félin."))
                 contexte.physique >= 4 -> PrioriteImmediate(PrioriteAction.URGENTE, "Priorité immédiate : consulter un vétérinaire",
@@ -1274,7 +1274,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression of instincts"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-                "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
+                "a_deja_griffe_mordu", "nature_griffure", "frequence_griffure", "quand_griffure", "cible_agression", "defense_ressources" -> "Cohabitation"
                 "a_un_probleme", "lieu_residence" -> "Going further"
                 else -> "Current context"
             }
@@ -1290,7 +1290,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Ausdruck der Instinkte"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-                "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Zusammenleben und Revier"
+                "a_deja_griffe_mordu", "nature_griffure", "frequence_griffure", "quand_griffure", "cible_agression", "defense_ressources" -> "Zusammenleben und Revier"
                 "a_un_probleme", "lieu_residence" -> "Weiterführendes"
                 else -> "Aktuelle Situation"
             }
@@ -1306,7 +1306,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expresión de los instintos"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-                "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Convivencia y territorio"
+                "a_deja_griffe_mordu", "nature_griffure", "frequence_griffure", "quand_griffure", "cible_agression", "defense_ressources" -> "Convivencia y territorio"
                 "a_un_probleme", "lieu_residence" -> "Para ir más lejos"
                 else -> "Contexto actual"
             }
@@ -1322,7 +1322,7 @@ fun titreSectionTraduit(questionId: String): String {
                 "jeu_chasse", "griffage_surfaces", "hyperactivite_nocturne",
                 "comportement_alimentaire", "destruction_ennui", "marquage_urinaire" -> "Expression des instincts"
                 "relation_autres_chats", "relation_chien", "relation_enfants", "agressivite_caresses",
-                "a_deja_griffe_mordu", "cible_agression", "defense_ressources" -> "Cohabitation"
+                "a_deja_griffe_mordu", "nature_griffure", "frequence_griffure", "quand_griffure", "cible_agression", "defense_ressources" -> "Cohabitation"
                 "a_un_probleme", "lieu_residence" -> "Pour aller plus loin"
                 else -> "Contexte actuel"
             }
