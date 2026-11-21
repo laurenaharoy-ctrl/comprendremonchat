@@ -58,6 +58,7 @@ sealed interface AppScreen {
     data object Feedback : AppScreen
     data object Historique : AppScreen
     data class HistoriqueDetail(val bilanId: String) : AppScreen
+    data class Comparaison(val idAvant: String, val idApres: String) : AppScreen
     data object Parametres : AppScreen
 }
 
@@ -73,6 +74,7 @@ fun AppScreen.toStorageValue(): String = when (this) {
     AppScreen.Feedback -> "accueil"
     AppScreen.Historique -> "historique"
     is AppScreen.HistoriqueDetail -> "historique"
+    is AppScreen.Comparaison -> "historique"
     AppScreen.Parametres -> "accueil"
 }
 
@@ -256,6 +258,7 @@ Envoyé depuis l'application Comprendre mon chat
             AppScreen.Feedback -> { screen = screenAvantFeedback }
             AppScreen.Historique -> { screen = AppScreen.Accueil; saveState() }
             is AppScreen.HistoriqueDetail -> { screen = AppScreen.Historique }
+            is AppScreen.Comparaison -> { screen = AppScreen.Historique }
             AppScreen.Parametres -> { screen = AppScreen.Accueil }
             AppScreen.Accueil, AppScreen.Onboarding -> Unit
         }
@@ -279,6 +282,7 @@ Envoyé depuis l'application Comprendre mon chat
                     AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung", "Reportar un problema")
                     AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones")
                     is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung", "Detalle de la evaluación")
+                    is AppScreen.Comparaison -> tr("Comparaison", "Comparison", "Vergleich", "Comparación")
                     AppScreen.Parametres -> ""
                 }
 
@@ -298,6 +302,7 @@ Envoyé depuis l'application Comprendre mon chat
                             AppScreen.Feedback -> screen = screenAvantFeedback
                             AppScreen.Historique -> { screen = AppScreen.Accueil; saveState() }
                             is AppScreen.HistoriqueDetail -> screen = AppScreen.Historique
+                            is AppScreen.Comparaison -> screen = AppScreen.Historique
                             AppScreen.Parametres -> screen = AppScreen.Accueil
                             else -> Unit
                         }
@@ -539,7 +544,7 @@ Envoyé depuis l'application Comprendre mon chat
                 }
 
                 AppScreen.Historique -> {
-                    HistoriqueScreen(
+                    HistoriqueComparableScreen(
                         modifier = Modifier.padding(padding),
                         bilans = bilans,
                         onOuvrirBilan = { bilanId -> screen = AppScreen.HistoriqueDetail(bilanId) },
@@ -548,8 +553,39 @@ Envoyé depuis l'application Comprendre mon chat
                         },
                         onSupprimerTout = {
                             scope.launch { HistoriqueManager.supprimerTout(context) }
+                        },
+                        onBasculerReference = { bilanId ->
+                            scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
+                        },
+                        onComparer = { idAvant, idApres ->
+                            screen = AppScreen.Comparaison(idAvant, idApres)
                         }
                     )
+                }
+
+                is AppScreen.Comparaison -> {
+                    val comparaison = screen as AppScreen.Comparaison
+                    val avant = bilans.firstOrNull { it.id == comparaison.idAvant }
+                    val apres = bilans.firstOrNull { it.id == comparaison.idApres }
+                    if (avant != null && apres != null) {
+                        ComparaisonBilansScreen(
+                            modifier = Modifier.padding(padding),
+                            avant = avant,
+                            apres = apres,
+                            onPartagerPdf = {
+                                val file = ComparaisonPdfExporter.exporterComparaisonPdf(context, avant, apres)
+                                val uri = FileProvider.getUriForFile(
+                                    context, "${context.packageName}.fileprovider", file
+                                )
+                                val intent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "application/pdf"
+                                    putExtra(Intent.EXTRA_STREAM, uri)
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                }
+                                context.startActivity(Intent.createChooser(intent, tr("Partager le PDF", "Share PDF", "PDF teilen", "Compartir el PDF")))
+                            }
+                        )
+                    }
                 }
 
                 is AppScreen.HistoriqueDetail -> {

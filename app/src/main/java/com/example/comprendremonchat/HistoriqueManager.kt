@@ -29,8 +29,13 @@ data class BilanSauvegarde(
     val reactivite: Int,
     val hypothesePrincipale: String,
     val conseilPrincipal: String,
-    val aDejaMordu: Boolean
+    val aDejaMordu: Boolean,
+    // Bilan marqué comme « Bilan de référence » (un seul par animal) — absent des anciens bilans : false par défaut
+    val estReference: Boolean = false
 )
+
+/** Clé qui permet de regrouper les bilans d'un même animal (insensible aux majuscules et aux espaces). */
+fun BilanSauvegarde.cleAnimal(): String = nomChien.trim().lowercase(Locale.ROOT)
 
 object HistoriqueManager {
 
@@ -74,6 +79,30 @@ object HistoriqueManager {
         }
     }
 
+    /**
+     * Marque un bilan comme « Bilan de référence » pour son animal.
+     * Un seul bilan de référence par animal : les autres bilans du même animal perdent la marque.
+     * Si le bilan était déjà la référence, la marque est retirée.
+     */
+    suspend fun basculerReference(context: Context, id: String) {
+        context.historiqueDataStore.edit { prefs ->
+            val bilans = parseBilans(prefs[HISTORIQUE_KEY] ?: "[]")
+            val cible = bilans.firstOrNull { it.id == id } ?: return@edit
+            val devientReference = !cible.estReference
+            val cle = cible.cleAnimal()
+            val miseAJour = bilans.map { bilan ->
+                when {
+                    bilan.id == id -> bilan.copy(estReference = devientReference)
+                    bilan.cleAnimal() == cle && devientReference -> bilan.copy(estReference = false)
+                    else -> bilan
+                }
+            }
+            val array = JSONArray()
+            miseAJour.forEach { array.put(bilanToJson(it)) }
+            prefs[HISTORIQUE_KEY] = array.toString()
+        }
+    }
+
     suspend fun supprimerBilan(context: Context, id: String) {
         context.historiqueDataStore.edit { prefs ->
             val existingJson = prefs[HISTORIQUE_KEY] ?: "[]"
@@ -109,6 +138,7 @@ object HistoriqueManager {
             put("hypothesePrincipale", bilan.hypothesePrincipale)
             put("conseilPrincipal", bilan.conseilPrincipal)
             put("aDejaMordu", bilan.aDejaMordu)
+            put("estReference", bilan.estReference)
         }
     }
 
@@ -131,7 +161,8 @@ object HistoriqueManager {
                     reactivite = obj.getInt("reactivite"),
                     hypothesePrincipale = obj.getString("hypothesePrincipale"),
                     conseilPrincipal = obj.getString("conseilPrincipal"),
-                    aDejaMordu = obj.getBoolean("aDejaMordu")
+                    aDejaMordu = obj.getBoolean("aDejaMordu"),
+                    estReference = obj.optBoolean("estReference", false)
                 )
             }
         } catch (e: Exception) {
