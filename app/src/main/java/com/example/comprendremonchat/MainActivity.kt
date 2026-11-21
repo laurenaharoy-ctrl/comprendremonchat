@@ -506,6 +506,10 @@ Envoyé depuis l'application Comprendre mon chat
                         onOpenAlimentation = {
                             screen = AppScreen.Alimentation
                             saveState()
+                        },
+                        onOpenHistorique = {
+                            screen = AppScreen.Historique
+                            saveState()
                         }
                     )
                 }
