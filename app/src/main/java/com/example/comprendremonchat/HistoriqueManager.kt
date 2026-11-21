@@ -66,8 +66,11 @@ object HistoriqueManager {
 
         context.historiqueDataStore.edit { prefs ->
             val existingJson = prefs[HISTORIQUE_KEY] ?: "[]"
-            val array = JSONArray(existingJson)
-            array.put(0, bilanToJson(bilan))
+            val anciens = JSONArray(existingJson)
+            // Le nouveau bilan est ajouté en tête, les anciens sont conservés à la suite
+            // (JSONArray.put(0, …) remplaçait le premier bilan au lieu d'en ajouter un)
+            val array = JSONArray().put(bilanToJson(bilan))
+            for (i in 0 until anciens.length()) array.put(anciens.getJSONObject(i))
             prefs[HISTORIQUE_KEY] = array.toString()
         }
     }
