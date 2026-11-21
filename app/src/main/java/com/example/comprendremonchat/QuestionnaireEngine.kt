@@ -285,9 +285,9 @@ object QuestionnaireEngine {
     // frequence_griffure : 0 = une fois ou rarement, 1 = de temps en temps, 2 = souvent
     // quand_griffure : 0 = uniquement quand il était chaton, 1 = ces derniers mois, 2 = il y a plus d'un an
     private fun aGriffe(r: Map<String, Int>) = r["a_deja_griffe_mordu"] == 1 && r["quand_griffure"] != 0
-    /** Vraie attaque unique, il y a plus d'un an : priorité élevée mais pas urgente. */
+    /** Vraie attaque datant de plus d'un an (quelle que soit sa fréquence à l'époque) : priorité élevée mais pas urgente. */
     fun griffureAncienneUnique(r: Map<String, Int>): Boolean =
-        aGriffe(r) && r["nature_griffure"] == 1 && r["quand_griffure"] == 2 && r["frequence_griffure"] == 0
+        aGriffe(r) && r["nature_griffure"] == 1 && r["quand_griffure"] == 2
     /** Vraie attaque récente ou répétée (ou détails non renseignés) : signal critique. */
     fun griffureForte(r: Map<String, Int>): Boolean =
         aGriffe(r) && r["nature_griffure"] != 0 && !griffureAncienneUnique(r)
