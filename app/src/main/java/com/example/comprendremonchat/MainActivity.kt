@@ -452,7 +452,15 @@ Envoyé depuis l'application Comprendre mon chat
                 AppScreen.Chargement -> {
                     ChargementAnalyseScreen(
                         modifier = Modifier.padding(padding),
-                        onTermine = { screen = AppScreen.Resultat; saveState() }
+                        onTermine = {
+                            // Le bilan est sauvegardé une seule fois, à la fin du questionnaire
+                            // (et non à chaque affichage de l'écran de résultat, ce qui créait des doublons)
+                            val analyseFinale = QuestionnaireEngine.calculerResultat(questions, reponsesTexte, reponsesChoix)
+                            val nomFinal = reponsesTexte["nom_chat"].orEmpty()
+                            scope.launch { HistoriqueManager.sauvegarderBilan(context, nomFinal, analyseFinale) }
+                            screen = AppScreen.Resultat
+                            saveState()
+                        }
                     )
                 }
 
@@ -460,14 +468,6 @@ Envoyé depuis l'application Comprendre mon chat
                     val analyse = QuestionnaireEngine.calculerResultat(
                         questions, reponsesTexte, reponsesChoix
                     )
-
-                    LaunchedEffect(Unit) {
-                        HistoriqueManager.sauvegarderBilan(
-                            context,
-                            reponsesTexte["nom_chat"].orEmpty(),
-                            analyse
-                        )
-                    }
 
                     val textePartage = construireTextePartageBilan(
                         reponsesTexte["nom_chat"].orEmpty(), analyse
