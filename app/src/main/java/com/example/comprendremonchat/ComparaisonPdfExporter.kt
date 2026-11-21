@@ -42,23 +42,35 @@ object ComparaisonPdfExporter {
     private fun t(fr: String, en: String, de: String, es: String) = tr(fr, en, de, es)
     private fun appName() = t("Comprendre mon chat", "Understanding My Cat", "Meine Katze verstehen", "Comprender a mi gato")
 
+    // Bas de la zone de contenu (au-dessus du pied de page avec QR code)
+    private val LIMITE_BAS = PAGE_H - MARGIN - 14f - 40f - 22f
+
     fun exporterComparaisonPdf(context: Context, avant: BilanSauvegarde, apres: BilanSauvegarde): File {
         val document = PdfDocument()
-        val info = PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, 1).create()
-        val page = document.startPage(info)
-        val canvas = page.canvas
+        var numPage = 1
+        var page = document.startPage(PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, numPage).create())
+        var canvas = page.canvas
         canvas.drawColor(Color.WHITE)
+        dessineEntete(canvas)
+        var y = MARGIN + 54f
 
-        // En-tête
-        canvas.drawRect(0f, 0f, PAGE_W.toFloat(), MARGIN + 28f, fill(COLOR_WARM_BG))
-        drawLine(canvas, 0f, MARGIN + 28f, PAGE_W.toFloat(), MARGIN + 28f, COLOR_BORDER, 0.5f)
-        val titreEntete = t("Comparaison de bilans", "Assessment comparison", "Vergleich der Einschätzungen", "Comparación de evaluaciones")
-        canvas.drawText(titreEntete, MARGIN, MARGIN + 18f, makePaint(9f, COLOR_INK_SOFT, bold = true))
-        val appPaint = makePaint(9f, COLOR_INK_SOFT, italic = true)
-        canvas.drawText(appName(), PAGE_W - MARGIN - appPaint.measureText(appName()), MARGIN + 18f, appPaint)
+        // Passe à une nouvelle page si le bloc suivant ne tient pas
+        fun assurer(hauteur: Float) {
+            if (y + hauteur > LIMITE_BAS) {
+                dessineFooter(canvas)
+                document.finishPage(page)
+                numPage++
+                page = document.startPage(PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, numPage).create())
+                canvas = page.canvas
+                canvas.drawColor(Color.WHITE)
+                dessineEntete(canvas)
+                y = MARGIN + 46f
+            }
+        }
+
+        val evolutions = evolutionsAxes(avant, apres)
 
         // Titre
-        var y = MARGIN + 54f
         y = drawText(canvas, apres.nomChien, MARGIN, y, CONTENT_W.toInt(), makePaint(22f, COLOR_PRIMARY, bold = true), Layout.Alignment.ALIGN_CENTER)
         y = drawText(canvas, t("Évolution entre deux bilans", "Change between two assessments", "Entwicklung zwischen zwei Einschätzungen", "Evolución entre dos evaluaciones"),
             MARGIN, y + 2f, CONTENT_W.toInt(), makePaint(11f, COLOR_INK_SOFT, italic = true), Layout.Alignment.ALIGN_CENTER)
@@ -70,19 +82,42 @@ object ComparaisonPdfExporter {
         val cardH = 66f
         drawDateCard(canvas, MARGIN, y, cardW, cardH, t("AVANT", "BEFORE", "VORHER", "ANTES"), avant)
         drawDateCard(canvas, MARGIN + cardW + gap, y, cardW, cardH, t("APRÈS", "AFTER", "NACHHER", "DESPUÉS"), apres)
-        y += cardH + 20f
+        y += cardH + 14f
+
+        // Résumé
+        y = drawText(canvas, texteResumeComparaison(evolutions), MARGIN, y, CONTENT_W.toInt(), makePaint(11.5f, COLOR_PRIMARY, bold = true), Layout.Alignment.ALIGN_CENTER)
+        y += 16f
 
         // Évolution par axe
+        assurer(32f + 56f)
         y = drawSectionTitle(canvas, y, t("Évolution par axe", "Change by axis", "Entwicklung je Achse", "Evolución por eje"))
-        y = drawText(canvas, t("Un score qui baisse signifie que la difficulté diminue.", "A falling score means the difficulty is decreasing.", "Ein sinkender Wert bedeutet, dass die Schwierigkeit abnimmt.", "Una puntuación que baja significa que la dificultad disminuye."),
-            MARGIN, y, CONTENT_W.toInt(), makePaint(9f, COLOR_INK_SOFT, italic = true))
-        y += 10f
-        evolutionsAxes(avant, apres).forEach { evolution ->
+        evolutions.forEach { evolution ->
+            assurer(56f)
             y = drawEvolution(canvas, y, evolution)
         }
 
-        // Synthèse
+        // Comment lire ce comparatif
         y += 6f
+        val pointPaint = makePaint(9.5f, COLOR_INK)
+        val pointLayouts = pointsCommentLire().map { makeStaticLayout(it, (CONTENT_W - 42f).toInt(), pointPaint) }
+        val titreLirePaint = makePaint(11f, COLOR_PRIMARY, bold = true)
+        val lireH = 40f + pointLayouts.sumOf { it.height.toDouble() }.toFloat() + pointLayouts.size * 6f + 8f
+        assurer(lireH)
+        drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + lireH, COLOR_WARM_BG, COLOR_BORDER, 12f)
+        canvas.drawText(titreCommentLire(), MARGIN + 14f, y + 24f, titreLirePaint)
+        var yPoint = y + 36f
+        pointLayouts.forEach { layout ->
+            canvas.drawCircle(MARGIN + 20f, yPoint + 7f, 2.5f, fill(COLOR_PRIMARY_SOFT))
+            canvas.save()
+            canvas.translate(MARGIN + 30f, yPoint)
+            layout.draw(canvas)
+            canvas.restore()
+            yPoint += layout.height + 6f
+        }
+        y += lireH + 16f
+
+        // Synthèse
+        assurer(32f + 90f)
         y = drawSectionTitle(canvas, y, t("Synthèse", "Summary", "Zusammenfassung", "Resumen"))
         y = drawLigneAvantApres(canvas, y, t("Priorité", "Priority", "Priorität", "Prioridad"),
             textePrioriteAction(avant.prioriteActionEnum()), textePrioriteAction(apres.prioriteActionEnum()))
@@ -94,6 +129,7 @@ object ComparaisonPdfExporter {
         val avertPaint = makePaint(9.5f, COLOR_INK_SOFT, italic = true)
         val avertLayout = makeStaticLayout(texteAvertissementComparaison(), (CONTENT_W - 28f).toInt(), avertPaint)
         val avertH = avertLayout.height + 24f
+        assurer(avertH)
         drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + avertH, COLOR_WARM_BG, COLOR_BORDER, 12f)
         canvas.save()
         canvas.translate(MARGIN + 14f, y + 12f)
@@ -118,6 +154,15 @@ object ComparaisonPdfExporter {
     // BLOCS
     // ════════════════════════════════════════════════════════════
 
+    private fun dessineEntete(canvas: Canvas) {
+        canvas.drawRect(0f, 0f, PAGE_W.toFloat(), MARGIN + 28f, fill(COLOR_WARM_BG))
+        drawLine(canvas, 0f, MARGIN + 28f, PAGE_W.toFloat(), MARGIN + 28f, COLOR_BORDER, 0.5f)
+        val titreEntete = t("Comparaison de bilans", "Assessment comparison", "Vergleich der Einschätzungen", "Comparación de evaluaciones")
+        canvas.drawText(titreEntete, MARGIN, MARGIN + 18f, makePaint(9f, COLOR_INK_SOFT, bold = true))
+        val appPaint = makePaint(9f, COLOR_INK_SOFT, italic = true)
+        canvas.drawText(appName(), PAGE_W - MARGIN - appPaint.measureText(appName()), MARGIN + 18f, appPaint)
+    }
+
     private fun drawDateCard(canvas: Canvas, left: Float, top: Float, w: Float, h: Float, titre: String, bilan: BilanSauvegarde) {
         drawCard(canvas, left, top, left + w, top + h, COLOR_WARM_BG, COLOR_BORDER, 12f)
         canvas.drawText(titre, left + 12f, top + 18f, makePaint(8.5f, COLOR_PRIMARY_SOFT, bold = true))
@@ -141,7 +186,7 @@ object ComparaisonPdfExporter {
         }
         val labelPaint = makePaint(11f, COLOR_INK, bold = true)
         canvas.drawText(evolution.label, MARGIN, y + 12f, labelPaint)
-        val tendanceTexte = "${libelleTendance(evolution.tendance)}  (${evolution.avant} → ${evolution.apres}, ${texteEcart(evolution.ecart)})"
+        val tendanceTexte = "${libelleTendance(evolution.tendance)}   ${evolution.avant} → ${evolution.apres} (${texteEcart(evolution.ecart)})"
         val tendancePaint = makePaint(10f, couleur, bold = true)
         canvas.drawText(tendanceTexte, PAGE_W - MARGIN - tendancePaint.measureText(tendanceTexte), y + 12f, tendancePaint)
 

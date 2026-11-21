@@ -112,6 +112,41 @@ fun texteAvertissementComparaison(): String = tr(
     "Esta comparación muestra la evolución de los comportamientos observados por el propietario. No sustituye la opinión de un veterinario o de un especialista en comportamiento."
 )
 
+/** Phrase de résumé : combien d'axes en amélioration, stables, à surveiller. */
+fun texteResumeComparaison(evolutions: List<EvolutionAxe>): String {
+    val amelio = evolutions.count { it.tendance == Tendance.AMELIORATION }
+    val stables = evolutions.count { it.tendance == Tendance.STABLE }
+    val surveiller = evolutions.count { it.tendance == Tendance.A_SURVEILLER }
+    return tr(
+        "En résumé, sur les ${evolutions.size} axes : $amelio en amélioration, $stables stable${if (stables > 1) "s" else ""}, $surveiller à surveiller.",
+        "In short, across the ${evolutions.size} axes: $amelio improving, $stables stable, $surveiller to watch.",
+        "Kurz gesagt, bei den ${evolutions.size} Achsen: $amelio verbessert, $stables stabil, $surveiller im Auge behalten.",
+        "En resumen, en los ${evolutions.size} ejes: $amelio en mejora, $stables estable${if (stables > 1) "s" else ""}, $surveiller a vigilar."
+    )
+}
+
+fun titreCommentLire(): String = tr("Comment lire ce comparatif ?", "How to read this comparison", "So lesen Sie diesen Vergleich", "Cómo leer esta comparación")
+
+/** Explication simple, affichée sous l'évolution par axe (écran et PDF). */
+fun pointsCommentLire(): List<String> = listOf(
+    tr("Chaque axe est noté de 0 à 100 : plus le score est élevé, plus la difficulté est présente dans le quotidien de votre chat.",
+        "Each axis is scored from 0 to 100: the higher the score, the more the difficulty shows in your cat's daily life.",
+        "Jede Achse wird von 0 bis 100 bewertet: Je höher der Wert, desto stärker ist die Schwierigkeit im Alltag Ihrer Katze.",
+        "Cada eje se puntúa de 0 a 100: cuanto más alta es la puntuación, más presente está la dificultad en el día a día de tu gato."),
+    tr("La barre claire correspond au bilan d'avant, la barre foncée au bilan d'après. Si la barre foncée est plus courte, la difficulté a diminué.",
+        "The light bar is the earlier assessment, the dark bar the later one. If the dark bar is shorter, the difficulty has decreased.",
+        "Der helle Balken zeigt die frühere Einschätzung, der dunkle die spätere. Ist der dunkle Balken kürzer, hat die Schwierigkeit abgenommen.",
+        "La barra clara corresponde a la evaluación anterior y la oscura a la posterior. Si la barra oscura es más corta, la dificultad ha disminuido."),
+    tr("Les chiffres indiquent le score d'avant, le score d'après et l'écart. Par exemple, « 21 → 16 (-5) » signifie que le score a baissé de 5 points.",
+        "The numbers show the earlier score, the later score and the difference. For example, \"21 → 16 (-5)\" means the score dropped by 5 points.",
+        "Die Zahlen zeigen den früheren Wert, den späteren Wert und die Differenz. „21 → 16 (-5)“ bedeutet zum Beispiel, dass der Wert um 5 Punkte gesunken ist.",
+        "Las cifras indican la puntuación anterior, la posterior y la diferencia. Por ejemplo, «21 → 16 (-5)» significa que la puntuación bajó 5 puntos."),
+    tr("« En amélioration » : la difficulté diminue. « Stable » : l'écart est de moins de $SEUIL_STABLE points. « À surveiller » : la difficulté augmente, c'est un point à observer et à évoquer avec votre comportementaliste.",
+        "\"Improving\": the difficulty is decreasing. \"Stable\": the difference is under $SEUIL_STABLE points. \"To watch\": the difficulty is increasing — something to observe and discuss with your behaviourist.",
+        "„Verbessert“: Die Schwierigkeit nimmt ab. „Stabil“: Die Differenz liegt unter $SEUIL_STABLE Punkten. „Im Auge behalten“: Die Schwierigkeit nimmt zu – ein Punkt, den Sie beobachten und mit Ihrer Verhaltensberaterin besprechen sollten.",
+        "«En mejora»: la dificultad disminuye. «Estable»: la diferencia es inferior a $SEUIL_STABLE puntos. «A vigilar»: la dificultad aumenta, es un punto para observar y comentar con tu especialista en comportamiento.")
+)
+
 fun texteBilanDeReference(): String = tr("Bilan de référence", "Reference assessment", "Referenz-Einschätzung", "Evaluación de referencia")
 
 @Composable
@@ -546,19 +581,29 @@ fun ComparaisonBilansScreen(
                     CarteDate(modifier = Modifier.weight(1f), titre = tr("Avant", "Before", "Vorher", "Antes"), bilan = avant)
                     CarteDate(modifier = Modifier.weight(1f), titre = tr("Après", "After", "Nachher", "Después"), bilan = apres)
                 }
+                Spacer(modifier = Modifier.height(14.dp))
+                Text(texteResumeComparaison(evolutions), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.Primary, textAlign = TextAlign.Center)
             }
 
             PremiumCard {
                 EditorialKicker(tr("Évolution par axe", "Change by axis", "Entwicklung je Achse", "Evolución por eje"), centered = true)
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    tr("Un score qui baisse signifie que la difficulté diminue.", "A falling score means the difficulty is decreasing.", "Ein sinkender Wert bedeutet, dass die Schwierigkeit abnimmt.", "Una puntuación que baja significa que la dificultad disminuye."),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
-                )
                 Spacer(modifier = Modifier.height(14.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     evolutions.forEach { LigneEvolution(it) }
+                }
+            }
+
+            PremiumCard {
+                EditorialKicker(titreCommentLire(), centered = true)
+                Spacer(modifier = Modifier.height(12.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    pointsCommentLire().forEach { point ->
+                        Row(verticalAlignment = Alignment.Top) {
+                            Box(modifier = Modifier.padding(top = 7.dp).size(6.dp).clip(CircleShape).background(PremiumPalette.PrimarySoft))
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(point, style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
                 }
             }
 
