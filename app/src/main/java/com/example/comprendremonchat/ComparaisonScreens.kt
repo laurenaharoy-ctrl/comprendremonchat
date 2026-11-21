@@ -125,28 +125,6 @@ fun texteResumeComparaison(evolutions: List<EvolutionAxe>): String {
     )
 }
 
-fun titreCommentLire(): String = tr("Comment lire ce comparatif ?", "How to read this comparison", "So lesen Sie diesen Vergleich", "Cómo leer esta comparación")
-
-/** Explication simple, affichée sous l'évolution par axe (écran et PDF). */
-fun pointsCommentLire(): List<String> = listOf(
-    tr("Chaque axe est noté de 0 à 100 : plus le score est élevé, plus la difficulté est présente dans le quotidien de votre chat.",
-        "Each axis is scored from 0 to 100: the higher the score, the more the difficulty shows in your cat's daily life.",
-        "Jede Achse wird von 0 bis 100 bewertet: Je höher der Wert, desto stärker ist die Schwierigkeit im Alltag Ihrer Katze.",
-        "Cada eje se puntúa de 0 a 100: cuanto más alta es la puntuación, más presente está la dificultad en el día a día de tu gato."),
-    tr("La barre claire correspond au bilan d'avant, la barre foncée au bilan d'après. Si la barre foncée est plus courte, la difficulté a diminué.",
-        "The light bar is the earlier assessment, the dark bar the later one. If the dark bar is shorter, the difficulty has decreased.",
-        "Der helle Balken zeigt die frühere Einschätzung, der dunkle die spätere. Ist der dunkle Balken kürzer, hat die Schwierigkeit abgenommen.",
-        "La barra clara corresponde a la evaluación anterior y la oscura a la posterior. Si la barra oscura es más corta, la dificultad ha disminuido."),
-    tr("Les chiffres indiquent le score d'avant, le score d'après et l'écart. Par exemple, « 21 → 16 (-5) » signifie que le score a baissé de 5 points.",
-        "The numbers show the earlier score, the later score and the difference. For example, \"21 → 16 (-5)\" means the score dropped by 5 points.",
-        "Die Zahlen zeigen den früheren Wert, den späteren Wert und die Differenz. „21 → 16 (-5)“ bedeutet zum Beispiel, dass der Wert um 5 Punkte gesunken ist.",
-        "Las cifras indican la puntuación anterior, la posterior y la diferencia. Por ejemplo, «21 → 16 (-5)» significa que la puntuación bajó 5 puntos."),
-    tr("« En amélioration » : la difficulté diminue. « Stable » : l'écart est de moins de $SEUIL_STABLE points. « À surveiller » : la difficulté augmente, c'est un point à observer et à évoquer avec votre comportementaliste.",
-        "\"Improving\": the difficulty is decreasing. \"Stable\": the difference is under $SEUIL_STABLE points. \"To watch\": the difficulty is increasing — something to observe and discuss with your behaviourist.",
-        "„Verbessert“: Die Schwierigkeit nimmt ab. „Stabil“: Die Differenz liegt unter $SEUIL_STABLE Punkten. „Im Auge behalten“: Die Schwierigkeit nimmt zu – ein Punkt, den Sie beobachten und mit Ihrer Verhaltensberaterin besprechen sollten.",
-        "«En mejora»: la dificultad disminuye. «Estable»: la diferencia es inferior a $SEUIL_STABLE puntos. «A vigilar»: la dificultad aumenta, es un punto para observar y comentar con tu especialista en comportamiento.")
-)
-
 fun texteBilanDeReference(): String = tr("Bilan de référence", "Reference assessment", "Referenz-Einschätzung", "Evaluación de referencia")
 
 @Composable
@@ -157,9 +135,10 @@ private fun couleurTendance(tendance: Tendance): Color = when (tendance) {
 }
 
 private fun iconeTendance(tendance: Tendance): ImageVector = when (tendance) {
-    Tendance.AMELIORATION -> Icons.AutoMirrored.Rounded.TrendingDown
+    // Flèche vers le haut = ça va mieux, vers le bas = à surveiller
+    Tendance.AMELIORATION -> Icons.AutoMirrored.Rounded.TrendingUp
     Tendance.STABLE -> Icons.AutoMirrored.Rounded.TrendingFlat
-    Tendance.A_SURVEILLER -> Icons.AutoMirrored.Rounded.TrendingUp
+    Tendance.A_SURVEILLER -> Icons.AutoMirrored.Rounded.TrendingDown
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -594,20 +573,6 @@ fun ComparaisonBilansScreen(
             }
 
             PremiumCard {
-                EditorialKicker(titreCommentLire(), centered = true)
-                Spacer(modifier = Modifier.height(12.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    pointsCommentLire().forEach { point ->
-                        Row(verticalAlignment = Alignment.Top) {
-                            Box(modifier = Modifier.padding(top = 7.dp).size(6.dp).clip(CircleShape).background(PremiumPalette.PrimarySoft))
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(point, style = MaterialTheme.typography.bodyMedium)
-                        }
-                    }
-                }
-            }
-
-            PremiumCard {
                 EditorialKicker(tr("Synthèse", "Summary", "Zusammenfassung", "Resumen"), centered = true)
                 Spacer(modifier = Modifier.height(12.dp))
                 LigneAvantApres(
@@ -677,11 +642,6 @@ private fun LigneEvolution(evolution: EvolutionAxe) {
         BarreScore(label = tr("Avant", "Before", "Vorher", "Antes"), score = evolution.avant, couleur = PremiumPalette.Accent)
         Spacer(modifier = Modifier.height(4.dp))
         BarreScore(label = tr("Après", "After", "Nachher", "Después"), score = evolution.apres, couleur = PremiumPalette.PrimarySoft)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            "${evolution.avant} → ${evolution.apres}  (${texteEcart(evolution.ecart)})",
-            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
 

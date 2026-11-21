@@ -96,27 +96,8 @@ object ComparaisonPdfExporter {
             y = drawEvolution(canvas, y, evolution)
         }
 
-        // Comment lire ce comparatif
-        y += 6f
-        val pointPaint = makePaint(9.5f, COLOR_INK)
-        val pointLayouts = pointsCommentLire().map { makeStaticLayout(it, (CONTENT_W - 42f).toInt(), pointPaint) }
-        val titreLirePaint = makePaint(11f, COLOR_PRIMARY, bold = true)
-        val lireH = 40f + pointLayouts.sumOf { it.height.toDouble() }.toFloat() + pointLayouts.size * 6f + 8f
-        assurer(lireH)
-        drawCard(canvas, MARGIN, y, PAGE_W - MARGIN, y + lireH, COLOR_WARM_BG, COLOR_BORDER, 12f)
-        canvas.drawText(titreCommentLire(), MARGIN + 14f, y + 24f, titreLirePaint)
-        var yPoint = y + 36f
-        pointLayouts.forEach { layout ->
-            canvas.drawCircle(MARGIN + 20f, yPoint + 7f, 2.5f, fill(COLOR_PRIMARY_SOFT))
-            canvas.save()
-            canvas.translate(MARGIN + 30f, yPoint)
-            layout.draw(canvas)
-            canvas.restore()
-            yPoint += layout.height + 6f
-        }
-        y += lireH + 16f
-
         // Synthèse
+        y += 6f
         assurer(32f + 90f)
         y = drawSectionTitle(canvas, y, t("Synthèse", "Summary", "Zusammenfassung", "Resumen"))
         y = drawLigneAvantApres(canvas, y, t("Priorité", "Priority", "Priorität", "Prioridad"),
@@ -186,7 +167,13 @@ object ComparaisonPdfExporter {
         }
         val labelPaint = makePaint(11f, COLOR_INK, bold = true)
         canvas.drawText(evolution.label, MARGIN, y + 12f, labelPaint)
-        val tendanceTexte = "${libelleTendance(evolution.tendance)}   ${evolution.avant} → ${evolution.apres} (${texteEcart(evolution.ecart)})"
+        // Flèche vers le haut = ça va mieux, vers le bas = à surveiller
+        val fleche = when (evolution.tendance) {
+            Tendance.AMELIORATION -> "↗"
+            Tendance.STABLE -> "→"
+            Tendance.A_SURVEILLER -> "↘"
+        }
+        val tendanceTexte = "$fleche  ${libelleTendance(evolution.tendance)}"
         val tendancePaint = makePaint(10f, couleur, bold = true)
         canvas.drawText(tendanceTexte, PAGE_W - MARGIN - tendancePaint.measureText(tendanceTexte), y + 12f, tendancePaint)
 
