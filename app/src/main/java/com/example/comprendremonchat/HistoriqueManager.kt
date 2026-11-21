@@ -37,6 +37,18 @@ data class BilanSauvegarde(
 /** Clé qui permet de regrouper les bilans d'un même animal (insensible aux majuscules et aux espaces). */
 fun BilanSauvegarde.cleAnimal(): String = nomChien.trim().lowercase(Locale.ROOT)
 
+/**
+ * Chaque animal a toujours un bilan de référence : celui choisi par l'utilisateur,
+ * sinon automatiquement son bilan le plus ancien.
+ */
+fun List<BilanSauvegarde>.avecReferenceParDefaut(): List<BilanSauvegarde> {
+    val idsReferenceAuto = groupBy { it.cleAnimal() }.values
+        .filter { groupe -> groupe.none { it.estReference } }
+        .mapNotNull { groupe -> groupe.minByOrNull { it.dateTimestamp }?.id }
+        .toSet()
+    return map { if (it.id in idsReferenceAuto) it.copy(estReference = true) else it }
+}
+
 object HistoriqueManager {
 
     private val HISTORIQUE_KEY = stringPreferencesKey("historique_bilans_chat_json")
@@ -78,25 +90,23 @@ object HistoriqueManager {
     fun getBilans(context: Context): Flow<List<BilanSauvegarde>> {
         return context.historiqueDataStore.data.map { prefs ->
             val json = prefs[HISTORIQUE_KEY] ?: "[]"
-            parseBilans(json)
+            parseBilans(json).avecReferenceParDefaut()
         }
     }
 
     /**
-     * Marque un bilan comme « Bilan de référence » pour son animal.
+     * Fait d'un bilan le « Bilan de référence » de son animal.
      * Un seul bilan de référence par animal : les autres bilans du même animal perdent la marque.
-     * Si le bilan était déjà la référence, la marque est retirée.
      */
-    suspend fun basculerReference(context: Context, id: String) {
+    suspend fun definirReference(context: Context, id: String) {
         context.historiqueDataStore.edit { prefs ->
             val bilans = parseBilans(prefs[HISTORIQUE_KEY] ?: "[]")
             val cible = bilans.firstOrNull { it.id == id } ?: return@edit
-            val devientReference = !cible.estReference
             val cle = cible.cleAnimal()
             val miseAJour = bilans.map { bilan ->
                 when {
-                    bilan.id == id -> bilan.copy(estReference = devientReference)
-                    bilan.cleAnimal() == cle && devientReference -> bilan.copy(estReference = false)
+                    bilan.id == id -> bilan.copy(estReference = true)
+                    bilan.cleAnimal() == cle -> bilan.copy(estReference = false)
                     else -> bilan
                 }
             }

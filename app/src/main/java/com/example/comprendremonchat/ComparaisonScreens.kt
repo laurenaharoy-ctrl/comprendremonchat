@@ -171,7 +171,8 @@ fun HistoriqueComparableScreen(
         val animal = bilans.groupBy { it.cleAnimal() }.values.firstOrNull { it.size >= 2 } ?: return
         val parDate = animal.sortedBy { it.dateTimestamp }
         val dernier = parDate.last()
-        val reference = parDate.firstOrNull { it.estReference && it.id != dernier.id } ?: parDate.first()
+        // Si la référence est le dernier bilan, on le compare au bilan précédent
+        val reference = parDate.firstOrNull { it.estReference && it.id != dernier.id } ?: parDate[parDate.size - 2]
         selection.add(reference.id)
         selection.add(dernier.id)
         modeComparer = true
@@ -223,7 +224,7 @@ fun HistoriqueComparableScreen(
                 if (bilans.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        tr("Touchez l'étoile pour marquer un bilan comme bilan de référence.", "Tap the star to mark an assessment as the reference.", "Tippen Sie auf den Stern, um eine Einschätzung als Referenz zu markieren.", "Toca la estrella para marcar una evaluación como referencia."),
+                        tr("Le premier bilan est le bilan de référence. Pour en choisir un autre, touchez son étoile.", "The first assessment is the reference. To choose another one, tap its star.", "Die erste Einschätzung ist die Referenz. Um eine andere zu wählen, tippen Sie auf ihren Stern.", "La primera evaluación es la de referencia. Para elegir otra, toca su estrella."),
                         textAlign = TextAlign.Center, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -441,6 +442,28 @@ fun BilanComparableItem(
     onBasculerReference: () -> Unit
 ) {
     var showConfirm by remember { mutableStateOf(false) }
+    var showConfirmReference by remember { mutableStateOf(false) }
+
+    if (showConfirmReference) {
+        AlertDialog(
+            onDismissRequest = { showConfirmReference = false },
+            title = { Text(tr("Changer le bilan de référence ?", "Change the reference assessment?", "Referenz-Einschätzung ändern?", "¿Cambiar la evaluación de referencia?")) },
+            text = {
+                Text(tr(
+                    "Le bilan du ${bilan.date} deviendra le nouveau bilan de référence de ${bilan.nomChien}. Les prochaines comparaisons partiront de ce bilan.",
+                    "The assessment from ${bilan.date} will become ${bilan.nomChien}'s new reference. Future comparisons will start from this assessment.",
+                    "Die Einschätzung vom ${bilan.date} wird die neue Referenz von ${bilan.nomChien}. Künftige Vergleiche gehen von dieser Einschätzung aus.",
+                    "La evaluación del ${bilan.date} será la nueva referencia de ${bilan.nomChien}. Las próximas comparaciones partirán de esta evaluación."
+                ))
+            },
+            confirmButton = {
+                Button(onClick = { onBasculerReference(); showConfirmReference = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.Primary)
+                ) { Text(tr("Oui", "Yes", "Ja", "Sí"), color = Color.White) }
+            },
+            dismissButton = { TextButton(onClick = { showConfirmReference = false }) { Text(tr("Non", "No", "Nein", "No")) } }
+        )
+    }
 
     if (showConfirm) {
         AlertDialog(
@@ -496,7 +519,8 @@ fun BilanComparableItem(
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                     if (bilan.aDejaMordu) Icon(Icons.Rounded.Warning, contentDescription = null, tint = PremiumPalette.PrioriteUrgente, modifier = Modifier.size(18.dp))
-                    IconButton(onClick = onBasculerReference, modifier = Modifier.size(34.dp)) {
+                    // L'étoile pleine indique la référence ; une étoile vide permet de changer de référence (avec confirmation)
+                    IconButton(onClick = { if (!bilan.estReference) showConfirmReference = true }, modifier = Modifier.size(34.dp)) {
                         Icon(
                             if (bilan.estReference) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                             contentDescription = texteBilanDeReference(),

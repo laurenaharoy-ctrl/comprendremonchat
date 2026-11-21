@@ -584,7 +584,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 scope.launch { HistoriqueManager.supprimerTout(context) }
                             },
                             onBasculerReference = { bilanId ->
-                                scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
+                                scope.launch { HistoriqueManager.definirReference(context, bilanId) }
                             },
                             onComparer = { idAvant, idApres ->
                                 screen = AppScreen.Comparaison(idAvant, idApres)
@@ -614,7 +614,7 @@ Envoyé depuis l'application Comprendre mon chat
                                 }
                             },
                             onBasculerReference = { bilanId ->
-                                scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
+                                scope.launch { HistoriqueManager.definirReference(context, bilanId) }
                             },
                             onComparer = { idAvant, idApres ->
                                 screen = AppScreen.Comparaison(idAvant, idApres)
