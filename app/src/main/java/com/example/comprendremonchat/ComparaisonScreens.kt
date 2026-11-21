@@ -139,7 +139,9 @@ fun HistoriqueComparableScreen(
     onSupprimerBilan: (String) -> Unit,
     onSupprimerTout: () -> Unit,
     onBasculerReference: (String) -> Unit,
-    onComparer: (idAvant: String, idApres: String) -> Unit
+    onComparer: (idAvant: String, idApres: String) -> Unit,
+    // Nom de l'animal quand la liste ne contient que ses bilans (titre « Bilans de … »)
+    nomAnimal: String? = null
 ) {
     var showConfirmSupprimerTout by remember { mutableStateOf(false) }
     var modeComparer by remember { mutableStateOf(false) }
@@ -164,12 +166,17 @@ fun HistoriqueComparableScreen(
     if (showConfirmSupprimerTout) {
         AlertDialog(
             onDismissRequest = { showConfirmSupprimerTout = false },
-            title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?", "¿Eliminar todo el historial?")) },
-            text = { Text(tr("Cette action est irréversible. Tous les bilans sauvegardés seront supprimés définitivement.", "This action cannot be undone. All saved assessments will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle gespeicherten Einschätzungen werden endgültig gelöscht.", "Esta acción no se puede deshacer. Todas las evaluaciones guardadas se eliminarán definitivamente.")) },
+            title = {
+                Text(
+                    if (nomAnimal != null) tr("Supprimer les bilans de $nomAnimal ?", "Delete $nomAnimal's assessments?", "Einschätzungen von $nomAnimal löschen?", "¿Eliminar las evaluaciones de $nomAnimal?")
+                    else tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?", "¿Eliminar todo el historial?")
+                )
+            },
+            text = { Text(tr("Cette action est irréversible. Ces bilans seront supprimés définitivement.", "This action cannot be undone. These assessments will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Diese Einschätzungen werden endgültig gelöscht.", "Esta acción no se puede deshacer. Estas evaluaciones se eliminarán definitivamente.")) },
             confirmButton = {
                 Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
                     colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
-                ) { Text(tr("Supprimer tout", "Delete all", "Alles löschen", "Eliminar todo"), color = Color.White) }
+                ) { Text(tr("Supprimer", "Delete", "Löschen", "Eliminar"), color = Color.White) }
             },
             dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(tr("Annuler", "Cancel", "Abbrechen", "Cancelar")) } }
         )
@@ -186,7 +193,8 @@ fun HistoriqueComparableScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones"),
+                    if (nomAnimal != null) texteBilansDe(nomAnimal)
+                    else tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones"),
                     style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -292,9 +300,115 @@ fun HistoriqueComparableScreen(
                     ) {
                         Icon(Icons.Rounded.DeleteSweep, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen", "Eliminar todo el historial"), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            if (nomAnimal != null) tr("Supprimer les bilans de $nomAnimal", "Delete $nomAnimal's assessments", "Einschätzungen von $nomAnimal löschen", "Eliminar las evaluaciones de $nomAnimal")
+                            else tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen", "Eliminar todo el historial"),
+                            fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center
+                        )
                     }
                 }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+fun texteBilansDe(nom: String): String = tr("Bilans de $nom", "$nom's assessments", "Einschätzungen von $nom", "Evaluaciones de $nom")
+
+// ═══════════════════════════════════════════════════════════
+// LISTE DES ANIMAUX (quand l'historique contient plusieurs animaux)
+// ═══════════════════════════════════════════════════════════
+
+@Composable
+fun AnimauxHistoriqueScreen(
+    modifier: Modifier = Modifier,
+    bilans: List<BilanSauvegarde>,
+    onOuvrirAnimal: (cle: String) -> Unit,
+    onSupprimerTout: () -> Unit
+) {
+    var showConfirmSupprimerTout by remember { mutableStateOf(false) }
+    // Animaux triés par bilan le plus récent
+    val animaux = bilans.groupBy { it.cleAnimal() }.values.sortedByDescending { groupe -> groupe.maxOf { it.dateTimestamp } }
+
+    if (showConfirmSupprimerTout) {
+        AlertDialog(
+            onDismissRequest = { showConfirmSupprimerTout = false },
+            title = { Text(tr("Supprimer tout l'historique ?", "Delete all history?", "Gesamten Verlauf löschen?", "¿Eliminar todo el historial?")) },
+            text = { Text(tr("Cette action est irréversible. Tous les bilans de tous les animaux seront supprimés définitivement.", "This action cannot be undone. All assessments for all animals will be permanently deleted.", "Diese Aktion kann nicht rückgängig gemacht werden. Alle Einschätzungen aller Tiere werden endgültig gelöscht.", "Esta acción no se puede deshacer. Todas las evaluaciones de todos los animales se eliminarán definitivamente.")) },
+            confirmButton = {
+                Button(onClick = { onSupprimerTout(); showConfirmSupprimerTout = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = PremiumPalette.PrioriteUrgente)
+                ) { Text(tr("Supprimer tout", "Delete all", "Alles löschen", "Eliminar todo"), color = Color.White) }
+            },
+            dismissButton = { TextButton(onClick = { showConfirmSupprimerTout = false }) { Text(tr("Annuler", "Cancel", "Abbrechen", "Cancelar")) } }
+        )
+    }
+
+    EditorialContainer(
+        modifier = modifier.fillMaxSize().windowInsetsPadding(WindowInsets.navigationBars)
+            .verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 10.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            PremiumCard(centered = true) {
+                Box(modifier = Modifier.size(48.dp).clip(CircleShape).background(PremiumPalette.Primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                    Icon(Icons.Rounded.History, contentDescription = null, tint = PremiumPalette.Primary, modifier = Modifier.size(24.dp))
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones"),
+                    style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    tr("Choisissez un animal pour voir ses bilans.", "Choose an animal to see its assessments.", "Wählen Sie ein Tier, um seine Einschätzungen zu sehen.", "Elige un animal para ver sus evaluaciones."),
+                    textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            animaux.forEach { groupe ->
+                val dernier = groupe.maxByOrNull { it.dateTimestamp } ?: return@forEach
+                val nb = groupe.size
+                Card(
+                    modifier = Modifier.fillMaxWidth().clickable { onOuvrirAnimal(dernier.cleAnimal()) },
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = if (isSystemInDarkTheme()) Color(0xFF231B17) else PremiumPalette.PaperSoft),
+                    border = BorderStroke(1.dp, if (isSystemInDarkTheme()) Color(0xFF56433B) else PremiumPalette.Border)
+                ) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(modifier = Modifier.size(42.dp).clip(CircleShape).background(PremiumPalette.Primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Rounded.Pets, contentDescription = null, tint = PremiumPalette.Primary, modifier = Modifier.size(22.dp))
+                        }
+                        Spacer(modifier = Modifier.width(14.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(texteBilansDe(dernier.nomChien), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                trList(
+                                    "$nb bilan${if (nb > 1) "s" else ""} · dernier le ${dernier.date}",
+                                    "$nb assessment${if (nb > 1) "s" else ""} · latest on ${dernier.date}",
+                                    "$nb Einschätzung${if (nb > 1) "en" else ""} · zuletzt am ${dernier.date}",
+                                    "$nb evaluaci${if (nb > 1) "ones" else "ón"} · la última el ${dernier.date}"
+                                ),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+            Button(
+                onClick = { showConfirmSupprimerTout = true },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isSystemInDarkTheme()) Color(0xFF3D1209) else Color(0xFFFFF0EC),
+                    contentColor = PremiumPalette.PrioriteUrgente
+                )
+            ) {
+                Icon(Icons.Rounded.DeleteSweep, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(tr("Supprimer tout l'historique", "Delete all history", "Gesamten Verlauf löschen", "Eliminar todo el historial"), fontWeight = FontWeight.SemiBold)
             }
             Spacer(modifier = Modifier.height(8.dp))
         }

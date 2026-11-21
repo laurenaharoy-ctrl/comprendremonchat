@@ -67,7 +67,7 @@ object ComparaisonPdfExporter {
         y += 16f
         val gap = 12f
         val cardW = (CONTENT_W - gap) / 2f
-        val cardH = 54f
+        val cardH = 66f
         drawDateCard(canvas, MARGIN, y, cardW, cardH, t("AVANT", "BEFORE", "VORHER", "ANTES"), avant)
         drawDateCard(canvas, MARGIN + cardW + gap, y, cardW, cardH, t("APRÈS", "AFTER", "NACHHER", "DESPUÉS"), apres)
         y += cardH + 20f

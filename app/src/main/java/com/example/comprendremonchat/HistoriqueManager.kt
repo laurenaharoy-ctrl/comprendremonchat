@@ -119,6 +119,16 @@ object HistoriqueManager {
         }
     }
 
+    /** Supprime tous les bilans d'un même animal (clé = nom normalisé, voir cleAnimal). */
+    suspend fun supprimerBilansAnimal(context: Context, cle: String) {
+        context.historiqueDataStore.edit { prefs ->
+            val restants = parseBilans(prefs[HISTORIQUE_KEY] ?: "[]").filter { it.cleAnimal() != cle }
+            val array = JSONArray()
+            restants.forEach { array.put(bilanToJson(it)) }
+            prefs[HISTORIQUE_KEY] = array.toString()
+        }
+    }
+
     suspend fun supprimerTout(context: Context) {
         context.historiqueDataStore.edit { prefs ->
             prefs[HISTORIQUE_KEY] = "[]"

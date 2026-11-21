@@ -57,6 +57,7 @@ sealed interface AppScreen {
     data object Alimentation : AppScreen
     data object Feedback : AppScreen
     data object Historique : AppScreen
+    data class HistoriqueAnimal(val cle: String) : AppScreen
     data class HistoriqueDetail(val bilanId: String) : AppScreen
     data class Comparaison(val idAvant: String, val idApres: String) : AppScreen
     data object Parametres : AppScreen
@@ -73,6 +74,7 @@ fun AppScreen.toStorageValue(): String = when (this) {
     AppScreen.Alimentation -> "alimentation"
     AppScreen.Feedback -> "accueil"
     AppScreen.Historique -> "historique"
+    is AppScreen.HistoriqueAnimal -> "historique"
     is AppScreen.HistoriqueDetail -> "historique"
     is AppScreen.Comparaison -> "historique"
     AppScreen.Parametres -> "accueil"
@@ -137,6 +139,13 @@ fun ComprendreMonchatApp() {
     val reponsesChoix = remember { mutableStateMapOf<String, Int>() }
 
     val bilans by HistoriqueManager.getBilans(context).collectAsState(initial = emptyList())
+
+    // Historique classé par animal : s'il y a plusieurs animaux, on passe par la liste des animaux
+    val nbAnimaux = bilans.map { it.cleAnimal() }.distinct().size
+    fun ecranHistoriquePour(cle: String?): AppScreen =
+        if (cle != null && nbAnimaux > 1) AppScreen.HistoriqueAnimal(cle) else AppScreen.Historique
+    fun retourDepuisBilan(bilanId: String): AppScreen =
+        ecranHistoriquePour(bilans.firstOrNull { it.id == bilanId }?.cleAnimal())
 
     fun saveState() {
         scope.launch {
@@ -257,8 +266,9 @@ Envoyé depuis l'application Comprendre mon chat
             AppScreen.Alimentation -> { screen = AppScreen.Accueil; saveState() }
             AppScreen.Feedback -> { screen = screenAvantFeedback }
             AppScreen.Historique -> { screen = AppScreen.Accueil; saveState() }
-            is AppScreen.HistoriqueDetail -> { screen = AppScreen.Historique }
-            is AppScreen.Comparaison -> { screen = AppScreen.Historique }
+            is AppScreen.HistoriqueAnimal -> { screen = AppScreen.Historique }
+            is AppScreen.HistoriqueDetail -> { screen = retourDepuisBilan((screen as AppScreen.HistoriqueDetail).bilanId) }
+            is AppScreen.Comparaison -> { screen = retourDepuisBilan((screen as AppScreen.Comparaison).idApres) }
             AppScreen.Parametres -> { screen = AppScreen.Accueil }
             AppScreen.Accueil, AppScreen.Onboarding -> Unit
         }
@@ -281,6 +291,7 @@ Envoyé depuis l'application Comprendre mon chat
                     AppScreen.Alimentation -> ""
                     AppScreen.Feedback -> tr("Signalement", "Report an issue", "Meldung", "Reportar un problema")
                     AppScreen.Historique -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones")
+                    is AppScreen.HistoriqueAnimal -> tr("Historique des bilans", "Assessment history", "Verlauf der Einschätzungen", "Historial de evaluaciones")
                     is AppScreen.HistoriqueDetail -> tr("Détail du bilan", "Assessment detail", "Details der Einschätzung", "Detalle de la evaluación")
                     is AppScreen.Comparaison -> tr("Comparaison", "Comparison", "Vergleich", "Comparación")
                     AppScreen.Parametres -> ""
@@ -301,8 +312,9 @@ Envoyé depuis l'application Comprendre mon chat
                             AppScreen.Alimentation -> { screen = AppScreen.Accueil; saveState() }
                             AppScreen.Feedback -> screen = screenAvantFeedback
                             AppScreen.Historique -> { screen = AppScreen.Accueil; saveState() }
-                            is AppScreen.HistoriqueDetail -> screen = AppScreen.Historique
-                            is AppScreen.Comparaison -> screen = AppScreen.Historique
+                            is AppScreen.HistoriqueAnimal -> screen = AppScreen.Historique
+                            is AppScreen.HistoriqueDetail -> screen = retourDepuisBilan((screen as AppScreen.HistoriqueDetail).bilanId)
+                            is AppScreen.Comparaison -> screen = retourDepuisBilan((screen as AppScreen.Comparaison).idApres)
                             AppScreen.Parametres -> screen = AppScreen.Accueil
                             else -> Unit
                         }
@@ -508,7 +520,8 @@ Envoyé depuis l'application Comprendre mon chat
                             saveState()
                         },
                         onOpenHistorique = {
-                            screen = AppScreen.Historique
+                            // Ouvre directement les bilans du chat qui vient d'être évalué
+                            screen = ecranHistoriquePour(nomChatAffiche(reponsesTexte["nom_chat"].orEmpty()).trim().lowercase(Locale.ROOT))
                             saveState()
                         }
                     )
@@ -548,23 +561,66 @@ Envoyé depuis l'application Comprendre mon chat
                 }
 
                 AppScreen.Historique -> {
-                    HistoriqueComparableScreen(
-                        modifier = Modifier.padding(padding),
-                        bilans = bilans,
-                        onOuvrirBilan = { bilanId -> screen = AppScreen.HistoriqueDetail(bilanId) },
-                        onSupprimerBilan = { bilanId ->
-                            scope.launch { HistoriqueManager.supprimerBilan(context, bilanId) }
-                        },
-                        onSupprimerTout = {
-                            scope.launch { HistoriqueManager.supprimerTout(context) }
-                        },
-                        onBasculerReference = { bilanId ->
-                            scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
-                        },
-                        onComparer = { idAvant, idApres ->
-                            screen = AppScreen.Comparaison(idAvant, idApres)
-                        }
-                    )
+                    if (nbAnimaux > 1) {
+                        AnimauxHistoriqueScreen(
+                            modifier = Modifier.padding(padding),
+                            bilans = bilans,
+                            onOuvrirAnimal = { cle -> screen = AppScreen.HistoriqueAnimal(cle) },
+                            onSupprimerTout = {
+                                scope.launch { HistoriqueManager.supprimerTout(context) }
+                            }
+                        )
+                    } else {
+                        // Un seul animal : on affiche directement ses bilans
+                        HistoriqueComparableScreen(
+                            modifier = Modifier.padding(padding),
+                            bilans = bilans,
+                            nomAnimal = bilans.firstOrNull()?.nomChien,
+                            onOuvrirBilan = { bilanId -> screen = AppScreen.HistoriqueDetail(bilanId) },
+                            onSupprimerBilan = { bilanId ->
+                                scope.launch { HistoriqueManager.supprimerBilan(context, bilanId) }
+                            },
+                            onSupprimerTout = {
+                                scope.launch { HistoriqueManager.supprimerTout(context) }
+                            },
+                            onBasculerReference = { bilanId ->
+                                scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
+                            },
+                            onComparer = { idAvant, idApres ->
+                                screen = AppScreen.Comparaison(idAvant, idApres)
+                            }
+                        )
+                    }
+                }
+
+                is AppScreen.HistoriqueAnimal -> {
+                    val cle = (screen as AppScreen.HistoriqueAnimal).cle
+                    val bilansAnimal = bilans.filter { it.cleAnimal() == cle }
+                    if (bilansAnimal.isEmpty()) {
+                        LaunchedEffect(cle) { screen = AppScreen.Historique }
+                    } else {
+                        HistoriqueComparableScreen(
+                            modifier = Modifier.padding(padding),
+                            bilans = bilansAnimal,
+                            nomAnimal = bilansAnimal.first().nomChien,
+                            onOuvrirBilan = { bilanId -> screen = AppScreen.HistoriqueDetail(bilanId) },
+                            onSupprimerBilan = { bilanId ->
+                                scope.launch { HistoriqueManager.supprimerBilan(context, bilanId) }
+                            },
+                            onSupprimerTout = {
+                                scope.launch {
+                                    HistoriqueManager.supprimerBilansAnimal(context, cle)
+                                    screen = AppScreen.Historique
+                                }
+                            },
+                            onBasculerReference = { bilanId ->
+                                scope.launch { HistoriqueManager.basculerReference(context, bilanId) }
+                            },
+                            onComparer = { idAvant, idApres ->
+                                screen = AppScreen.Comparaison(idAvant, idApres)
+                            }
+                        )
+                    }
                 }
 
                 is AppScreen.Comparaison -> {
@@ -600,9 +656,10 @@ Envoyé depuis l'application Comprendre mon chat
                             modifier = Modifier.padding(padding),
                             bilan = bilan,
                             onSupprimer = {
+                                val retour = retourDepuisBilan(bilanId)
                                 scope.launch {
                                     HistoriqueManager.supprimerBilan(context, bilanId)
-                                    screen = AppScreen.Historique
+                                    screen = retour
                                 }
                             }
                         )
