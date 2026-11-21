@@ -84,10 +84,6 @@ object ComparaisonPdfExporter {
         drawDateCard(canvas, MARGIN + cardW + gap, y, cardW, cardH, t("APRÈS", "AFTER", "NACHHER", "DESPUÉS"), apres)
         y += cardH + 14f
 
-        // Résumé
-        y = drawText(canvas, texteResumeComparaison(evolutions), MARGIN, y, CONTENT_W.toInt(), makePaint(11.5f, COLOR_PRIMARY, bold = true), Layout.Alignment.ALIGN_CENTER)
-        y += 16f
-
         // Évolution par axe
         assurer(32f + 56f)
         y = drawSectionTitle(canvas, y, t("Évolution par axe", "Change by axis", "Entwicklung je Achse", "Evolución por eje"))
@@ -100,6 +96,8 @@ object ComparaisonPdfExporter {
         y += 6f
         assurer(32f + 90f)
         y = drawSectionTitle(canvas, y, t("Synthèse", "Summary", "Zusammenfassung", "Resumen"))
+        y = drawText(canvas, texteResumeComparaison(evolutions), MARGIN, y, CONTENT_W.toInt(), makePaint(11f, COLOR_PRIMARY, bold = true))
+        y += 8f
         y = drawLigneAvantApres(canvas, y, t("Priorité", "Priority", "Priorität", "Prioridad"),
             textePrioriteAction(avant.prioriteActionEnum()), textePrioriteAction(apres.prioriteActionEnum()))
         y = drawLigneAvantApres(canvas, y, t("Situation", "Situation", "Situation", "Situación"),

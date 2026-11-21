@@ -560,8 +560,6 @@ fun ComparaisonBilansScreen(
                     CarteDate(modifier = Modifier.weight(1f), titre = tr("Avant", "Before", "Vorher", "Antes"), bilan = avant)
                     CarteDate(modifier = Modifier.weight(1f), titre = tr("Après", "After", "Nachher", "Después"), bilan = apres)
                 }
-                Spacer(modifier = Modifier.height(14.dp))
-                Text(texteResumeComparaison(evolutions), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.Primary, textAlign = TextAlign.Center)
             }
 
             PremiumCard {
@@ -574,6 +572,8 @@ fun ComparaisonBilansScreen(
 
             PremiumCard {
                 EditorialKicker(tr("Synthèse", "Summary", "Zusammenfassung", "Resumen"), centered = true)
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(texteResumeComparaison(evolutions), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = PremiumPalette.Primary)
                 Spacer(modifier = Modifier.height(12.dp))
                 LigneAvantApres(
                     label = tr("Priorité", "Priority", "Priorität", "Prioridad"),
