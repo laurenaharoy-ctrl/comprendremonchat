@@ -1229,9 +1229,9 @@ fun questionsApplication(): List<Question> {
         QuestionChoix("quand_griffure",
             tr("Quand ?", "When?", "Wann?", "¿Cuándo?"),
             trList(listOf("Uniquement quand il était chaton", "Ces derniers mois", "Il y a plus d'un an"),
-                listOf("Only when it was a kitten", "In the last few months", "More than a year ago"),
+                listOf("Only as a kitten", "In the last few months", "More than a year ago"),
                 listOf("Nur als Kätzchen", "In den letzten Monaten", "Vor mehr als einem Jahr"),
-                listOf("Solo cuando era cachorro", "En los últimos meses", "Hace más de un año")),
+                listOf("Solo cuando era un gatito", "En los últimos meses", "Hace más de un año")),
             axe = Axe.COHABITATION, scoreParOption = listOf(0, 0, 0)),
 
         QuestionChoix("cible_agression",
